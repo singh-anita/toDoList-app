@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
+import { Link } from 'react-router-dom';
 /*import {
     HelpBlock,
     FormGroup,
@@ -81,32 +82,32 @@ class Signup extends Component {
                     <div class="panel panel-info">
                         <div class="panel-heading">
                             <div class="panel-title">Sign Up</div>
-                            <div><a id="signinlink" href="#" onclick="$('#signupbox').hide(); $('#loginbox').show()">Sign In</a></div>
+                            <div><Link to= "./"><a id="signinlink" href="login.js" >Sign In</a></Link></div>
                         </div>  
                         <div class="panel-body" >
                             <form id="signupform" style={{ marginTop: 50 }} class="form-horizontal" role="form">
                                 <div class="form-group">
                                     <label for="email" class="col-md-3 control-label">Email</label>
                                     <div class="col-md-6">
-                                        <input type="text" class="form-control" name="email" placeholder="Email Address" value={this.state.value}/>
+                                        <input type="text" class="form-control" name="email" placeholder="Email Address" />
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="firstname" class="col-md-3 control-label">User Name</label>
                                     <div class="col-md-6">
-                                        <input type="text" class="form-control" name="firstname" placeholder="First Name" value={this.state.value}/>
+                                        <input type="text" class="form-control" name="firstname" placeholder="First Name" />
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="password" class="col-md-3 control-label">Password</label>
                                     <div class="col-md-6">
-                                        <input type="password" class="form-control" name="passwd" placeholder="Password" value={this.state.value}/>
+                                        <input type="password" class="form-control" name="passwd" placeholder="Password" />
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="confirm-password" class="col-md-3 control-label">Confirm Password</label>
                                     <div class="col-md-6">
-                                        <input type="confirm-password" class="form-control" name="conpasswd" placeholder="Confirm Password" value={this.state.value}/>
+                                        <input type="confirm-password" class="form-control" name="conpasswd" placeholder="Confirm Password" />
                                     </div>
                                 </div>
 

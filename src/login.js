@@ -1,21 +1,33 @@
 import React, { Component } from 'react';
 import { Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
+import { Link } from 'react-router-dom';
+
 /*import "./Login.css";*/
 
 class Login extends Component {
-   /* constructor(props) {
-        super(props);
-    
-        this.*/
-        state = {
+   // constructor(props) {
+      //  super(props);
+      // this.onSubmit = this.onSubmit.bind(this);
+        
+        /*this.state = {
           email: "",
           emailError: "",
           password: "",
           passwordError:""
-        };
-      //}
+        };*/
+     // }
+    /*  onSubmit = (e)=> {
+        e.preventDefault();
+       // console.log(this.props);
+        //this.props.history.push('/signup');
+       // console.log('Click happened');
+       // this.setState({query: e.target.value});
+      // <Redirect to={{pathname: './signup', state: {from: props.location}}}
+      //<Redirect to='./signup' />
+       // window.location ='./signup';
+    }*/
 
-      handleChange = e => {
+    /*  handleChange = e => {
         this.props.onChange({ [e.target.name]: e.target.value });
         this.setState({
           [e.target.name]: e.target.value
@@ -28,11 +40,6 @@ class Login extends Component {
             passwordError: ""
           };
 
-         /* if(this.state.username.length <5)
-          {
-              isError =true;
-              errors.us
-          }*/
           if (this.state.email.indexOf("@") === -1) {
             isError = true;
             errors.emailError = "Requires valid email";
@@ -44,13 +51,13 @@ class Login extends Component {
               });
           }
           return isError;
-       /* return this.state.email.length > 0 && this.state.password.length > 0;*/
-      }
-      onSubmit = e => {
-        e.preventDefault();
+      }*/
+     // onSubmit = e => {
+     //   console.log('Click happened');
+       // e.preventDefault();
         // this.props.onSubmit(this.state);
-        const err = this.validateForm();
-        if (!err) {
+       // const err = this.validateForm();
+       /* if (!err) {
           // clear form
           this.setState({
             email: "",
@@ -62,8 +69,8 @@ class Login extends Component {
             email: "",
             password: ""
           });
-        }
-    }
+        }*/
+     // }
     
 render() {
     return (
@@ -81,12 +88,12 @@ render() {
 
                     <div style={{marginBottom: 25}} class="input-group">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                        <input id="login-username" type="text" class="form-control" name="email" value={this.state.value} onChange={this.handleChange(e)} errorText={this.state.emailError} placeholder="username or email"/>                                        
+                        <input id="login-username" type="text" class="form-control" name="email"  placeholder="username or email"/>                                        
                         </div>
 
                         <div style={{marginBottom: 25}} class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-                            <input id="login-password" type="password" class="form-control" name="password" value={this.state.value} onChange={this.handleChange(e)} errorText={this.state.passwordError}placeholder="password"/>
+                            <input id="login-password" type="password" class="form-control" name="password" placeholder="password"/>
                         </div>
                             <div class="input-group">
                                 <div class="checkbox">
@@ -98,7 +105,7 @@ render() {
                         <div style={{marginTop:10}} class="form-group">
 
                         <div class="col-sm-12 controls">
-                          <button id="btn-login" type="submit" class="btn btn-success" onClick= {(e)=>this.onSubmit(e)} >Login</button>
+                          <button id="btn-login" type="submit" class="btn btn-success"  >Login</button>
                             <button id="btn-fblogin" class="btn btn-primary" >Login with Stackoverflow</button>
 
                                     </div>
@@ -109,9 +116,11 @@ render() {
                                     <div class="col-md-12 control">
                                         <div style={{borderTop:'1 solid#888',paddingTop:15}} >
                                             Don't have an account!
-                            <a href="#" onClick="$('#loginbox').hide(); $('#signupbox').show()">
+                           <Link to= "./signup">
+                            <a href="signup.js">
                                                 Sign Up Here
                             </a>
+                            </Link>
                                         </div>
                                     </div>
                                 </div>    
