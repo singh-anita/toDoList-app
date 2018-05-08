@@ -4,9 +4,12 @@ import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import './App.css';
 import Signup from './signup';
 import Login from './login';
-import Inputa from './input';
-import TodoItem from './todoItem';
-import TodoInput from './todoinput';
+import UserProfile from './useprofile';
+import MaterialIcon from 'react-google-material-icons'
+//import Dashboard from './dashboard';
+//import Inputa from './input';
+//import TodoItem from './todoItem';
+//import TodoInput from './todoinput';
 class App extends Component {
   render() {
     return (

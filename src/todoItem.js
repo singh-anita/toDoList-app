@@ -20,4 +20,4 @@ import { Link } from 'react-router-dom';
     );
   }
 }
-export default TodoItem;
+//export default TodoItem;

@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
 import { Link } from 'react-router-dom';
-import TodoInput from './todoinput';
-import TodoItem from './todoItem';
+//import TodoInput from './todoinput';
+//import TodoItem from './todoItem';
    // <TodoInput todoText="" addTodo={this.addTodo} />
 class Inputa extends Component{
   /*constructor(props) {
@@ -32,4 +32,4 @@ render() {
     );
   }
 }
-export default Inputa;
+//export default Inputa;
