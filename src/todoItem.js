@@ -1,23 +1,29 @@
 import React, { Component } from 'react';
-import './todoItem.css';
-import { Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
+import { ListGroup,ListGroupItem, Button, FormGroup, FormControl, ControlLabel, Checkbox } from "react-bootstrap";
 import { Link } from 'react-router-dom';
+import './dashboard.css';
+  //  <button className="removeTodo" onClick={(e)=> this.removeTodo(this.props.id) }>remove</button>{this.props.todo.text}
 
  class TodoItem extends Component {
-  constructor(props) {
+ /* constructor(props) {
     super(props);
   }
 
   removeTodo(id) {
     this.props.removeTodo(id);
-  }
+  }*/
 
   render() {
+    var content = {
+      marginBottom: '10px'
+  }
     return (
-      <div className="todoWrapper">
-        <button className="removeTodo" onClick={(e)=> this.removeTodo(this.props.id) }>remove</button>{this.props.todo.text}
-      </div>
+
+      <Button style={content} >
+                            <span class="glyphicon glyphicon-plus adder_icon" style={{ marginRight: '10px' }}></span>
+                            Add Item
+                    </Button>
     );
   }
 }
-//export default TodoItem;
+export default TodoItem;

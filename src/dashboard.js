@@ -2,31 +2,71 @@ import React, { Component } from 'react';
 import { ListGroup,ListGroupItem, Button, FormGroup, FormControl, ControlLabel, Checkbox } from "react-bootstrap";
 import { Link } from 'react-router-dom';
 import './dashboard.css';
+//import TodoItem from './todoItem';
 
+/*
+onClick={this.handleCheck.bind(this)}
+{
+    this.state.list.map((curr, index) => {
+            return (
+                <div>{curr.t_name}</div>
+            );
+    })
+} 
+    {
+                       this.state.list.map((curr,index) => {
+                          return (
+                              <div>{curr.t_name}</div>
+                          );
+                    })
+                }
+*/
 class Dashboard extends Component {
     constructor(props) {
         super(props);
         this.state = {
-
             list: [
                 
-            ], value: ''
+            ], 
+            value: '',
+            t_name:'',
+            divs:''
         };
-
+      //  this.title =  this.title.bind(this);
+       // this.alertClicked =  this.alertClicked.bind(this);
     // this.handleChange = this.handleChange.bind(this);
         /*  this.handleSubmit = this.handleSubmit.bind(this);*/
     }
+  
     add() {
         //  alert(e.target.value)
+        if (this.state.value.length > 0) {
         this.setState({
            list: this.state.list.concat([{ pro_name: this.state.value }]),
-            value: ''
+            value: '',
+            t_name:''
         });
     }
-    handleChange(event) {
-        this.setState({ value: event.target.value });
     }
-
+    
+   /* handleCheck() {
+        alert(this.state.value);
+        this.setState({
+            list: this.state.list.concat([{ t_name: this.state.value}]), 
+           
+         });
+         //alert("clicked"+list.t_name);
+       // e.currentTarget.dataset.pro_name
+     }*/
+   /* title(e)
+    {
+        this.setState({
+            t_name: e.target.value
+        })
+    }*/
+    alertClicked() {
+        alert('You clicked the ListGroupItem');
+      }
     /*handleSubmit(event) {
       alert('A name was submitted: ' + this.state.value);
       event.preventDefault();
@@ -86,11 +126,12 @@ class Dashboard extends Component {
                             </ListGroup>       
                     </div>
                     <div class="content_container">
-                        <Button style={content}  >
+                      
+                    <Button style={content} >
                             <span class="glyphicon glyphicon-plus adder_icon" style={{ marginRight: '10px' }}></span>
                             Add Item
                     </Button>
-
+                
                         <ListGroup componentClass="ul">
                             <ListGroupItem>
                                 <div class="description">
