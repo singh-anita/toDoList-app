@@ -14,6 +14,6 @@ import Dashboard from './dashboard';
 //ReactDOM.render(<Inputa/>, document.getElementById('root'));
 //ReactDOM.render(<Signup/>, document.getElementById('root'));
 //ReactDOM.render(<UserProfile/>, document.getElementById('root'));
-//ReactDOM.render(<Dashboard/>, document.getElementById('root'));
-ReactDOM.render(<App/>, document.getElementById('root'));
+ReactDOM.render(<Dashboard/>, document.getElementById('root'));
+//ReactDOM.render(<App/>, document.getElementById('root'));
 /*registerServiceWorker();*/

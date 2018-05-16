@@ -1,72 +1,79 @@
 import React, { Component } from 'react';
-import { ListGroup,ListGroupItem, Button, FormGroup, FormControl, ControlLabel, Checkbox } from "react-bootstrap";
+import { ListGroup, ListGroupItem, Button, FormGroup, FormControl, ControlLabel, Checkbox } from "react-bootstrap";
 import { Link } from 'react-router-dom';
 import './dashboard.css';
-//import TodoItem from './todoItem';
-
-/*
-onClick={this.handleCheck.bind(this)}
-{
-    this.state.list.map((curr, index) => {
-            return (
-                <div>{curr.t_name}</div>
-            );
-    })
-} 
-    {
-                       this.state.list.map((curr,index) => {
-                          return (
-                              <div>{curr.t_name}</div>
-                          );
-                    })
-                }
-*/
 class Dashboard extends Component {
+    notesObjArray = [{ title: 'Shopping List', list: [{ content: 'Eggs are required for the body', isChecked: true }, 
+    { content: 'Milk is white in color', isChecked: true }, { content: 'Cereals always require milk.', isChecked: false }, 
+    { content: 'Bread and butter make a man\'s breakfast', isChecked: true },] }, { title: 'Word List', list: [{ content: 'Cornucopia means too many in number', isChecked: false }, { content: 'Abtruse means to interpret in a specific way', isChecked: false }, { content: 'Orwellian is a term associated with a dystopian world', isChecked: true }, { content: 'Obtuse means slow to understand', isChecked: false },] }, 
+    { title: 'Villain List', list: [{ content: 'Joker', isChecked: false }, { content: 'Copperhead', isChecked: true }, { content: 'Prometheus', isChecked: false }, { content: 'Harley Quinn', isChecked: true }] }, { title: 'Shopping List', list: [{ content: '', isChecked: true }, { content: '', isChecked: true }, { content: '', isChecked: false }, { content: '', isChecked: true },] }, { title: 'Word List', list: [{ content: 'Cornucopia', isChecked: false }, 
+    { content: 'Abtruse', isChecked: false }, { content: 'Orwellian', isChecked: true }, { content: 'Obtruse', isChecked: false },] }, { title: 'Villain List', list: [{ content: 'Joker', isChecked: false }, { content: 'Copperhead', isChecked: true }, { content: 'Prometheus', isChecked: false }, { content: 'Harley Quinn', isChecked: true }] }, { title: 'Shopping List', list: [{ content: 'Eggs', isChecked: true }, { content: 'Milk', isChecked: true }, { content: 'Cereals', isChecked: false }, { content: 'Bread', isChecked: true },] }, { title: 'Word List', list: [{ content: 'Cornucopia', isChecked: false }, 
+    { content: 'Abtruse', isChecked: false }, 
+    { content: 'Orwellian', isChecked: true }, { content: 'Obtruse', isChecked: false },] }, {
+        title: 'Villain List', list: [{ content: 'Joker', isChecked: false }, { content: 'Copperhead', isChecked: true }, { content: 'Prometheus', isChecked: false },
+        { content: 'Harley Quinn', isChecked: true }]
+    }]
     constructor(props) {
         super(props);
         this.state = {
-            list: [
-                
-            ], 
+            list: [],
             value: '',
-            t_name:'',
-            divs:''
+            t_name: '',
+            inputtxt: [],
+            item: [],
+            description: ''
         };
-      //  this.title =  this.title.bind(this);
-       // this.alertClicked =  this.alertClicked.bind(this);
-    // this.handleChange = this.handleChange.bind(this);
+        //  this.title =  this.title.bind(this);
+        // this.alertClicked =  this.alertClicked.bind(this);
+        // this.handleChange = this.handleChange.bind(this);
         /*  this.handleSubmit = this.handleSubmit.bind(this);*/
     }
-  
+
     add() {
         //  alert(e.target.value)
         if (this.state.value.length > 0) {
-        this.setState({
-           list: this.state.list.concat([{ pro_name: this.state.value }]),
-            value: '',
-            t_name:''
-        });
+            this.setState({
+                list: this.state.list.concat([{ pro_name: this.state.value }]),
+                value: '',
+                t_name: ''
+            });
+        }
     }
-    }
-    
-   /* handleCheck() {
-        alert(this.state.value);
+    /* handleCheck() {
+         alert(this.state.value);
+         this.setState({
+             list: this.state.list.concat([{ t_name: this.state.value}]), 
+            
+          });
+          //alert("clicked"+list.t_name);
+        // e.currentTarget.dataset.pro_name
+      }*/
+    addItem() {
         this.setState({
-            list: this.state.list.concat([{ t_name: this.state.value}]), 
-           
-         });
-         //alert("clicked"+list.t_name);
-       // e.currentTarget.dataset.pro_name
-     }*/
-   /* title(e)
-    {
+            inputtxt: this.state.inputtxt.concat({ input_box: this.state.description }),
+            description: ''
+        })
+    }
+    handleChange(e) {
+        this.setState({
+            description: e.target.value
+        })
+    }
+    addContent() {
+        this.setState({
+            item: this.state.item.concat([{ content: this.state.description }]),
+            description: ''
+        })
+    }
+    title(e) {
+        // alert(e.target.value);
         this.setState({
             t_name: e.target.value
         })
-    }*/
+    }
     alertClicked() {
         alert('You clicked the ListGroupItem');
-      }
+    }
     /*handleSubmit(event) {
       alert('A name was submitted: ' + this.state.value);
       event.preventDefault();
@@ -115,38 +122,59 @@ class Dashboard extends Component {
                                 <span>Add Project</span>
                             </Button>
                         </div>
-                           <ListGroup>
+                        <ListGroup>
                             {
                                 this.state.list.map((curr, index) => {
-                                        return (
-                                            <ListGroupItem>{curr.pro_name}</ListGroupItem>
-                                        );
+                                    return (
+                                        <ListGroupItem onClick={this.title.bind(this)} value={curr.pro_name}>{curr.pro_name}</ListGroupItem>
+                                    );
                                 })
-                            }   
-                            </ListGroup>       
+                            }
+                        </ListGroup>
                     </div>
                     <div class="content_container">
-                      
-                    <Button style={content} >
+                        <div>
+                            {
+                                this.state.t_name
+                            }
+                        </div>
+                        <Button style={content} onClick={() => { this.addItem() }}>
                             <span class="glyphicon glyphicon-plus adder_icon" style={{ marginRight: '10px' }}></span>
                             Add Item
                     </Button>
-                
-                        <ListGroup componentClass="ul">
-                            <ListGroupItem>
-                                <div class="description">
-                                    <Checkbox>Item 1</Checkbox>
-                                </div>
-                                <div class="action">
-                                    <Button style={edit}>
-                                        <i class="glyphicon glyphicon-pencil"></i>
-                                    </Button>
-                                    <Button style={delet}>
-                                        <i class="glyphicon glyphicon-trash"></i>
-                                    </Button>
-                                </div>
-                            </ListGroupItem>
+                        {
+                            this.state.inputtxt.map((curr, index) => {
+                                return (
+                                    <div>
+                                        <input type="text" class="form-control add-todo" placeholder="Add items" onChange={(e) => { this.handleChange(e) }} value={this.state.description} />
+                                        <Button onClick={() => { this.addContent() }} style={{ marginBottom: '20px' }}>Add Item</Button>
+                                        <Button style={{ marginBottom: '20px' }}>Cancel</Button>
+                                    </div>
+                                )
+                            })
+                        }
 
+
+                        <ListGroup componentClass="ul">
+                            {
+                                this.state.item.map((curr, index) => {
+                                    return (
+                                        <ListGroupItem>
+                                            <div class="description">
+                                                <Checkbox>{curr.content}</Checkbox>
+                                            </div>
+                                            <div class="action">
+                                                <Button style={edit}>
+                                                    <i class="glyphicon glyphicon-pencil"></i>
+                                                </Button>
+                                                <Button style={delet}>
+                                                    <i class="glyphicon glyphicon-trash"></i>
+                                                </Button>
+                                            </div>
+                                        </ListGroupItem>
+                                    );
+                                })
+                            }
                         </ListGroup>
                     </div>
                 </div>

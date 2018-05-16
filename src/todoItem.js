@@ -5,14 +5,6 @@ import './dashboard.css';
   //  <button className="removeTodo" onClick={(e)=> this.removeTodo(this.props.id) }>remove</button>{this.props.todo.text}
 
  class TodoItem extends Component {
- /* constructor(props) {
-    super(props);
-  }
-
-  removeTodo(id) {
-    this.props.removeTodo(id);
-  }*/
-
   render() {
     var content = {
       marginBottom: '10px'
