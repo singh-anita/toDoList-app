@@ -3,7 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "axios": "^0.18.0",
+    "body-parser": "^1.18.3",
+    "mongoose": "^5.1.1",
     "ng2-button-loader": "0.0.6",
+    "nodemon": "^1.17.4",
     "react": "^16.3.2",
     "react-dom": "^16.3.2",
     "react-google-material-icons": "^1.0.4",

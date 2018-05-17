@@ -1,133 +1,117 @@
 import React, { Component } from "react";
-import { Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
+import { Button, Form, Col, FormGroup, FormControl, HelpBlock, ControlLabel } from "react-bootstrap";
 import { Link } from 'react-router-dom';
-/*import {
-    HelpBlock,
-    FormGroup,
-    FormControl,
-    ControlLabel
-} from "react-bootstrap";*/
+import axios from 'axios';
+//disabled={!this.validateForm()}
 /*import LoaderButton from "../components/LoaderButton";*/
-/* <span style={{ marginLeft: 8 }}>or</span>  <div style={{borderTop:'1 solid #999',paddingTop:20}} class="form-group">*/
+/* <span style={{ marginLeft: 8 }}>or</span>  <div style={{borderTop:'1 solid #999',paddingTop:20}} className="form-group">*/
 class Signup extends Component {
-    /* constructor(props) {
-         super(props);
- 
-         this.state = {
-             isLoading: false,
-             email: "",
-             password: "",
-             confirmPassword: "",
-             confirmationCode: "",
-             newUser: null
-         };
-     }*/
+    //  isLoading: false,  newUser: null
+    constructor(props) {
+        super(props);
 
-    /* validateForm() {
-         return (
-             this.state.email.length > 0 &&
-             this.state.password.length > 0 &&
-             this.state.password === this.state.confirmPassword
-         );
-     }
- 
-     validateConfirmationForm() {
-         return this.state.confirmationCode.length > 0;
-     }
- 
-     handleChange = event => {
-         this.setState({
-             [event.target.id]: event.target.value
-         });
-     }
- 
-     handleSubmit = async event => {
-         event.preventDefault();
- 
-         this.setState({ isLoading: true });
- 
-         this.setState({ newUser: "test" });
- 
-         this.setState({ isLoading: false });
-     }
- 
-     handleConfirmationSubmit = async event => {
-         event.preventDefault();
- 
-         this.setState({ isLoading: true });
-     }
- 
-     renderConfirmationForm() {
-         return (
-             <form onSubmit={this.handleConfirmationSubmit}>
-                 <FormGroup controlId="confirmationCode" bsSize="large">
-                     <ControlLabel>Confirmation Code</ControlLabel>
-                     <FormControl
-                         autoFocus
-                         type="tel"
-                         value={this.state.confirmationCode}
-                         onChange={this.handleChange}
-                     />
-                     <HelpBlock>Please check your email for the code.</HelpBlock>
-                 </FormGroup>
-             </form>
-         );
-     }*/
+        this.state = {
+            email: "",
+            username: "",
+            password: "",
+            confpsswd: ""
+        };
+        this.handleChange = this.handleChange.bind(this);
+
+    }
+    validateForm() {
+        return
+        (
+            this.state.email.length > 0 &&
+            this.state.username.length > 0 &&
+            this.state.password.length === this.state.confpsswd.length
+        );
+        //   this.setState({formValid: this.state.emailValid && this.state.passwordValid});
+    }
+    handleChange(e) {
+        this.setState({
+            [e.target.id]: e.target.value
+        });
+    }
+
+     handleSubmit(e){
+        // console.log(e)
+        var obj = {
+            "email":this.state.email,
+            "username":this.state.username,
+            "password":this.state.password,
+            "confpassword":this.state.confpsswd
+         };
+        console.log(obj)
+        axios.post('http://localhost:8001', obj)
+          .then(function (response) {
+            console.log(response);
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+    }
 
     render() {
         return (
-            <div class="container">
-              
-        <div id="signupbox" style={{marginTop:50}} class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
-                    <div class="panel panel-info">
-                        <div class="panel-heading">
-                            <div class="panel-title">Sign Up</div>
-                            <div><Link to= "./"><a id="signinlink" href="login.js" >Sign In</a></Link></div>
-                        </div>  
-                        <div class="panel-body" >
-                            <form id="signupform" style={{ marginTop: 50 }} class="form-horizontal" role="form">
-                                <div class="form-group">
-                                    <label for="email" class="col-md-3 control-label">Email</label>
-                                    <div class="col-md-6">
-                                        <input type="text" class="form-control" name="email" placeholder="Email Address" />
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="firstname" class="col-md-3 control-label">User Name</label>
-                                    <div class="col-md-6">
-                                        <input type="text" class="form-control" name="firstname" placeholder="First Name" />
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="password" class="col-md-3 control-label">Password</label>
-                                    <div class="col-md-6">
-                                        <input type="password" class="form-control" name="passwd" placeholder="Password" />
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="confirm-password" class="col-md-3 control-label">Confirm Password</label>
-                                    <div class="col-md-6">
-                                        <input type="confirm-password" class="form-control" name="conpasswd" placeholder="Confirm Password" />
-                                    </div>
-                                </div>
+            <div className="container">
 
-                                <div class="form-group">
-                                    <div class="col-md-offset-3 col-md-9">
-                                        <button id="btn-signup" type="button" class="btn btn-info"><i class="icon-hand-right"></i> Sign Up</button>
-                                        <span style={{ marginLeft: 8 }}> OR   </span>
-                                        <button id="btn-fbsignup" type="button" class="btn btn-primary"><i class="icon-facebook"></i> Sign Up with Stackoverflow</button>
-                                    </div>
-
-                                </div>
-                            </form>
+                <div id="signupbox" style={{ marginTop: 50 }} className="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
+                    <div className="panel panel-info">
+                        <div className="panel-heading">
+                            <div className="panel-title">Sign Up</div>
+                            <div><Link to="./">Sign In</Link></div>
+                        </div>
+                        <div className="panel-body" >
+                            <Form horizontal style={{ marginTop: 50 }}>
+                                <FormGroup controlId="email">
+                                    <Col componentClass={ControlLabel} md={3}>
+                                        Email
+                                    </Col>
+                                    <Col md={6}>
+                                        <FormControl type="email" placeholder="Email" value={this.state.email} onChange={(e) => { this.handleChange(e) }} />
+                                    </Col>
+                                </FormGroup>
+                                <FormGroup controlId="username">
+                                    <Col componentClass={ControlLabel} md={3}>
+                                        User Name
+                                    </Col>
+                                    <Col md={6}>
+                                        <FormControl type="text" placeholder="Username" value={this.state.username} onChange={(e) => { this.handleChange(e) }} />
+                                    </Col>
+                                </FormGroup>
+                                <FormGroup controlId="password">
+                                    <Col componentClass={ControlLabel} md={3}>
+                                        Password
+                                    </Col>
+                                    <Col md={6}>
+                                        <FormControl type="password" placeholder="Password" value={this.state.password} onChange={(e) => { this.handleChange(e) }} />
+                                    </Col>
+                                </FormGroup>
+                                <FormGroup controlId="confpsswd">
+                                    <Col componentClass={ControlLabel} md={3}>
+                                        Confirm Password
+                                    </Col>
+                                    <Col md={6}>
+                                        <FormControl type="password" placeholder="Confirm Password" value={this.state.confpsswd} onChange={(e) => { this.handleChange(e) }} />
+                                    </Col>
+                                </FormGroup>
+                                <FormGroup>
+                                    <Col smOffset={3} mdOffset={3} sm={9} md={9}>
+                                        <Button type="button" bsStyle="primary" onClick={ (e) =>this.handleSubmit(e) }><i className="icon-hand-right"></i>Sign Up</Button>
+                                        <span style={{ marginLeft: 8 }}> OR </span>
+                                        <Button type="submit" bsStyle="primary">Sign Up with Stackoverflow</Button>
+                                    </Col>
+                                </FormGroup>
+                            </Form>
                         </div>
 
-</div>
-</div>
-</div>
-                        );
-                    }
+                    </div>
+                </div>
+            </div>
+        );
+    }
 
-                }
-                
+}
+
 export default Signup;
