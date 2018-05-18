@@ -83,9 +83,7 @@ class Login extends Component {
                         </div>
 
                         <div style={{ paddingTop: 30 }} className="panel-body" >
-
-                            <form id="loginform" className="form-horizontal" role="form">
-
+                        <Form  horizontal>
                                 <div style={{ marginBottom: 25 }} className="input-group">
                                     <span className="input-group-addon"><i className="glyphicon glyphicon-user"></i></span>
                                     <input id="login-username" type="text" className="form-control" name="email" placeholder="username or email" />
@@ -124,7 +122,7 @@ class Login extends Component {
                                         </div>
                                     </div>
                                 </div>
-                            </form>
+                            </Form>
 
 
 

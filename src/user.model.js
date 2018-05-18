@@ -1,6 +1,8 @@
 var mongoose = require('mongoose');
 //mongoose.connect('mongodb://localhost/test');
 var Schema = mongoose.Schema;
+
+// create a schema
 var UserSchema = new Schema({
     username: String,
     name: String,
@@ -10,4 +12,7 @@ var UserSchema = new Schema({
     profilePhoto: Buffer, // the token of the user
     key: String
 });
-module.exports = mongoose.model('User',UserSchema);
+// the schema is useless so far
+// we need to create a model using it
+ var User = mongoose.model('User',UserSchema);
+ module.exports =User;

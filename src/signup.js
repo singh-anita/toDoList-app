@@ -39,8 +39,7 @@ class Signup extends Component {
         var obj = {
             "email":this.state.email,
             "username":this.state.username,
-            "password":this.state.password,
-            "confpassword":this.state.confpsswd
+            "password":this.state.password
          };
         console.log(obj)
         axios.post('http://localhost:8001', obj)
