@@ -17,7 +17,6 @@ class Signup extends Component {
             confpsswd: ""
         };
         this.handleChange = this.handleChange.bind(this);
-
     }
     validateForm() {
         return
@@ -41,8 +40,9 @@ class Signup extends Component {
             "username":this.state.username,
             "password":this.state.password
          };
-        console.log(obj)
-        axios.post('http://localhost:8001', obj)
+       // console.log(obj)
+        /*Posting Data From React to the Node Service*/
+        axios.post('http://localhost:3001', obj)
           .then(function (response) {
             console.log(response);
           })
@@ -97,7 +97,7 @@ class Signup extends Component {
                                 </FormGroup>
                                 <FormGroup>
                                     <Col smOffset={3} mdOffset={3} sm={9} md={9}>
-                                        <Button type="button" bsStyle="primary" onClick={ (e) =>this.handleSubmit(e) }><i className="icon-hand-right"></i>Sign Up</Button>
+                                        <Button type="button" bsStyle="success" onClick={ (e) =>this.handleSubmit(e) }><i className="icon-hand-right"></i>Sign Up</Button>
                                         <span style={{ marginLeft: 8 }}> OR </span>
                                         <Button type="submit" bsStyle="primary">Sign Up with Stackoverflow</Button>
                                     </Col>

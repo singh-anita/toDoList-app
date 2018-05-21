@@ -1,77 +1,38 @@
 import React, { Component } from 'react';
-import { Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
+import { Button, Form, Col, FormGroup, FormControl, InputGroup, ControlLabel, Glyphicon } from "react-bootstrap";
 import { Link } from 'react-router-dom';
-
-/*import "./Login.css";*/
+import axios from 'axios';
 
 class Login extends Component {
-    // constructor(props) {
-    //  super(props);
-    // this.onSubmit = this.onSubmit.bind(this);
+    constructor(props) {
+        super(props);
 
-    /*this.state = {
-      email: "",
-      emailError: "",
-      password: "",
-      passwordError:""
-    };*/
-    // }
-    /*  onSubmit = (e)=> {
-        e.preventDefault();
-       // console.log(this.props);
-        //this.props.history.push('/signup');
-       // console.log('Click happened');
-       // this.setState({query: e.target.value});
-      // <Redirect to={{pathname: './signup', state: {from: props.location}}}
-      //<Redirect to='./signup' />
-       // window.location ='./signup';
-    }*/
-
-    /*  handleChange = e => {
-        this.props.onChange({ [e.target.name]: e.target.value });
+        this.state = {
+            loginEmail: "",
+            loginPassword: ""
+        };
+        this.handleChange = this.handleChange.bind(this);
+    }
+    handleChange(e) {
         this.setState({
-          [e.target.name]: e.target.value
+            [e.target.id]: e.target.value
         });
-      };
-      validateForm = () => {
-          let isError = false;
-          const errors = {
-            emailError: "",
-            passwordError: ""
-          };
-
-          if (this.state.email.indexOf("@") === -1) {
-            isError = true;
-            errors.emailError = "Requires valid email";
-          }
-          if(isError){
-              this.setState({
-                  ...this.state,
-                  ...errors
-              });
-          }
-          return isError;
-      }*/
-    // onSubmit = e => {
-    //   console.log('Click happened');
-    // e.preventDefault();
-    // this.props.onSubmit(this.state);
-    // const err = this.validateForm();
-    /* if (!err) {
-       // clear form
-       this.setState({
-         email: "",
-         emailError: "",
-         password: "",
-         passwordError: ""
-       });
-       this.props.onChange({
-         email: "",
-         password: ""
-       });
-     }*/
-    // }
-
+    }
+    login(e) {
+        var userobj = {
+            "login_email": this.state.loginEmail,
+            "login_password": this.state.loginPassword
+        };
+       // console.log(userobj)
+        /*Posting Data From React to the Node Service*/
+          axios.post('http://localhost:3001', userobj)
+            .then(function (response) {
+              console.log(response);
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
+    }
     render() {
         return (
             <div className="container">
@@ -81,51 +42,42 @@ class Login extends Component {
                             <div className="panel-title">Sign In</div>
                             <div><a href="#">Forgot password?</a></div>
                         </div>
-
                         <div style={{ paddingTop: 30 }} className="panel-body" >
-                        <Form  horizontal>
-                                <div style={{ marginBottom: 25 }} className="input-group">
-                                    <span className="input-group-addon"><i className="glyphicon glyphicon-user"></i></span>
-                                    <input id="login-username" type="text" className="form-control" name="email" placeholder="username or email" />
-                                </div>
-
-                                <div style={{ marginBottom: 25 }} className="input-group">
-                                    <span className="input-group-addon"><i className="glyphicon glyphicon-lock"></i></span>
-                                    <input id="login-password" type="password" className="form-control" name="password" placeholder="password" />
-                                </div>
-                                <div className="input-group">
-                                    <div className="checkbox">
-                                        <label>
-                                            <input id="login-remember" type="checkbox" name="remember" value="1" /> Remember me
-                            </label>
-                                    </div>
-                                </div>
-                                <div style={{ marginTop: 10 }} className="form-group">
-
-                                    <div className="col-sm-12 controls">
-                                        <button id="btn-login" type="submit" className="btn btn-success"  >Login</button>
-                                        <button id="btn-fblogin" className="btn btn-primary" >Login with Stackoverflow</button>
-
-                                    </div>
-                                </div>
-
-
-                                <div className="form-group">
-                                    <div className="col-md-12 control">
+                            <Form horizontal>
+                                <FormGroup controlId="loginEmail" style={{ marginBottom: 25 }} >
+                                    <Col md={12}>
+                                        <InputGroup>
+                                            <InputGroup.Addon><Glyphicon glyph="user" /></InputGroup.Addon>
+                                            <FormControl type="text" placeholder="username or email" value={this.state.loginEmail} onChange={(e) => { this.handleChange(e) }} />
+                                        </InputGroup>
+                                    </Col>
+                                </FormGroup>
+                                <FormGroup controlId="loginPassword" style={{ marginBottom: 25 }} >
+                                    <Col md={12}>
+                                        <InputGroup>
+                                            <InputGroup.Addon><Glyphicon glyph="lock" /></InputGroup.Addon>
+                                            <FormControl type="password" placeholder="password" value={this.state.loginPassword} onChange={(e) => { this.handleChange(e) }} />
+                                        </InputGroup>
+                                    </Col>
+                                </FormGroup>
+                                <FormGroup style={{ marginTop: 10 }}>
+                                    <Col sm={12} md={12}>
+                                        <Button id="btn-login" bsStyle="success" onClick={ (e) =>this.login(e) }>Login</Button>
+                                        <span style={{ marginLeft: 8 }}>OR</span>
+                                        <Button style={{ marginLeft: 8 }} id="btn-flogin" bsStyle="primary">Login with Stackoverflow</Button>
+                                    </Col>
+                                </FormGroup>
+                                <FormGroup style={{ marginTop: 10 }}>
+                                    <Col sm={12} md={12}>
                                         <div style={{ borderTop: '1 solid#888', paddingTop: 15 }} >
                                             Don't have an account!
                            <Link to="./signup">
-
                                                 Sign Up Here
-
                             </Link>
                                         </div>
-                                    </div>
-                                </div>
+                                    </Col>
+                                </FormGroup>
                             </Form>
-
-
-
                         </div>
                     </div>
                 </div>

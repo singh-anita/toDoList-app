@@ -1,9 +1,7 @@
 var mongoose = require('mongoose');
-
 var Schema = mongoose.Schema;
-
- var dbase = mongoose.createConnection("mongodb://localhost/")
- const db = dbase.useDb('local')
+var dbase = mongoose.createConnection("mongodb://localhost/")
+const db = dbase.useDb('local')
 
 //mongoose.connect('mongodb://localhost/local');
 
@@ -34,8 +32,17 @@ u.save(function(err,doc){
 
 })*/
 //insert new users into the database -. sign up functionality
-exports.newUser = function(userInsObject){
+exports.newUser = function(userdata){
     //return the promise object
-    return User(userInsObject).save();
+    return User(userdata);//passes the userdata to user model
 }
+// search for the user in the database -> login functionality
+exports.loginUser = function (email, password) {
+
+    return userdata.findOne({ emailId: email, password: password }, function (err, obj) {
+         if (err) throw err;
+         console.log(obj);
+     })
+ }
+ 
 //  module.exports =User;

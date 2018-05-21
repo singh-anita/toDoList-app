@@ -15,20 +15,35 @@ app.use(function (req, res, next) {
 app.use(bodyparser.json());
 // app.use(bodyparser.urlencoded({extended: true}))
 
-app.post('/', function (req, res) {
-    var userInsObject = {};
-     userInsObject.emailId =req.body.email;
-     userInsObject.username = req.body.username;
-    userInsObject.password = req.body.password;
+// FOR SIGN UP - create user accounts
+app.post('/signup', function (req, res) {
+    var userdata = {};
+     userdata.emailId =req.body.email;
+     userdata.username = req.body.username;
+    userdata.password = req.body.password;
 
-console.log("user obj created " , userInsObject);
+console.log("user obj created " ,userdata);
  //   var email=req.body.email;
   //  var username=req.body.username;
   //  var password=req.body.password;
   //  var confpassword=req.body.confpassword;
    // console.log(req.body)
+   newUser(userdata).save(function(err,d){
+    //send this error in a fancy way back to the app
+    if(err) throw err
+    else {
+        console.log("INSERT SUCCESSFUL")
+       // return res.redirect('/profile');
+      }
+});
 
-    newUser(userInsObject).then(x => console.log("INSERT SUCCESSFUL"));
+    /*newUser(userdata).then(x => console.log("INSERT SUCCESSFUL")).catch(err => {
+        res.status(400).send("unable to save to database");
+        });*/
     
+});
+
+app.post('/', function (req, res) {
+    console.log(req.body)
 })
-app.listen(8001);
+app.listen(3001);
