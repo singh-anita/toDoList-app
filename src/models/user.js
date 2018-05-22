@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-var dbase = mongoose.createConnection("mongodb://localhost/")
+var dbase = mongoose.createConnection("mongodb://localhost/");
+var bcrypt = require('bcrypt');
 const db = dbase.useDb('local')
 
 //mongoose.connect('mongodb://localhost/local');
@@ -12,8 +13,7 @@ var UserSchema = new Schema({
     password: String,
     key: String
 });
-// the schema is useless so far
-// we need to create a model using it
+/* the schema is useless so far we need to create a model using it*/
 var User = db.model('User', UserSchema);
 
 /*var u = new User({
@@ -44,5 +44,19 @@ exports.loginUser = function (email, password) {
          console.log(obj);
      })
  }
- 
+ //generating a hash
+ exports.hashpass = function (password, saltRounds) {
+    var hash = bcrypt.hashSync(password, saltRounds);
+    //console.log(hash);
+    return hash;
+}
+ // checking if password is valid
+ exports.validPassword = function(password , dbPassword) {
+
+    return bcrypt.compareSync(password,dbPassword);
+};
 //  module.exports =User;
+
+exports.checkUserEmail = function(emailId){
+    return User.findOne({emailId : emailId})
+}

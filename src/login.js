@@ -20,8 +20,8 @@ class Login extends Component {
     }
     login(e) {
         var userobj = {
-            "login_email": this.state.loginEmail,
-            "login_password": this.state.loginPassword
+            "loginEmail": this.state.loginEmail,
+            "loginPassword": this.state.loginPassword
         };
        // console.log(userobj)
         /*Posting Data From React to the Node Service*/

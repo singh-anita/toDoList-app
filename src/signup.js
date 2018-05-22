@@ -42,7 +42,7 @@ class Signup extends Component {
          };
        // console.log(obj)
         /*Posting Data From React to the Node Service*/
-        axios.post('http://localhost:3001', obj)
+        axios.post('http://localhost:3001/signup', obj)
           .then(function (response) {
             console.log(response);
           })
