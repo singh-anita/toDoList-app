@@ -11,7 +11,8 @@ var UserSchema = new Schema({
     emailId: String,
     username: String,
     password: String,
-    key: String
+    token: String,
+    timestamp : Number
 });
 /* the schema is useless so far we need to create a model using it*/
 var User = db.model('User', UserSchema);
@@ -56,7 +57,7 @@ exports.loginUser = function (email, password) {
     return bcrypt.compareSync(password,dbPassword);
 };
 //  module.exports =User;
-
+/*find email*/
 exports.checkUserEmail = function(emailId){
     return User.findOne({emailId : emailId})
 }

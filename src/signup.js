@@ -33,22 +33,22 @@ class Signup extends Component {
         });
     }
 
-     handleSubmit(e){
+    handleSubmit(e) {
         // console.log(e)
         var obj = {
-            "email":this.state.email,
-            "username":this.state.username,
-            "password":this.state.password
-         };
-       // console.log(obj)
+            "email": this.state.email,
+            "username": this.state.username,
+            "password": this.state.password
+        };
+        // console.log(obj)
         /*Posting Data From React to the Node Service*/
         axios.post('http://localhost:3001/signup', obj)
-          .then(function (response) {
-            console.log(response);
-          })
-          .catch(function (error) {
-            console.log(error);
-          });
+            .then(function (response) {
+                console.log(response);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
     }
 
     render() {
@@ -97,7 +97,7 @@ class Signup extends Component {
                                 </FormGroup>
                                 <FormGroup>
                                     <Col smOffset={3} mdOffset={3} sm={9} md={9}>
-                                        <Button type="button" bsStyle="success" onClick={ (e) =>this.handleSubmit(e) }><i className="icon-hand-right"></i>Sign Up</Button>
+                                        <Button type="button" bsStyle="success" onClick={(e) => this.handleSubmit(e)}><i className="icon-hand-right"></i>Sign Up</Button>
                                         <span style={{ marginLeft: 8 }}> OR </span>
                                         <Button type="submit" bsStyle="primary">Sign Up with Stackoverflow</Button>
                                     </Col>
