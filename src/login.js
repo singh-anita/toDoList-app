@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Button, Form, Col, FormGroup, FormControl, InputGroup, ControlLabel, Glyphicon } from "react-bootstrap";
-import { Link } from 'react-router-dom';
+import { Link,Redirect } from 'react-router-dom';
 import axios from 'axios';
 
 class Login extends Component {
@@ -9,7 +9,8 @@ class Login extends Component {
 
         this.state = {
             loginEmail: "",
-            loginPassword: ""
+            loginPassword: "",
+            redirect: false  
         };
         this.handleChange = this.handleChange.bind(this);
     }
@@ -18,7 +19,15 @@ class Login extends Component {
             [e.target.id]: e.target.value
         });
     }
-    login(e) {
+
+    renderRedirect(){
+        if(this.state.redirect){
+            return <Redirect to='/dashboard'/>
+        }
+    }
+
+    login() {
+        
         var userobj = {
             "loginEmail": this.state.loginEmail,
             "loginPassword": this.state.loginPassword
@@ -31,13 +40,20 @@ class Login extends Component {
               "Authorization": localStorage.getItem('authtoken')
             }
           })
-            .then(function (response) {
-               console.log(response.data.authtoken);
-               if (!localStorage.authtoken) {
+            .then( (response) => {
+               /* console.log(response.data.authtoken);*/
+            //    if (1) {
                 //save it in localStorage
-             localStorage.setItem('authtoken', (response.data.authtoken));
+            //  localStorage.setItem('authtoken', (response.data.authtoken));
                 console.log("Saved in localStorage ");
-                 }
+                console.log("RESPONSE : ",response)
+                this.setState({
+                    redirect: true
+                  })
+                
+               // this.setRedirect()
+                //  }
+               
               // console.log(response);
             })
             .catch(function (error) {
@@ -53,6 +69,7 @@ class Login extends Component {
                             <div className="panel-title">Sign In</div>
                             <div><a href="#">Forgot password?</a></div>
                         </div>
+                        
                         <div style={{ paddingTop: 30 }} className="panel-body" >
                             <Form horizontal>
                                 <FormGroup controlId="loginEmail" style={{ marginBottom: 25 }} >
@@ -73,7 +90,8 @@ class Login extends Component {
                                 </FormGroup>
                                 <FormGroup style={{ marginTop: 10 }}>
                                     <Col sm={12} md={12}>
-                                        <Button id="btn-login" bsStyle="success" onClick={(e) => this.login(e)}>Login</Button>
+                                   {this.renderRedirect()}
+                                        <Button id="btn-login" bsStyle="success" onClick={this.login.bind(this)}>Login</Button>
                                         <span style={{ marginLeft: 8 }}>OR</span>
                                         <Button style={{ marginLeft: 8 }} id="btn-flogin" bsStyle="primary">Login with Stackoverflow</Button>
                                     </Col>

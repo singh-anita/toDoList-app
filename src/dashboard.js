@@ -105,18 +105,18 @@ class Dashboard extends Component {
             marginBottom: '10px'
         }
         return (
-            <div class="container">
-                <header class="page-title">
+            <div className="container">
+                <header className="page-title">
                 </header>
-                <div class="todo-in-progress">
+                <div className="todo-in-progress">
                     <h2> Working tasks</h2>
-                    <div class="left_menu">
-                        <div class="cont">
+                    <div className="left_menu">
+                        <div className="cont">
                             <h3 style={{ marginLeft: '6px', paddingTop: '3px' }}>
                                 TO DO
                             </h3>
-                            <div class="addlist">
-                                <input type="text" onChange={(e) => { this.update(e) }} class="form-control add-todo" placeholder="Add todo" value={this.state.value} />
+                            <div className="addlist">
+                                <input type="text" onChange={(e) => { this.update(e) }} className="form-control add-todo" placeholder="Add todo" value={this.state.value} />
                             </div>
                             <Button onClick={() => { this.add() }}>
                                 <span>Add Project</span>
@@ -132,21 +132,21 @@ class Dashboard extends Component {
                             }
                         </ListGroup>
                     </div>
-                    <div class="content_container">
+                    <div className="content_container">
                         <div>
                             {
                                 this.state.t_name
                             }
                         </div>
                         <Button style={content} onClick={() => { this.addItem() }}>
-                            <span class="glyphicon glyphicon-plus adder_icon" style={{ marginRight: '10px' }}></span>
+                            <span className="glyphicon glyphicon-plus adder_icon" style={{ marginRight: '10px' }}></span>
                             Add Item
                     </Button>
                         {
                             this.state.inputtxt.map((curr, index) => {
                                 return (
                                     <div>
-                                        <input type="text" class="form-control add-todo" placeholder="Add items" onChange={(e) => { this.handleChange(e) }} value={this.state.description} />
+                                        <input type="text" className="form-control add-todo" placeholder="Add items" onChange={(e) => { this.handleChange(e) }} value={this.state.description} />
                                         <Button onClick={() => { this.addContent() }} style={{ marginBottom: '20px' }}>Add Item</Button>
                                         <Button style={{ marginBottom: '20px' }}>Cancel</Button>
                                     </div>
@@ -160,15 +160,15 @@ class Dashboard extends Component {
                                 this.state.item.map((curr, index) => {
                                     return (
                                         <ListGroupItem>
-                                            <div class="description">
+                                            <div className="description">
                                                 <Checkbox>{curr.content}</Checkbox>
                                             </div>
-                                            <div class="action">
+                                            <div className="action">
                                                 <Button style={edit}>
-                                                    <i class="glyphicon glyphicon-pencil"></i>
+                                                    <i className="glyphicon glyphicon-pencil"></i>
                                                 </Button>
                                                 <Button style={delet}>
-                                                    <i class="glyphicon glyphicon-trash"></i>
+                                                    <i className="glyphicon glyphicon-trash"></i>
                                                 </Button>
                                             </div>
                                         </ListGroupItem>

@@ -6,6 +6,7 @@ import Signup from './signup';
 import Login from './login';
 import UserProfile from './useprofile';
 import MaterialIcon from 'react-google-material-icons'
+import Dashboard from './dashboard';
 //import Dashboard from './dashboard';
 //import Inputa from './input';
 //import TodoItem from './todoItem';
@@ -18,7 +19,7 @@ class App extends Component {
         <Switch>
            {/* THE SIGN UP ROUTE */}
              <Route exact path='/signup' component={Signup} />
-             
+             <Route exact path = '/dashboard' component = { Dashboard } />
                {/* This is LOGIN ROUTE */}
              <Route exact path='/' component={Login} />
           </Switch>
