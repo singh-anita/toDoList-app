@@ -23,14 +23,25 @@ class Login extends Component {
             "loginEmail": this.state.loginEmail,
             "loginPassword": this.state.loginPassword
         };
-       // console.log(userobj)
+        // console.log(userobj)
         /*Posting Data From React to the Node Service*/
-          axios.post('http://localhost:3001', userobj)
+        axios.post('http://localhost:3001', userobj,
+         {
+            headers: {
+              "Authorization": localStorage.getItem('authtoken')
+            }
+          })
             .then(function (response) {
-              console.log(response);
+               console.log(response.data.authtoken);
+               if (!localStorage.authtoken) {
+                //save it in localStorage
+             localStorage.setItem('authtoken', (response.data.authtoken));
+                console.log("Saved in localStorage ");
+                 }
+              // console.log(response);
             })
             .catch(function (error) {
-              console.log(error);
+                console.log(error);
             });
     }
     render() {
@@ -62,7 +73,7 @@ class Login extends Component {
                                 </FormGroup>
                                 <FormGroup style={{ marginTop: 10 }}>
                                     <Col sm={12} md={12}>
-                                        <Button id="btn-login" bsStyle="success" onClick={ (e) =>this.login(e) }>Login</Button>
+                                        <Button id="btn-login" bsStyle="success" onClick={(e) => this.login(e)}>Login</Button>
                                         <span style={{ marginLeft: 8 }}>OR</span>
                                         <Button style={{ marginLeft: 8 }} id="btn-flogin" bsStyle="primary">Login with Stackoverflow</Button>
                                     </Col>

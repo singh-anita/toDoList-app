@@ -16,7 +16,10 @@ class App extends Component {
       <Router>
 
         <Switch>
+           {/* THE SIGN UP ROUTE */}
              <Route exact path='/signup' component={Signup} />
+             
+               {/* This is LOGIN ROUTE */}
              <Route exact path='/' component={Login} />
           </Switch>
        </Router>

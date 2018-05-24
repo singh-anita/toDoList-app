@@ -1,0 +1,15 @@
+  ///  var token = r.randomToken().then(console.log(res)) ;
+   // console.log(r.ab)
+  /*  r.randomToken(function(name){
+        console.log(name);
+    })*/
+
+// testing for random token storage
+app.post('/test', function(req,res){
+    console.log("IN / TEST")
+    var x= randomToken();
+    Console.log(x)
+   /* var x =  r.randomToken(function(name){
+        return name;
+    })*/
+})
