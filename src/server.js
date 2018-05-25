@@ -1,8 +1,8 @@
 var express = require('express'); // call express
 var app = express();  /* define our app using express*/
 var bodyparser = require("body-parser");
-var { checkUserEmail, newUser, hashpass, validPassword } = require('./models/user');
-var r= require('./tokenGenerate');
+var { checkUserEmail, newUser, hashpass, validPassword, newToken, checkuId } = require('./models/user');
+var r = require('./tokenGenerate');
 var passport = require('passport');
 var flash = require('connect-flash');
 const saltRounds = 10;
@@ -26,18 +26,52 @@ app.use(bodyparser.json());
 /*----- FOR SIGN UP - create user accounts-------*/
 app.post('/signup', function (req, res) {
     var userdata = {};
+    var tokendata = {};
     userdata.emailId = req.body.email;
     userdata.username = req.body.username;
     userdata.password = hashpass(req.body.password, saltRounds);/*Store hash in your password DB.*/
-    userdata.token =  r.randomToken();/*random token generate*/
-    userdata.timestamp = new Date().getTime(); 
 
-    console.log("HASH VALUE : ", userdata.password)
-    console.log("user obj created ", userdata);
-    newUser(userdata).save(function (err, data) {
-        if (err) throw err
-        console.log("SAVE SUCCESSFUL")
-    })
+    console.log("HASH VALUE : ", req.headers.authorization)
+    // console.log("user obj created ", userdata);
+    if (req.headers.authorization == "null") {
+        console.log("HJGFNJDFBYTFTYU")
+        newUser(userdata).save(function (err, data) {
+            if (err) throw err
+            console.log("SAVE SUCCESSFUL")
+
+            // var obj = {}
+            tokendata.uId = data._id;
+            tokendata.token = r.randomToken()
+            tokendata.timestamp = new Date().getTime()
+
+            newToken(tokendata).save(function (err, data) {
+                if (err) throw err
+                console.log("token SAVE SUCCESSFUL")
+                res.send({ authtoken: tokendata.token, redirect: '/' });
+            })
+
+        })
+    }
+    else {
+
+        console.log("dsfgvhyfvui")
+        checkuId(req.headers.authorization).then((tokendata, err) => {
+
+            if (err) throw err;
+
+            console.log("tok", tokendata)
+
+            //check if the token is expired by finding the difference between
+            // the time now and the timestamp in the database
+            // if (!((new Date().getTime() - tokendata.timestamp) > 3600)) {
+                
+                res.json({ redirect: '/' })
+            // }
+
+        })
+
+    }
+
 });
 
 /*---------------------FOR login---------------------------*/
@@ -46,20 +80,33 @@ app.post('/', function (req, res) {
     var userlogin = {};
     userlogin.emailId = req.body.loginEmail;
     userlogin.password = req.body.loginPassword;
-   // userlogin.token =
-//    console.log(userlogin)
-//    console.log(req.headers.authorization);
+    var tokenobj = {};
+    // userlogin.token =
+    //    console.log(userlogin)
+    //    console.log(req.headers.authorization);
     checkUserEmail(userlogin.emailId).then((userObj, err) => {
-        if(err)throw err;
+        if (err) throw err;
         console.log("IS IT RIGHT : ", validPassword(userlogin.password, userObj.password));
-        // console.log(userObj)
-        console.log(userObj.token)
-        res.send({authtoken : userObj.token});
-    });
+        console.log(userObj);
+        // if(uId){
+        console.log("header", req.headers.authorization);
+        if (req.headers.authorization) {
+            tokenobj.uId = userObj._id;
+            checkuId(tokenobj.uId).then((tokenobj, err) => {
+                console.log("tok", tokenobj)
+                if (err) throw err;
+                res.send({ authtoken: tokenobj.token });
+            })
+        }
+        // }
+        //checkuId(uId).then()
+        // console.log("tok",userObj.token)
+        //   res.send({authtoken : userObj.token});
+    })
 })
 
 
-app.listen(3001, function(){
+app.listen(3001, function () {
     console.log("SERVER RUNNING ON PORT 3001")
 });
 

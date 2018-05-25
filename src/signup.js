@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Button, Form, Col, FormGroup, FormControl, HelpBlock, ControlLabel } from "react-bootstrap";
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import axios from 'axios';
 //disabled={!this.validateForm()}
 /*import LoaderButton from "../components/LoaderButton";*/
@@ -14,10 +14,30 @@ class Signup extends Component {
             email: "",
             username: "",
             password: "",
-            confpsswd: ""
+            confpsswd: "",
+            redirect: false
         };
         this.handleChange = this.handleChange.bind(this);
     }
+
+    componentWillMount() {
+        var obj = {
+            "sdzg" : "xzv"
+        }
+        axios.post('http://localhost:3001/signup', obj, {
+            headers: {
+                "Authorization": localStorage.getItem('authtoken')
+            }
+        }).then(
+            function (response) {
+                if (response.data.redirect == '/') {
+                    this.setState({ redirect: true })
+                }
+            }
+        )
+    }
+
+
     validateForm() {
         return
         (
@@ -32,6 +52,11 @@ class Signup extends Component {
             [e.target.id]: e.target.value
         });
     }
+    renderRedirect() {
+        if (this.state.redirect) {
+            return <Redirect to='/dashboard' />
+        }
+    }
 
     handleSubmit(e) {
         // console.log(e)
@@ -40,12 +65,36 @@ class Signup extends Component {
             "username": this.state.username,
             "password": this.state.password
         };
-        // console.log(obj)
+        // console.log("TOKEN IN SIGNUP : ", localStorage.getItem("authtoken"))
         /*Posting Data From React to the Node Service*/
-        axios.post('http://localhost:3001/signup', obj)
-            .then(function (response) {
-                console.log(response);
+        axios.post('http://localhost:3001/signup', obj, {
+            headers: {
+                "Authorization": localStorage.getItem('authtoken')
+            }
+        })
+            .then((response) => {
+                console.log(response.data.authtoken);
+                if (!localStorage.getItem('authtoken')) {
+                    //save it in localStorage
+                    localStorage.setItem('authtoken', (response.data.authtoken));
+                    console.log("Saved in localStorage ");
+                    console.log("RESPONSE : ", response)
+                    this.setState({
+                        redirect: true
+                    })
+                }
+                else {
+                    console.log("I AM HERRE!!!!");
+
+                    if (response.data.redirect == '/')
+                        this.setState({
+                            redirect: true
+                        })
+                }
             })
+            /*.then(function (response) {
+                console.log(response);
+            })*/
             .catch(function (error) {
                 console.log(error);
             });
@@ -97,6 +146,7 @@ class Signup extends Component {
                                 </FormGroup>
                                 <FormGroup>
                                     <Col smOffset={3} mdOffset={3} sm={9} md={9}>
+                                        {this.renderRedirect()}
                                         <Button type="button" bsStyle="success" onClick={(e) => this.handleSubmit(e)}><i className="icon-hand-right"></i>Sign Up</Button>
                                         <span style={{ marginLeft: 8 }}> OR </span>
                                         <Button type="submit" bsStyle="primary">Sign Up with Stackoverflow</Button>

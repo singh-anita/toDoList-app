@@ -3,22 +3,198 @@ import { ListGroup, ListGroupItem, Button, FormGroup, FormControl, ControlLabel,
 import { Link } from 'react-router-dom';
 import './dashboard.css';
 class Dashboard extends Component {
-    notesObjArray = [{ title: 'Shopping List', list: [{ content: 'Eggs are required for the body', isChecked: true }, 
-    { content: 'Milk is white in color', isChecked: true }, { content: 'Cereals always require milk.', isChecked: false }, 
-    { content: 'Bread and butter make a man\'s breakfast', isChecked: true },] }, { title: 'Word List', list: [{ content: 'Cornucopia means too many in number', isChecked: false }, { content: 'Abtruse means to interpret in a specific way', isChecked: false }, { content: 'Orwellian is a term associated with a dystopian world', isChecked: true }, { content: 'Obtuse means slow to understand', isChecked: false },] }, 
-    { title: 'Villain List', list: [{ content: 'Joker', isChecked: false }, { content: 'Copperhead', isChecked: true }, { content: 'Prometheus', isChecked: false }, { content: 'Harley Quinn', isChecked: true }] }, { title: 'Shopping List', list: [{ content: '', isChecked: true }, { content: '', isChecked: true }, { content: '', isChecked: false }, { content: '', isChecked: true },] }, { title: 'Word List', list: [{ content: 'Cornucopia', isChecked: false }, 
-    { content: 'Abtruse', isChecked: false }, { content: 'Orwellian', isChecked: true }, { content: 'Obtruse', isChecked: false },] }, { title: 'Villain List', list: [{ content: 'Joker', isChecked: false }, { content: 'Copperhead', isChecked: true }, { content: 'Prometheus', isChecked: false }, { content: 'Harley Quinn', isChecked: true }] }, { title: 'Shopping List', list: [{ content: 'Eggs', isChecked: true }, { content: 'Milk', isChecked: true }, { content: 'Cereals', isChecked: false }, { content: 'Bread', isChecked: true },] }, { title: 'Word List', list: [{ content: 'Cornucopia', isChecked: false }, 
-    { content: 'Abtruse', isChecked: false }, 
-    { content: 'Orwellian', isChecked: true }, { content: 'Obtruse', isChecked: false },] }, {
-        title: 'Villain List', list: [{ content: 'Joker', isChecked: false }, { content: 'Copperhead', isChecked: true }, { content: 'Prometheus', isChecked: false },
-        { content: 'Harley Quinn', isChecked: true }]
-    }]
+    notesObjArray = [
+        {
+            title: 'Shopping List',
+            list: [
+                { content: 'Eggs are required for the body', isChecked: true },
+                { content: 'Milk is white in color', isChecked: true },
+                { content: 'Cereals always require milk.', isChecked: false },
+                { content: 'Bread and butter make a man\'s breakfast', isChecked: true }
+            ]
+        },
+
+        {
+            title: 'Word List',
+            list: [
+                { content: 'Cornucopia means too many in number', isChecked: false },
+                { content: 'Abtruse means to interpret in a specific way', isChecked: false },
+                { content: 'Orwellian is a term associated with a dystopian world', isChecked: true },
+                { content: 'Obtuse means slow to understand', isChecked: false }
+            ]
+        },
+
+        {
+            title: 'Villain List',
+            list: [
+                { content: 'Joker', isChecked: false },
+                { content: 'Copperhead', isChecked: true },
+                { content: 'Prometheus', isChecked: false },
+                { content: 'Harley Quinn', isChecked: true }
+            ]
+        },
+
+        {
+            title: 'Shopping List',
+            list: [
+                { content: '', isChecked: true },
+                { content: '', isChecked: true },
+                { content: '', isChecked: false },
+                { content: '', isChecked: true }
+            ]
+        },
+
+        {
+            title: 'Word List',
+            list: [
+                { content: 'Cornucopia', isChecked: false },
+                { content: 'Abtruse', isChecked: false },
+                { content: 'Orwellian', isChecked: true },
+                { content: 'Obtruse', isChecked: false }
+            ]
+        },
+
+        {
+            title: 'Villain List', list: [
+                { content: 'Joker', isChecked: false },
+                { content: 'Copperhead', isChecked: true },
+                { content: 'Prometheus', isChecked: false },
+                { content: 'Harley Quinn', isChecked: true }
+            ]
+        },
+
+        {
+            title: 'Shopping List', list: [
+                { content: 'Eggs', isChecked: true },
+                { content: 'Milk', isChecked: true },
+                { content: 'Cereals', isChecked: false },
+                { content: 'Bread', isChecked: true }
+            ]
+        },
+
+        {
+            title: 'Word List', list: [
+                { content: 'Cornucopia', isChecked: false },
+                { content: 'Abtruse', isChecked: false },
+                { content: 'Orwellian', isChecked: true },
+                { content: 'Obtruse', isChecked: false }
+            ]
+        },
+
+        {
+            title: 'Villain List', list: [
+                { content: 'Joker', isChecked: false },
+                { content: 'Copperhead', isChecked: true },
+                { content: 'Prometheus', isChecked: false },
+                { content: 'Harley Quinn', isChecked: true }
+            ]
+        }]
+
+
+
+
+
     constructor(props) {
         super(props);
         this.state = {
-            list: [],
+
+            list: [
+                {
+                    title: 'Shopping List1',
+                    list: [
+                        { content: 'Eggs are required for the body', isChecked: true },
+                        { content: 'Milk is white in color', isChecked: true },
+                        { content: 'Cereals always require milk.', isChecked: false },
+                        { content: 'Bread and butter make a man\'s breakfast', isChecked: true }
+                    ]
+                },
+
+                {
+                    title: 'Word List1',
+                    list: [
+                        { content: 'Cornucopia means too many in number', isChecked: false },
+                        { content: 'Abtruse means to interpret in a specific way', isChecked: false },
+                        { content: 'Orwellian is a term associated with a dystopian world', isChecked: true },
+                        { content: 'Obtuse means slow to understand', isChecked: false }
+                    ]
+                },
+
+                {
+                    title: 'Villain List1',
+                    list: [
+                        { content: 'Joker', isChecked: false },
+                        { content: 'Copperhead', isChecked: true },
+                        { content: 'Prometheus', isChecked: false },
+                        { content: 'Harley Quinn', isChecked: true }
+                    ]
+                },
+
+                {
+                    title: 'Shopping List2',
+                    list: [
+                        { content: 'xdfrgxhbxdrtfhnj', isChecked: true },
+                        { content: 'xderhfgxdrth', isChecked: true },
+                        { content: 'xdrehy', isChecked: false },
+                        { content: 'drxtgh', isChecked: true }
+                    ]
+                },
+
+                {
+                    title: 'Word List2',
+                    list: [
+                        { content: 'Cornucopia', isChecked: false },
+                        { content: 'Abtruse', isChecked: false },
+                        { content: 'Orwellian', isChecked: true },
+                        { content: 'Obtruse', isChecked: false }
+                    ]
+                },
+
+                {
+                    title: 'Villain List2', list: [
+                        { content: 'Joker', isChecked: false },
+                        { content: 'Copperhead', isChecked: true },
+                        { content: 'Prometheus', isChecked: false },
+                        { content: 'Harley Quinn', isChecked: true }
+                    ]
+                },
+
+                {
+                    title: 'Shopping List3', list: [
+                        { content: 'Eggs', isChecked: true },
+                        { content: 'Milk', isChecked: true },
+                        { content: 'Cereals', isChecked: false },
+                        { content: 'Bread', isChecked: true }
+                    ]
+                },
+
+                {
+                    title: 'Word List3', list: [
+                        { content: 'Cornucopia', isChecked: false },
+                        { content: 'Abtruse', isChecked: false },
+                        { content: 'Orwellian', isChecked: true },
+                        { content: 'Obtruse', isChecked: false }
+                    ]
+                },
+
+                {
+                    title: 'Villain List3', list: [
+                        { content: 'Joker', isChecked: false },
+                        { content: 'Copperhead', isChecked: true },
+                        { content: 'Prometheus', isChecked: false },
+                        { content: 'Harley Quinn', isChecked: true }
+                    ]
+                }],
             value: '',
             t_name: '',
+            selectedTitleContents :[ {
+                title: 'Shopping List',
+                list: [
+                    { content: 'xdzsgvxdrfgb', isChecked: true },
+                    { content: 'xdrfgb', isChecked: true },
+                    { content: 'xdtrh', isChecked: false },
+                    { content: 'xdrtfh', isChecked: true }
+                ]
+            }],
             inputtxt: [],
             item: [],
             description: ''
@@ -35,7 +211,7 @@ class Dashboard extends Component {
             this.setState({
                 list: this.state.list.concat([{ pro_name: this.state.value }]),
                 value: '',
-                t_name: ''
+                // selectedTitleContents: ''
             });
         }
     }
@@ -66,9 +242,16 @@ class Dashboard extends Component {
         })
     }
     title(e) {
-        // alert(e.target.value);
+        console.log("IN TITLE : ", e.target.value)
+        // console.log("IN TITLE : ", this.state.list.filter( (arr, idx) =>{
+        //             return arr.title == e.target.value
+        //         } ));
+
+
         this.setState({
-            t_name: e.target.value
+            selectedTitleContents: this.state.list.filter( (arr, idx) =>{
+                return arr.title == e.target.value
+            } )
         })
     }
     alertClicked() {
@@ -90,6 +273,30 @@ class Dashboard extends Component {
         this.setState({
             value: e.target.value
         })
+    }
+
+    test(){
+            if(this.state.selectedTitleContents){
+                return(
+                    this.state.selectedTitleContents[0].list.map( (noteEntry, idx) =>{
+                        return (
+                                <ListGroupItem>
+                                        <div className="description">
+                                            <Checkbox checked = { noteEntry.isChecked }>{noteEntry.content}</Checkbox>
+                                        </div>
+                                        <div className="action">
+                                            <Button >
+                                                <i className="glyphicon glyphicon-pencil"></i>
+                                            </Button>
+                                            <Button >
+                                                <i className="glyphicon glyphicon-trash"></i>
+                                            </Button>
+                                        </div>
+                                </ListGroupItem>
+                                );
+                    } ) 
+                )
+            }
     }
 
     render() {
@@ -126,7 +333,7 @@ class Dashboard extends Component {
                             {
                                 this.state.list.map((curr, index) => {
                                     return (
-                                        <ListGroupItem onClick={this.title.bind(this)} value={curr.pro_name}>{curr.pro_name}</ListGroupItem>
+                                        <ListGroupItem onClick={this.title.bind(this)} value={curr.title}>{curr.title}</ListGroupItem>
                                     );
                                 })
                             }
@@ -153,34 +360,37 @@ class Dashboard extends Component {
                                 )
                             })
                         }
-
-
                         <ListGroup componentClass="ul">
+                        {this.test()}
                             {
-                                this.state.item.map((curr, index) => {
-                                    return (
-                                        <ListGroupItem>
-                                            <div className="description">
-                                                <Checkbox>{curr.content}</Checkbox>
-                                            </div>
-                                            <div className="action">
-                                                <Button style={edit}>
-                                                    <i className="glyphicon glyphicon-pencil"></i>
-                                                </Button>
-                                                <Button style={delet}>
-                                                    <i className="glyphicon glyphicon-trash"></i>
-                                                </Button>
-                                            </div>
-                                        </ListGroupItem>
-                                    );
-                                })
+
+
+                          
+                    
+
+
+                                // this.state.item.map((curr, index) => {
+                                //     return (
+                                //         <ListGroupItem>
+                                //             <div className="description">
+                                //                 <Checkbox>{curr.content}</Checkbox>
+                                //             </div>
+                                //             <div className="action">
+                                //                 <Button style={edit}>
+                                //                     <i className="glyphicon glyphicon-pencil"></i>
+                                //                 </Button>
+                                //                 <Button style={delet}>
+                                //                     <i className="glyphicon glyphicon-trash"></i>
+                                //                 </Button>
+                                //             </div>
+                                //         </ListGroupItem>
+                                //     );
+                                // })
                             }
                         </ListGroup>
                     </div>
                 </div>
             </div>
-
-
         );
     }
 }

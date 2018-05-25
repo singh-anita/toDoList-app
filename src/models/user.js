@@ -2,8 +2,8 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var dbase = mongoose.createConnection("mongodb://localhost/");
 var bcrypt = require('bcrypt');
-const db = dbase.useDb('local')
-
+//const db = dbase.useDb('local')
+const db = dbase.useDb('todoapp')
 //mongoose.connect('mongodb://localhost/local');
 
 // create a schema
@@ -11,12 +11,17 @@ var UserSchema = new Schema({
     emailId: String,
     username: String,
     password: String,
-    token: String,
-    timestamp : Number
+  //  token: String,
+ //   timestamp : Number
 });
+var TokenSchema = new Schema({
+    uId: String,
+    token: String,
+   timestamp : Number
+})
 /* the schema is useless so far we need to create a model using it*/
 var User = db.model('User', UserSchema);
-
+var Token =db.model('Token',TokenSchema);
 /*var u = new User({
     username: "sree",
     name: "SreeraG",
@@ -36,6 +41,11 @@ u.save(function(err,doc){
 exports.newUser = function(userdata){
     //return the promise object
     return User(userdata);//passes the userdata to user model
+}
+//insert new token into the database -. sign up functionality
+exports.newToken = function(tokendata){
+    //return the promise object
+    return Token(tokendata);//passes the token data to user model
 }
 // search for the user in the database -> login functionality
 exports.loginUser = function (email, password) {
@@ -60,4 +70,7 @@ exports.loginUser = function (email, password) {
 /*find email*/
 exports.checkUserEmail = function(emailId){
     return User.findOne({emailId : emailId})
+}
+exports.checkuId= function(token){
+    return Token.findOne({token : token})
 }

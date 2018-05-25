@@ -41,10 +41,10 @@ class Login extends Component {
             }
           })
             .then( (response) => {
-               /* console.log(response.data.authtoken);*/
-            //    if (1) {
+               console.log(response.data.authtoken);
+             if (!localStorage.getItem('authtoken')) {
                 //save it in localStorage
-            //  localStorage.setItem('authtoken', (response.data.authtoken));
+              localStorage.setItem('authtoken', (response.data.authtoken));
                 console.log("Saved in localStorage ");
                 console.log("RESPONSE : ",response)
                 this.setState({
@@ -52,7 +52,7 @@ class Login extends Component {
                   })
                 
                // this.setRedirect()
-                //  }
+              }
                
               // console.log(response);
             })
