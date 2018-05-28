@@ -1,28 +1,4 @@
-/*.todo-list {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-    overflow: auto;
-}*/
-/*.todo-list {
-    margin: 0 auto;
-    padding: 0;
-    list-style: none;
-    display: flex;
-    flex-wrap: wrap;
-  }  
-.todo-list>li {
-    border-radius: 2px;
-    background: #f4f4f4;
-    margin-bottom: 2px;
-    border-left: 2px solid #e6e7e8;
-    color: #444;
-}
-.todo-list>li .label {
-    margin-left: 10px;
-    font-size: 9px;
-}*/ 
-    .panel-title {
+  .panel-title {
     color: black;
     margin: 0 0px;
     padding: 15px 20px;
@@ -64,6 +40,7 @@
   }*/
   .cont{
   position: relative;
+  margin-bottom:20px;
   /*width: 280px;
   height: 50px;*/
   }
@@ -103,6 +80,10 @@
     padding: 0 20px;
     margin-left: 280px;
     border-right: 1px solid #f1f1f1;
+}
+.addcontent
+{
+  margin-top: 17px;
 }
 /*.todo-list>li .tools {
     display: none;

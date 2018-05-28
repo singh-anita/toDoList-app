@@ -185,8 +185,7 @@ class Dashboard extends Component {
                     ]
                 }],
             value: '',
-            t_name: '',
-            selectedTitleContents :[ {
+            selectedTitleContents: [{
                 title: 'Shopping List',
                 list: [
                     { content: 'xdzsgvxdrfgb', isChecked: true },
@@ -195,7 +194,7 @@ class Dashboard extends Component {
                     { content: 'xdrtfh', isChecked: true }
                 ]
             }],
-            inputtxt: [],
+            //  inputtxt: [],
             item: [],
             description: ''
         };
@@ -207,13 +206,13 @@ class Dashboard extends Component {
 
     add() {
         //  alert(e.target.value)
-        if (this.state.value.length > 0) {
+      //  if (this.state.value.length > 0) {
             this.setState({
-                list: this.state.list.concat([{ pro_name: this.state.value }]),
+                list: this.state.list.concat([{ title : this.state.value, list: [] }]),
                 value: '',
                 // selectedTitleContents: ''
             });
-        }
+       // }
     }
     /* handleCheck() {
          alert(this.state.value);
@@ -224,36 +223,49 @@ class Dashboard extends Component {
           //alert("clicked"+list.t_name);
         // e.currentTarget.dataset.pro_name
       }*/
-    addItem() {
+    /*addItem() {
         this.setState({
             inputtxt: this.state.inputtxt.concat({ input_box: this.state.description }),
             description: ''
         })
-    }
+    }*/
     handleChange(e) {
         this.setState({
             description: e.target.value
         })
     }
-    addContent() {
+   /* addContent() {
         this.setState({
-            item: this.state.item.concat([{ content: this.state.description }]),
+           list: this.state.list.concat([{ content: this.state.content }]),
             description: ''
         })
-    }
+    }*/
     title(e) {
         console.log("IN TITLE : ", e.target.value)
         // console.log("IN TITLE : ", this.state.list.filter( (arr, idx) =>{
         //             return arr.title == e.target.value
         //         } ));
 
-
+/*on selection of title changing state and get the selected title*/
         this.setState({
-            selectedTitleContents: this.state.list.filter( (arr, idx) =>{
+            selectedTitleContents: this.state.list.filter((arr, idx) => {
                 return arr.title == e.target.value
-            } )
+            })
         })
     }
+
+    checkStateChanged(index, e){
+        
+         console.log("CHECKBOX CHANGED : ", this.state.selectedTitleContents[0].list[index].isChecked);
+        
+        var objToChange = this.state.selectedTitleContents;
+        // console.log()
+        objToChange[0].list[index].isChecked = !this.state.selectedTitleContents[0].list[index].isChecked
+        this.setState({ selectedTitleContents : objToChange  })
+
+    }
+
+
     alertClicked() {
         alert('You clicked the ListGroupItem');
     }
@@ -275,28 +287,30 @@ class Dashboard extends Component {
         })
     }
 
-    test(){
-            if(this.state.selectedTitleContents){
-                return(
-                    this.state.selectedTitleContents[0].list.map( (noteEntry, idx) =>{
-                        return (
-                                <ListGroupItem>
-                                        <div className="description">
-                                            <Checkbox checked = { noteEntry.isChecked }>{noteEntry.content}</Checkbox>
-                                        </div>
-                                        <div className="action">
-                                            <Button >
-                                                <i className="glyphicon glyphicon-pencil"></i>
-                                            </Button>
-                                            <Button >
-                                                <i className="glyphicon glyphicon-trash"></i>
-                                            </Button>
-                                        </div>
-                                </ListGroupItem>
-                                );
-                    } ) 
-                )
-            }
+    test() {
+        console.log(this.state.selectedTitleContents)
+        if (this.state.selectedTitleContents) {
+            return (
+                this.state.selectedTitleContents[0].list.map((noteEntry, idx) => {
+                    return (
+                        <ListGroupItem>
+                            <div className="description">
+                                <Checkbox onChange = { this.checkStateChanged.bind(this, idx) }  
+                                checked={noteEntry.isChecked}>{noteEntry.content}</Checkbox>
+                            </div>
+                            <div className="action">
+                                <Button >
+                                    <i className="glyphicon glyphicon-pencil"></i>
+                                </Button>
+                                <Button >
+                                    <i className="glyphicon glyphicon-trash"></i>
+                                </Button>
+                            </div>
+                        </ListGroupItem>
+                    );
+                })
+            )
+        }
     }
 
     render() {
@@ -340,16 +354,21 @@ class Dashboard extends Component {
                         </ListGroup>
                     </div>
                     <div className="content_container">
-                        <div>
-                            {
-                                this.state.t_name
-                            }
+                        <div style={{ marginLeft: '6px', paddingTop: '3px',marginTop:'30px' }}>
+                            
+                                <h3>
+                                    {this.state.selectedTitleContents[0].title}
+                                </h3>
+                            
                         </div>
-                        <Button style={content} onClick={() => { this.addItem() }}>
-                            <span className="glyphicon glyphicon-plus adder_icon" style={{ marginRight: '10px' }}></span>
-                            Add Item
-                    </Button>
-                        {
+                        <div className="addcontent">
+                            <div className="col-md-9 addlist">
+                            <input type="text" className="form-control  add-todo" placeholder="Add items" onChange={(e) => { this.handleChange(e) }} value={this.state.description} />
+                           </div><div className="col-md-3"> <Button onClick={() => { this.addContent() }} style={{ marginBottom: '20px' }}>Add Item</Button>
+                            </div>
+                      
+                        </div>
+                        { /* 
                             this.state.inputtxt.map((curr, index) => {
                                 return (
                                     <div>
@@ -359,14 +378,15 @@ class Dashboard extends Component {
                                     </div>
                                 )
                             })
-                        }
+                        */}
+                        <div className="contentlist" style={{marginTop:'105px'}}>
                         <ListGroup componentClass="ul">
-                        {this.test()}
+                            {this.test()}
                             {
 
 
-                          
-                    
+
+
 
 
                                 // this.state.item.map((curr, index) => {
@@ -388,6 +408,7 @@ class Dashboard extends Component {
                                 // })
                             }
                         </ListGroup>
+                        </div>
                     </div>
                 </div>
             </div>
