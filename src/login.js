@@ -32,17 +32,16 @@ class Login extends Component {
             "loginEmail": this.state.loginEmail,
             "loginPassword": this.state.loginPassword
         };
-        // console.log(userobj)
+         console.log(userobj)
         /*Posting Data From React to the Node Service*/
-        axios.post('http://localhost:3001', userobj,
-         {
-            headers: {
-              "Authorization": localStorage.getItem('authtoken')
-            }
-          })
+        axios.post('http://localhost:3001', userobj)
             .then( (response) => {
-               console.log(response.data.authtoken);
-             if (!localStorage.getItem('authtoken')) {
+               console.log(response.data);
+               if (response.status == 200)
+               this.setState({ redirect: true })
+
+               console.log("HERE")
+          /*   if (!localStorage.getItem('authtoken')) {
                 //save it in localStorage
               localStorage.setItem('authtoken', (response.data.authtoken));
                 console.log("Saved in localStorage ");
@@ -52,7 +51,7 @@ class Login extends Component {
                   })
                 
                // this.setRedirect()
-              }
+              }*/
                
               // console.log(response);
             })

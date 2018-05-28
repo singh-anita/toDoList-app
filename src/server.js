@@ -29,11 +29,13 @@ app.post('/signup', function (req, res) {
     var tokendata = {};
     userdata.emailId = req.body.email;
     userdata.username = req.body.username;
-    userdata.password = hashpass(req.body.password, saltRounds);/*Store hash in your password DB.*/
-
+    userdata.password =  hashpass(req.body.password, saltRounds);/*Store hash in your password DB.*/
+    console.log("user obj created ", userdata);
+   // console.log( "hash pass",userdata.password)
     console.log("HASH VALUE : ", req.headers.authorization)
-    // console.log("user obj created ", userdata);
+  
     if (req.headers.authorization == "null") {
+      
         console.log("HJGFNJDFBYTFTYU")
         newUser(userdata).save(function (err, data) {
             if (err) throw err
@@ -47,14 +49,15 @@ app.post('/signup', function (req, res) {
             newToken(tokendata).save(function (err, data) {
                 if (err) throw err
                 console.log("token SAVE SUCCESSFUL")
-                res.send({ authtoken: tokendata.token, redirect: '/' });
+                res.send({ authtoken: tokendata.token, redirect: '/dashboard' });
             })
 
         })
     }
     else {
 
-        console.log("dsfgvhyfvui")
+        console.log(req.headers.authorization)
+        console.log(tokendata)
         checkuId(req.headers.authorization).then((tokendata, err) => {
 
             if (err) throw err;
@@ -65,7 +68,7 @@ app.post('/signup', function (req, res) {
             // the time now and the timestamp in the database
             // if (!((new Date().getTime() - tokendata.timestamp) > 3600)) {
                 
-                res.json({ redirect: '/' })
+                res.json({ redirect: '/dashboard' })
             // }
 
         })
@@ -80,11 +83,20 @@ app.post('/', function (req, res) {
     var userlogin = {};
     userlogin.emailId = req.body.loginEmail;
     userlogin.password = req.body.loginPassword;
+    console.log("OBJ : ", userlogin)
     var tokenobj = {};
     // userlogin.token =
     //    console.log(userlogin)
     //    console.log(req.headers.authorization);
     checkUserEmail(userlogin.emailId).then((userObj, err) => {
+        if(err)throw err;
+        console.log("IS IT RIGHT : ", validPassword(userlogin.password, userObj.password));
+        console.log(userObj)
+        //console.log(userObj.token)
+        res.status(200).send();
+    });
+
+   /* checkUserEmail(userlogin.emailId).then((userObj, err) => {
         if (err) throw err;
         console.log("IS IT RIGHT : ", validPassword(userlogin.password, userObj.password));
         console.log(userObj);
@@ -102,7 +114,7 @@ app.post('/', function (req, res) {
         //checkuId(uId).then()
         // console.log("tok",userObj.token)
         //   res.send({authtoken : userObj.token});
-    })
+    })*/
 })
 
 

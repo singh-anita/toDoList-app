@@ -57,9 +57,10 @@ exports.loginUser = function (email, password) {
  }
  //generating a hash
  exports.hashpass = function (password, saltRounds) {
-    var hash = bcrypt.hashSync(password, saltRounds);
-    //console.log(hash);
-    return hash;
+     console.log("password :" , password);
+     console.log("sR : ", saltRounds)
+    return hash = bcrypt.hashSync(password, saltRounds);
+    // return hash;
 }
  // checking if password is valid
  exports.validPassword = function(password , dbPassword) {
@@ -71,6 +72,7 @@ exports.loginUser = function (email, password) {
 exports.checkUserEmail = function(emailId){
     return User.findOne({emailId : emailId})
 }
+//for token 
 exports.checkuId= function(token){
     return Token.findOne({token : token})
 }

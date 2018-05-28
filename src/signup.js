@@ -21,16 +21,13 @@ class Signup extends Component {
     }
 
     componentWillMount() {
-        var obj = {
-            "sdzg" : "xzv"
-        }
-        axios.post('http://localhost:3001/signup', obj, {
+        axios.post('http://localhost:3001/signup', {} , {
             headers: {
                 "Authorization": localStorage.getItem('authtoken')
             }
         }).then(
             function (response) {
-                if (response.data.redirect == '/') {
+                if (response.data.redirect == '/dashboard') {
                     this.setState({ redirect: true })
                 }
             }
@@ -86,7 +83,7 @@ class Signup extends Component {
                 else {
                     console.log("I AM HERRE!!!!");
 
-                    if (response.data.redirect == '/')
+                    if (response.data.redirect == '/dashboard')
                         this.setState({
                             redirect: true
                         })
@@ -147,9 +144,9 @@ class Signup extends Component {
                                 <FormGroup>
                                     <Col smOffset={3} mdOffset={3} sm={9} md={9}>
                                         {this.renderRedirect()}
-                                        <Button type="button" bsStyle="success" onClick={(e) => this.handleSubmit(e)}><i className="icon-hand-right"></i>Sign Up</Button>
+                                        <Button type="button" bsStyle="success" onClick={(e) => this.handleSubmit(e)}>Sign Up</Button>
                                         <span style={{ marginLeft: 8 }}> OR </span>
-                                        <Button type="submit" bsStyle="primary">Sign Up with Stackoverflow</Button>
+                                        <Button type="submit" bsStyle="primary"><i className="fa fa-stack-overflow"></i>Sign Up with Stackoverflow</Button>
                                     </Col>
                                 </FormGroup>
                             </Form>
