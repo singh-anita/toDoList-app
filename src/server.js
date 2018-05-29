@@ -1,7 +1,7 @@
 var express = require('express'); // call express
 var app = express();  /* define our app using express*/
 var bodyparser = require("body-parser");
-var { checkUserEmail, newUser, hashpass, validPassword, newToken, checkuId } = require('./models/user');
+var { checkUserEmail, newUser, hashpass, validPassword, newToken, checkuId ,insertTitle} = require('./models/user');
 var r = require('./tokenGenerate');
 var passport = require('passport');
 var flash = require('connect-flash');
@@ -105,7 +105,17 @@ app.post('/', function (req, res) {
     })
 })
 
-
+/*---------------------------add title dashboar------------------------*/
+app.post('/addnotetitle', function (req, res) {
+    console.log("req",req.body);
+    req.body.list.map((obj, idx) =>{
+        insertTitle('5b0bc831ccfade2af940e156', obj.title)
+    .then(function (doc, err) {   //returns the inserted document
+        if(err) throw err
+        console.log("doc",doc);
+    })
+    })
+})
 app.listen(3001, function () {
     console.log("SERVER RUNNING ON PORT 3001")
 });

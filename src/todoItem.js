@@ -8,7 +8,18 @@ import './dashboard.css';
                             Add Item
                     </Button>*/
 class TodoItem extends Component {
+
+  /*constructor(props) {
+    super(props);
+    this.state = {
+      items:[],
+        description: ''
+    };
+  //  this.addContent=this.addContent.bind(this);
+  //  this.handleChange= this.handleChange.bind(this);
+}*/
   /*selecting checkbox on selection*/
+
   checkStateChanged(index, e) {
 
     console.log("CHECKBOX CHANGED : ", this.props.noteObj[0].list[index].isChecked);
@@ -18,7 +29,7 @@ class TodoItem extends Component {
   }
   /*contents display*/
   selectedcontents() {
-    console.log(this.props.noteObj)
+  //  console.log(this.props.noteObj)
     if (this.props.noteObj) {
       return (
         this.props.noteObj[0].list.map((noteEntry, idx) => {
@@ -42,6 +53,18 @@ class TodoItem extends Component {
       )
     }
   }
+ /* handleChange(e) {
+    this.setState({
+        description: e.target.value
+    })
+}*/
+/*addContent(){
+  this.setState({
+    item: this.state.item.concat([{ content: this.state.description }]),
+    description: ''
+})
+  //console.log("content",this.props.noteObj)
+}*/
   /*addContent(){
     console.log(this.props.noteObj)
     /*if (this.props.noteObj) {
@@ -93,8 +116,8 @@ class TodoItem extends Component {
         </div>
         <div className="addcontent">
           <div className="col-md-9 addlist">
-            <input type="text" className="form-control  add-todo" placeholder="Add items" onChange={(e) => { this.props.handleChange(e) }} />
-          </div><div className="col-md-3"> <Button onClick={() => { this.props.addContent() }} style={{ marginBottom: '20px' }}>Add Item</Button>
+            <input type="text" className="form-control  add-todo"  placeholder="Add items" />
+          </div><div className="col-md-3"> <Button style={{ marginBottom: '20px' }}>Add Item</Button>
           </div>
 
         </div>

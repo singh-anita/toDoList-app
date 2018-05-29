@@ -18,10 +18,31 @@ var TokenSchema = new Schema({
     uId: String,
     token: String,
    timestamp : Number
-})
+});
+notesTableSchema = new Schema({
+
+    // id of the owner
+    uId: String,
+    title: String,
+    date: Date,
+    isDeleted: Boolean,
+    //collaborators of the note
+    sharedWith: Array
+
+});
+contentTableSchema = new Schema({
+
+    // the id of the note it is present in
+    notesID: String,
+    content: String,
+    isChecked: Boolean
+
+});
 /* the schema is useless so far we need to create a model using it*/
 var User = db.model('User', UserSchema);
 var Token =db.model('Token',TokenSchema);
+var notesTable=db.model('notesTable',notesTableSchema);
+var contentTable=db.model('contentTable',contentTableSchema);
 /*var u = new User({
     username: "sree",
     name: "SreeraG",
@@ -73,4 +94,9 @@ exports.checkUserEmail = function(emailId){
 }
 exports.checkuId= function(token){
     return Token.findOne({token : token})
+}
+
+// insert a new note title into the notesCollection
+exports.insertTitle = function (userTableId, noteTitle) {
+    return notesTable({ uId: userTableId, title: noteTitle, date: new Date(), isDeleted: false }).save()
 }
