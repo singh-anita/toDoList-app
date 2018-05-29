@@ -41,8 +41,12 @@ class Login extends Component {
             }
           })
             .then( (response) => {
-               console.log(response.data.authtoken);
-             if (!localStorage.getItem('authtoken')) {
+                     console.log("loginresponse",response);
+                this.setState({
+                    redirect: true
+                  })
+              // console.log(response.data.authtoken);
+             /*if (!localStorage.getItem('authtoken')) {
                 //save it in localStorage
               localStorage.setItem('authtoken', (response.data.authtoken));
                 console.log("Saved in localStorage ");
@@ -50,10 +54,7 @@ class Login extends Component {
                 this.setState({
                     redirect: true
                   })
-                
-               // this.setRedirect()
-              }
-               
+              }*/
               // console.log(response);
             })
             .catch(function (error) {

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { ListGroup, ListGroupItem, Button, FormGroup, FormControl, ControlLabel, Checkbox } from "react-bootstrap";
 import { Link } from 'react-router-dom';
+import TodoItem from './todoItem';
 import './dashboard.css';
 class Dashboard extends Component {
     notesObjArray = [
@@ -214,15 +215,6 @@ class Dashboard extends Component {
             });
        // }
     }
-    /* handleCheck() {
-         alert(this.state.value);
-         this.setState({
-             list: this.state.list.concat([{ t_name: this.state.value}]), 
-            
-          });
-          //alert("clicked"+list.t_name);
-        // e.currentTarget.dataset.pro_name
-      }*/
     /*addItem() {
         this.setState({
             inputtxt: this.state.inputtxt.concat({ input_box: this.state.description }),
@@ -234,12 +226,13 @@ class Dashboard extends Component {
             description: e.target.value
         })
     }
-   /* addContent() {
+   addContent() {
+       console.log("this state : ",  this.state.selectedTitleContents)
         this.setState({
-           list: this.state.list.concat([{ content: this.state.content }]),
+            selectedTitleContents: this.state.selectedTitleContents[0].list.concat([{ content : this.state.description, isChecked: false }]),
             description: ''
         })
-    }*/
+    }
     title(e) {
         console.log("IN TITLE : ", e.target.value)
         // console.log("IN TITLE : ", this.state.list.filter( (arr, idx) =>{
@@ -252,22 +245,6 @@ class Dashboard extends Component {
                 return arr.title == e.target.value
             })
         })
-    }
-
-    checkStateChanged(index, e){
-        
-         console.log("CHECKBOX CHANGED : ", this.state.selectedTitleContents[0].list[index].isChecked);
-        
-        var objToChange = this.state.selectedTitleContents;
-        // console.log()
-        objToChange[0].list[index].isChecked = !this.state.selectedTitleContents[0].list[index].isChecked
-        this.setState({ selectedTitleContents : objToChange  })
-
-    }
-
-
-    alertClicked() {
-        alert('You clicked the ListGroupItem');
     }
     /*handleSubmit(event) {
       alert('A name was submitted: ' + this.state.value);
@@ -287,32 +264,11 @@ class Dashboard extends Component {
         })
     }
 
-    test() {
-        console.log(this.state.selectedTitleContents)
-        if (this.state.selectedTitleContents) {
-            return (
-                this.state.selectedTitleContents[0].list.map((noteEntry, idx) => {
-                    return (
-                        <ListGroupItem>
-                            <div className="description">
-                                <Checkbox onChange = { this.checkStateChanged.bind(this, idx) }  
-                                checked={noteEntry.isChecked}>{noteEntry.content}</Checkbox>
-                            </div>
-                            <div className="action">
-                                <Button >
-                                    <i className="glyphicon glyphicon-pencil"></i>
-                                </Button>
-                                <Button >
-                                    <i className="glyphicon glyphicon-trash"></i>
-                                </Button>
-                            </div>
-                        </ListGroupItem>
-                    );
-                })
-            )
-        }
+    checkStateChanged(obj){
+        // alert('SHOWING HERE')
+        this.setState({ selectedTitleContents : obj  })
     }
-
+    
     render() {
 
         var edit = {
@@ -347,72 +303,18 @@ class Dashboard extends Component {
                             {
                                 this.state.list.map((curr, index) => {
                                     return (
-                                        <ListGroupItem onClick={this.title.bind(this)} value={curr.title}>{curr.title}</ListGroupItem>
+                                        <ListGroupItem  bsStyle="success" onClick={this.title.bind(this)} value={curr.title}>{curr.title}</ListGroupItem>
                                     );
                                 })
                             }
                         </ListGroup>
                     </div>
-                    <div className="content_container">
-                        <div style={{ marginLeft: '6px', paddingTop: '3px',marginTop:'30px' }}>
-                            
-                                <h3>
-                                    {this.state.selectedTitleContents[0].title}
-                                </h3>
-                            
-                        </div>
-                        <div className="addcontent">
-                            <div className="col-md-9 addlist">
-                            <input type="text" className="form-control  add-todo" placeholder="Add items" onChange={(e) => { this.handleChange(e) }} value={this.state.description} />
-                           </div><div className="col-md-3"> <Button onClick={() => { this.addContent() }} style={{ marginBottom: '20px' }}>Add Item</Button>
-                            </div>
-                      
-                        </div>
-                        { /* 
-                            this.state.inputtxt.map((curr, index) => {
-                                return (
-                                    <div>
-                                        <input type="text" className="form-control add-todo" placeholder="Add items" onChange={(e) => { this.handleChange(e) }} value={this.state.description} />
-                                        <Button onClick={() => { this.addContent() }} style={{ marginBottom: '20px' }}>Add Item</Button>
-                                        <Button style={{ marginBottom: '20px' }}>Cancel</Button>
-                                    </div>
-                                )
-                            })
-                        */}
-                        <div className="contentlist" style={{marginTop:'105px'}}>
-                        <ListGroup componentClass="ul">
-                            {this.test()}
-                            {
-
-
-
-
-
-
-                                // this.state.item.map((curr, index) => {
-                                //     return (
-                                //         <ListGroupItem>
-                                //             <div className="description">
-                                //                 <Checkbox>{curr.content}</Checkbox>
-                                //             </div>
-                                //             <div className="action">
-                                //                 <Button style={edit}>
-                                //                     <i className="glyphicon glyphicon-pencil"></i>
-                                //                 </Button>
-                                //                 <Button style={delet}>
-                                //                     <i className="glyphicon glyphicon-trash"></i>
-                                //                 </Button>
-                                //             </div>
-                                //         </ListGroupItem>
-                                //     );
-                                // })
-                            }
-                        </ListGroup>
-                        </div>
-                    </div>
+                    <TodoItem checkStateChange = {this.checkStateChanged.bind(this)} noteObj = {this.state.selectedTitleContents} addContent={this.addContent.bind(this)} handleChange={this.handleChange.bind(this)}/>
                 </div>
             </div>
         );
     }
 }
+  
 export default Dashboard;
+// <TodoItem noteObj = {this.state.selectedTitleContents} />
