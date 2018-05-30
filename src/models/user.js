@@ -77,11 +77,16 @@ exports.loginUser = function (email, password) {
      })
  }
  //generating a hash
- exports.hashpass = function (password, saltRounds) {
-    var hash = bcrypt.hashSync(password, saltRounds);
+ /*exports.hashpass = function (password, saltRounds) {
+    var hash = bcrypt.genSalt(saltRounds, function(err, salt){
+        bcrypt.hash(password, salt, function(err, hash) {
+            // Store hash in your password DB.
+            console.log(console.log("PWD : ", hash))
+        });
+    });
     //console.log(hash);
-    return hash;
-}
+    // return hash;
+}*/
  // checking if password is valid
  exports.validPassword = function(password , dbPassword) {
 
@@ -96,7 +101,17 @@ exports.checkuId= function(token){
     return Token.findOne({token : token})
 }
 
-// insert a new note title into the notesCollection
+/* insert a new note title into the notesCollection  collection*/
 exports.insertTitle = function (userTableId, noteTitle) {
     return notesTable({ uId: userTableId, title: noteTitle, date: new Date(), isDeleted: false }).save()
+}
+//get notes title for dashboard
+exports.getNotesTitle = function(userId){
+    /*returns an array consisting of note titles created by a particular user*/
+    return  notesTable.find({ uId : userId });
+}
+
+/* insert individual contents on the basis of particular notetitle*/
+exports.insertNoteContent = function (noteTitleId, individualNotesEntry, checkBoxStatus) {
+    return contentTable({ notesID: noteTitleId, content: individualNotesEntry, isChecked: checkBoxStatus }).save()
 }

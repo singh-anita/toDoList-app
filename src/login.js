@@ -101,7 +101,7 @@ class Login extends Component {
                                     <Col sm={12} md={12}>
                                         <div style={{ borderTop: '1 solid#888', paddingTop: 15 }} >
                                             Don't have an account!
-                           <Link to="./signup">
+                           <Link to="/signup">
                                                 Sign Up Here
                             </Link>
                                         </div>

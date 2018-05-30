@@ -21,16 +21,14 @@ class Signup extends Component {
     }
 
     componentWillMount() {
-        var obj = {
-            "sdzg" : "xzv"
-        }
-        axios.post('http://localhost:3001/signup', obj, {
+
+        axios.post('http://localhost:3001/signup', {}, {
             headers: {
                 "Authorization": localStorage.getItem('authtoken')
             }
         }).then(
-            function (response) {
-                if (response.data.redirect == '/') {
+             (response) => {
+                if (response.status == 200) {
                     this.setState({ redirect: true })
                 }
             }
@@ -38,7 +36,7 @@ class Signup extends Component {
     }
 
 
-    validateForm() {
+   /* validateForm() {
         return
         (
             this.state.email.length > 0 &&
@@ -46,7 +44,7 @@ class Signup extends Component {
             this.state.password.length === this.state.confpsswd.length
         );
         //   this.setState({formValid: this.state.emailValid && this.state.passwordValid});
-    }
+    }*/
     handleChange(e) {
         this.setState({
             [e.target.id]: e.target.value
@@ -61,9 +59,9 @@ class Signup extends Component {
     handleSubmit(e) {
         // console.log(e)
         var obj = {
-            "email": this.state.email,
-            "username": this.state.username,
-            "password": this.state.password
+            email: this.state.email,
+            username: this.state.username,
+            password: this.state.password
         };
         // console.log("TOKEN IN SIGNUP : ", localStorage.getItem("authtoken"))
         /*Posting Data From React to the Node Service*/
@@ -74,7 +72,7 @@ class Signup extends Component {
         })
             .then((response) => {
                 console.log(response.data.authtoken);
-                if (!localStorage.getItem('authtoken')) {
+              if (!localStorage.getItem('authtoken')) {
                     //save it in localStorage
                     localStorage.setItem('authtoken', (response.data.authtoken));
                     console.log("Saved in localStorage ");
@@ -82,21 +80,22 @@ class Signup extends Component {
                     this.setState({
                         redirect: true
                     })
-                }
-                else {
+              }
+               else {
                     console.log("I AM HERRE!!!!");
 
                     if (response.data.redirect == '/')
                         this.setState({
                             redirect: true
                         })
-                }
+                 }
             })
             /*.then(function (response) {
                 console.log(response);
             })*/
             .catch(function (error) {
-                console.log(error);
+                console.log(error.response)
+               // console.log(error);
             });
     }
 

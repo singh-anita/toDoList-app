@@ -3,6 +3,7 @@ import { ListGroup, ListGroupItem, Button, FormGroup, FormControl, ControlLabel,
 import { Link } from 'react-router-dom';
 import TodoItem from './todoItem';
 import './dashboard.css';
+import  HeaderLogout from './logout';
 import axios from 'axios';
 class Dashboard extends Component {
     notesObjArray = [
@@ -99,10 +100,10 @@ class Dashboard extends Component {
     constructor(props) {
         super(props);
         this.state = {
-
             list: [],
             value: '',
-            selectedTitleContents: [{
+            selectedTitleContents: [],
+           /* selectedTitleContents: [{
                 title: 'Shopping List',
                 list: [
                     { content: 'xdzsgvxdrfgb', isChecked: true },
@@ -110,82 +111,74 @@ class Dashboard extends Component {
                     { content: 'xdtrh', isChecked: false },
                     { content: 'xdrtfh', isChecked: true }
                 ]
-            }],
-           
+            }],*/
            // item: [],
             description: ''
         };
-        //  this.title =  this.title.bind(this);
-        // this.alertClicked =  this.alertClicked.bind(this);
         // this.handleChange = this.handleChange.bind(this);
         /*  this.handleSubmit = this.handleSubmit.bind(this);*/
         this.addTitle = this.addTitle.bind(this);
     }
 
+
+    componentWillMount(){
+    axios.get('http://localhost:3001/gettitles',{ })
+    .then(response => {
+        console.log("CONSOLE DATA : ", response.data)
+       this.setState({ list : response.data })
+    })
+    .catch((err) => {
+        // if (err.response.status == 401) {
+            console.log("error : ", err)
+        // }
+    })
+}
+
+
     addTitle(e) {
         var updatedList;
-        //  console.log()
         if (this.state.value.length > 0) {
          updatedList = [...this.state.list, { title: this.state.value, list: [] }]
             this.setState({
                 list: updatedList,
                 value: '',
-                // selectedTitleContents: ''
+
+                //selectedTitleContents:  [{ title: this.state.value, list: [] }]
             });
         }
         var obj = {
-            list: updatedList
+            title : this.state.value,
+            list: []
         };
-        console.log("OBJECT : ", obj)
+        console.log("OBJECT : ", { title : this.state.value, list : [] })
         // console.log(""obj)
-        axios.post('http://localhost:3001/addnotetitle', obj).then((response) => {
+        axios.post('http://localhost:3001/addnotetitle', obj)
+        .then((response) => {
             console.log("axios", response.data);
         })
-            .catch(err => {
+        .catch(err => {
                 console.error(err);
             });
         // }
     }
-    /*addItem() {
-        this.setState({
-            inputtxt: this.state.inputtxt.concat({ input_box: this.state.description }),
-            description: ''
-        })
-    }*/
     handleChange(e) {
         this.setState({
             description: e.target.value
         })
     }
-    /* addContent() {
-         console.log("this state : ",  this.state.selectedTitleContents)
-          this.setState({
-              selectedTitleContents: this.state.selectedTitleContents[0].list.concat([{ content : this.state.description, isChecked: false }]),
-              description: ''
-          })
-      }*/
-    title(e) {
-        /*  console.log("IN TITLE : ", e.target.value)*/
+    title(key, e) {
+          console.log("IN TITLE : ", key)
 
         /*on selection of title changing state and get the selected title*/
         this.setState({
-            selectedTitleContents: this.state.list.filter((arr, idx) => {
+
+            //selectedTitleContents:  [{ title: this.state.value, list: [] }]
+          selectedTitleContents: this.state.list.find((arr, idx) => {
                 console.log("arr HERE : ", arr)
                 return arr.title == e.target.value
             })
         })
     }
-    /*handleSubmit(event) {
-      alert('A name was submitted: ' + this.state.value);
-      event.preventDefault();
-    }*/
-    /*  state = {
-          add : null
-      }
-      addTodo = () =>
-            {
-          this.setState({ add : <ListGroupItem bsStyle="success">Success</ListGroupItem> })
-      }*/
     update(e) {
         // alert(e.target.value)
         this.setState({
@@ -212,8 +205,10 @@ class Dashboard extends Component {
             marginBottom: '10px'
         }
         return (
+        
             <div className="container">
                 <header className="page-title">
+                <HeaderLogout/>
                 </header>
                 <div className="todo-in-progress">
                     <h2> Working tasks</h2>
@@ -233,7 +228,7 @@ class Dashboard extends Component {
                             {
                                 this.state.list.map((curr, index) => {
                                     return (
-                                        <ListGroupItem bsStyle="success" onClick={this.title.bind(this)} value={curr.title}>{curr.title}</ListGroupItem>
+                                        <ListGroupItem key = { curr._id } bsStyle="success" onClick={this.title.bind(this,curr._id)} value={curr.title}>{curr.title}</ListGroupItem>
                                     );
                                 })
                             }
@@ -247,4 +242,4 @@ class Dashboard extends Component {
 }
 
 export default Dashboard;
-// <TodoItem noteObj = {this.state.selectedTitleContents} />
+//<TodoItem checkStateChange={this.checkStateChanged.bind(this)} noteObj={this.state.selectedTitleContents} />

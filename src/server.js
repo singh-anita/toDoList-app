@@ -1,11 +1,12 @@
 var express = require('express'); // call express
 var app = express();  /* define our app using express*/
 var bodyparser = require("body-parser");
-var { checkUserEmail, newUser, hashpass, validPassword, newToken, checkuId ,insertTitle} = require('./models/user');
+var { checkUserEmail, newUser, validPassword, newToken, checkuId, insertTitle, getNotesTitle, insertNoteContent } = require('./models/user');
 var r = require('./tokenGenerate');
 var passport = require('passport');
 var flash = require('connect-flash');
 const saltRounds = 10;
+var bcrypt = require('bcrypt');
 
 //var db ='mongodb://localhost/test';
 //mongoose.connect(db); // connect to our database
@@ -25,16 +26,41 @@ app.use(bodyparser.json());
 
 /*----- FOR SIGN UP - create user accounts-------*/
 app.post('/signup', function (req, res) {
-    var userdata = {};
-    var tokendata = {};
-    userdata.emailId = req.body.email;
-    userdata.username = req.body.username;
-    userdata.password = hashpass(req.body.password, saltRounds);/*Store hash in your password DB.*/
 
-    console.log("HASH VALUE : ", req.headers.authorization)
-    // console.log("user obj created ", userdata);
-    if (req.headers.authorization == "null") {
-        console.log("HJGFNJDFBYTFTYU")
+    console.log("user obj created ", req.headers);
+    
+    
+    if (req.headers.authorization != 'null'){
+        console.log("HERTRERRR")
+        checkuId(req.headers.authorization).then(
+            (doc, err) => {
+                if (doc) {
+
+                    console.log("Got token")
+                    //200 means the  token is valid
+                    res.status(200).send();
+
+                }
+                //it means that something is in the body ie the filled form
+                //client side validation to be done separately
+
+            }
+        )
+    }
+        
+    else 
+    if(req.body != {}){
+        var userdata = {};
+        var tokendata = {};
+        console.log("HJGFNJDFBYTFTYU : ", userdata)
+
+        userdata.emailId = req.body.email;
+        userdata.username = req.body.username;
+        // console.log("PWD : ", bcrypt.hashSync("pwd", saltRounds))
+        userdata.password = bcrypt.hashSync(req.body.password, saltRounds);/*Store hash in your password DB.*/
+
+
+
         newUser(userdata).save(function (err, data) {
             if (err) throw err
             console.log("SAVE SUCCESSFUL")
@@ -52,25 +78,10 @@ app.post('/signup', function (req, res) {
 
         })
     }
-    else {
 
-        console.log("dsfgvhyfvui")
-        checkuId(req.headers.authorization).then((tokendata, err) => {
 
-            if (err) throw err;
 
-            console.log("tok", tokendata)
 
-            //check if the token is expired by finding the difference between
-            // the time now and the timestamp in the database
-            // if (!((new Date().getTime() - tokendata.timestamp) > 3600)) {
-                
-                res.json({ redirect: '/' })
-            // }
-
-        })
-
-    }
 
 });
 
@@ -105,17 +116,51 @@ app.post('/', function (req, res) {
     })
 })
 
-/*---------------------------add title dashboar------------------------*/
+/*---------------------------add title ------------------------*/
 app.post('/addnotetitle', function (req, res) {
-    console.log("req",req.body);
-    req.body.list.map((obj, idx) =>{
-        insertTitle('5b0bc831ccfade2af940e156', obj.title)
-    .then(function (doc, err) {   //returns the inserted document
-        if(err) throw err
-        console.log("doc",doc);
-    })
-    })
+    console.log("req", req.body);
+    insertTitle('5b0bc831ccfade2af940e156', req.body.title)
+        .then(function (doc, err) {   //returns the inserted document
+            if (err) throw err
+            console.log("doc", doc);
+        })
 })
+
+
+//get all the titles of a specific user - read/retrieve operation
+app.get('/gettitles', function (req, res, next) {
+    console.log("req", req.body);
+    var titleToSend = [];
+
+    getNotesTitle('5b0bc831ccfade2af940e156')
+        .then((notesTitleArray, err) => {
+            if (err) throw err
+
+            titleToSend = notesTitleArray.map((note) => {
+                return { _id: note._id, title: note.title }
+            })
+
+            res.status(200).send(titleToSend);
+
+        })
+
+
+
+    //    console.log("Unauthorized user")
+    //    res.status(401).send();
+})
+
+/*---------------------------add Content--------------------------*/
+app.post('/addnotecontent', function (req, res) {
+    console.log("reqofcontent", req.body);
+    insertNoteContent('5b0bc831ccfade2af940e156', req.body.content, req.body.isChecked)
+        .then(function (doc, err) {   //returns the inserted Content document
+            if (err) throw err
+            console.log("content doc", doc);
+        })
+    // console.log("fd");
+});
+
 app.listen(3001, function () {
     console.log("SERVER RUNNING ON PORT 3001")
 });
@@ -155,3 +200,10 @@ if(!userlogin.emailId){
 
 
 */
+
+    /* notesTitleArray.map((noteTitle, titleIndex) => {
+                    //create a new entry with the title and _id
+                    
+                    objToSend.push({ _id: noteTitle._id, title: noteTitle.title, date : noteTitle.date })
+                    
+                })*/
