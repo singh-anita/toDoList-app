@@ -25,7 +25,7 @@ if (req.headers.authorization == "null" && !(req.body == '{}')) {
         })
 
     })
-} else if() {
+} else{
 
     console.log("dsfgvhyfvui")
     checkuId(req.headers.authorization).then((tokendata, err) => {
