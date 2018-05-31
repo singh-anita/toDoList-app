@@ -8,6 +8,8 @@
     "mongoose": "^5.1.1",
     "ng2-button-loader": "0.0.6",
     "nodemon": "^1.17.4",
+    "passport": "^0.4.0",
+    "passport-local": "^1.0.0",
     "react": "^16.3.2",
     "react-dom": "^16.3.2",
     "react-google-material-icons": "^1.0.4",

@@ -4,6 +4,19 @@ import { Link,Redirect } from 'react-router-dom';
 import axios from 'axios';
 
 class Login extends Component {
+
+    componentWillMount(){
+        axios.post('http://localhost:3001',{}, {
+            headers: {
+                "Authorization": localStorage.getItem('authtoken')
+            }
+      }
+    ).then((response) =>{
+      if(response.status == 200 ){
+      this.setState({  redirect : true })
+      }
+    })
+    }
     constructor(props) {
         super(props);
 
@@ -13,6 +26,7 @@ class Login extends Component {
             redirect: false  
         };
         this.handleChange = this.handleChange.bind(this);
+        this.login = this.login.bind(this);
     }
     handleChange(e) {
         this.setState({
@@ -26,15 +40,16 @@ class Login extends Component {
         }
     }
 
-    login() {
-        
+    login(e) {
+        console.log(e)
+        e.preventDefault();
         var userobj = {
-            "loginEmail": this.state.loginEmail,
-            "loginPassword": this.state.loginPassword
+            loginEmail: this.state.loginEmail,
+            loginPassword: this.state.loginPassword
         };
-        // console.log(userobj)
+         console.log(userobj)
         /*Posting Data From React to the Node Service*/
-        axios.post('http://localhost:3001', userobj,
+        axios.post('http://localhost:3001/login', userobj,
          {
             headers: {
               "Authorization": localStorage.getItem('authtoken')
@@ -42,23 +57,17 @@ class Login extends Component {
           })
             .then( (response) => {
                      console.log("loginresponse",response);
+                             // if (!localStorage.authtoken) {
+                     if(response.status == 200){
+                           // console.log(response.data.authtoken);
+                        localStorage.setItem('authtoken', (response.data.authtoken));
                 this.setState({
                     redirect: true
                   })
-              // console.log(response.data.authtoken);
-             /*if (!localStorage.getItem('authtoken')) {
-                //save it in localStorage
-              localStorage.setItem('authtoken', (response.data.authtoken));
-                console.log("Saved in localStorage ");
-                console.log("RESPONSE : ",response)
-                this.setState({
-                    redirect: true
-                  })
-              }*/
-              // console.log(response);
+                }
             })
             .catch(function (error) {
-                console.log(error);
+                console.log(error.response);
             });
     }
     render() {
@@ -92,7 +101,7 @@ class Login extends Component {
                                 <FormGroup style={{ marginTop: 10 }}>
                                     <Col sm={12} md={12}>
                                    {this.renderRedirect()}
-                                        <Button id="btn-login" bsStyle="success" onClick={this.login.bind(this)}>Login</Button>
+                                        <Button id="btn-login" bsStyle="success" onClick={(e) => this.login(e)}>Login</Button>
                                         <span style={{ marginLeft: 8 }}>OR</span>
                                         <Button style={{ marginLeft: 8 }} id="btn-flogin" bsStyle="primary">Login with Stackoverflow</Button>
                                     </Col>

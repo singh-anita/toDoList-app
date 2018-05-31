@@ -1,12 +1,14 @@
 var express = require('express'); // call express
 var app = express();  /* define our app using express*/
 var bodyparser = require("body-parser");
-var { checkUserEmail, newUser, validPassword, newToken, checkuId, insertTitle, getNotesTitle, insertNoteContent } = require('./models/user');
+var { checkUserEmail, newUser, validPassword, newToken, getUId, getUserData, checkuId, insertTitle, getNotesTitle, hashpass, insertNoteContent } = require('./models/user');
 var r = require('./tokenGenerate');
 var passport = require('passport');
 var flash = require('connect-flash');
 const saltRounds = 10;
 var bcrypt = require('bcrypt');
+
+var LocalStrategy = require('passport-local').Strategy
 
 //var db ='mongodb://localhost/test';
 //mongoose.connect(db); // connect to our database
@@ -16,6 +18,102 @@ app.use(function (req, res, next) {
     res.header('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, OPTIONS');
     next();
 });
+
+app.use(passport.initialize())
+
+
+//PASSPORT MIDDLEWARE.......
+/*passport.use('localStrategy', new LocalStrategy({
+    usernameField: 'loginEmail',
+    passwordField: 'loginPassword',
+    passReqToCallback: true
+
+}, function (req, loginEmail, loginPassword, done) {
+
+    //make some db calls to check token
+    //and user validity
+
+    console.log("req : ", req.body)
+    console.log("e : ", loginEmail)
+    console.log("p : ", loginPassword)
+
+    var token = req.headers.authtoken
+    console.log(req.body);
+    console.log("token passport: ", req.headers.authtoken)
+
+    if (req.headers.authtoken) {
+        console.log("Herrlooo")
+    }
+
+    getUId(token)
+        .then((doc, err) => {
+            if (doc) {
+                // console.log("doc",doc)
+                console.log("Got token")
+                getUserData(doc.uId)
+                    .then((doc, err) => {
+
+                        if (doc) {
+                            console.log("Got user")
+                            done(null, doc)
+                        }
+                        else {
+                            console.log("didnt get user")
+                            done({ error: "THIS IS AN ERROR" })
+                        }
+                    })
+            }
+
+            else {
+                console.log("didnt get token")
+                done({ error: "THIS IS AN ERRORZZZZZ" }, { info: "INFOZZZZZ" })
+            }
+        })
+
+}))*/
+
+
+function tokenCheckingMiddleware(req, res, next) {
+
+    if (req.headers.authtoken) {
+        getUId(req.headers.authtoken)
+            .then((doc, err) => {
+                if (doc) {
+                    console.log("Got token")
+                    getUserData(doc.uId)
+                        .then((doc, err) => {
+
+                            if (doc) {
+                                next();
+                                console.log("Got user")
+                            }
+                            else {
+                                // unauthorized....
+                                res.status(401).send()
+                                console.log("didnt get user")
+                            }
+                        })
+                }
+
+                else {
+                    res.status(401).send()
+                    console.log("didnt get token")
+                }
+            })
+    }
+    else {
+        res.status(401).send()
+    }
+
+
+
+
+}
+
+
+
+
+
 
 /* configure app to use bodyParser()-> this will let us get the data from a POST*/
 app.use(bodyparser.json());
@@ -27,10 +125,8 @@ app.use(bodyparser.json());
 /*----- FOR SIGN UP - create user accounts-------*/
 app.post('/signup', function (req, res) {
 
-    console.log("user obj created ", req.headers);
-    
-    
-    if (req.headers.authorization != 'null'){
+    if (req.headers.authorization != 'null') {
+        console.log("user token already exist so redirect to dashboard with token", req.headers.authorization);
         console.log("HERTRERRR")
         checkuId(req.headers.authorization).then(
             (doc, err) => {
@@ -47,78 +143,87 @@ app.post('/signup', function (req, res) {
             }
         )
     }
-        
-    else 
-    if(req.body != {}){
-        var userdata = {};
-        var tokendata = {};
-        console.log("HJGFNJDFBYTFTYU : ", userdata)
 
-        userdata.emailId = req.body.email;
-        userdata.username = req.body.username;
-        // console.log("PWD : ", bcrypt.hashSync("pwd", saltRounds))
-        userdata.password = bcrypt.hashSync(req.body.password, saltRounds);/*Store hash in your password DB.*/
+    else
+        if (Object.keys(req.body) != 0) {
+            var userdata = {};
+            var tokendata = {};
+            console.log("from clientside data coming: ", req.body)
+
+            userdata.emailId = req.body.email;
+            userdata.username = req.body.username;
+            // console.log("PWD : ", bcrypt.hashSync("pwd", saltRounds))
+            userdata.password = hashpass(req.body.password, saltRounds);/*Store hash in your password DB.*/
 
 
 
-        newUser(userdata).save(function (err, data) {
-            if (err) throw err
-            console.log("SAVE SUCCESSFUL")
-
-            // var obj = {}
-            tokendata.uId = data._id;
-            tokendata.token = r.randomToken()
-            tokendata.timestamp = new Date().getTime()
-
-            newToken(tokendata).save(function (err, data) {
+            newUser(userdata).save(function (err, data) {
                 if (err) throw err
-                console.log("token SAVE SUCCESSFUL")
-                res.send({ authtoken: tokendata.token, redirect: '/' });
+                console.log("userdat SAVE SUCCESSFUL")
+
+                // var obj = {}
+                tokendata.uId = data._id;
+                tokendata.token = r.randomToken()
+                tokendata.timestamp = new Date().getTime()
+
+                newToken(tokendata).save(function (err, data) {
+                    if (err) throw err
+                    console.log("token SAVE SUCCESSFUL")
+                    res.status(200).send({ authtoken: data.token });
+                })
+
             })
-
-        })
-    }
-
-
-
-
+        }
 
 });
 
 /*---------------------FOR login---------------------------*/
-app.post('/', function (req, res) {
-
+app.post('/login', function (req, res, next) {
+ 
     var userlogin = {};
     userlogin.emailId = req.body.loginEmail;
     userlogin.password = req.body.loginPassword;
-    var tokenobj = {};
-    // userlogin.token =
-    //    console.log(userlogin)
-    //    console.log(req.headers.authorization);
-    checkUserEmail(userlogin.emailId).then((userObj, err) => {
-        if (err) throw err;
-        console.log("IS IT RIGHT : ", validPassword(userlogin.password, userObj.password));
-        console.log(userObj);
-        // if(uId){
-        console.log("header", req.headers.authorization);
-        if (req.headers.authorization) {
-            tokenobj.uId = userObj._id;
-            checkuId(tokenobj.uId).then((tokenobj, err) => {
-                console.log("tok", tokenobj)
-                if (err) throw err;
-                res.send({ authtoken: tokenobj.token });
-            })
-        }
-        // }
-        //checkuId(uId).then()
-        // console.log("tok",userObj.token)
-        //   res.send({authtoken : userObj.token});
-    })
-})
+    console.log(userlogin)
+   // var tokenobj = {};
+                //    console.log(req.headers.authorization);
+                // console.log("JHBGYBDTCY")
+                 checkUserEmail( userlogin.emailId).then((userObj, err) => {
+                    var tokenobj = {};
+                   if (err) throw err;
+                    console.log("userobj find", userObj);
+                    console.log("IS PASSWORD MATCHING : ", validPassword(userlogin.password, userObj.password));
 
+                    if (validPassword) {
+
+                //         // console.log("header", req.headers.authorization);
+                //         // if (req.headers.authorization) {
+                        tokenobj.uId = userObj._id;
+                        checkuId(tokenobj.uId).then((tokenOb, err) => {
+                            console.log("tokenobject", tokenOb)
+                            if (err) throw err;
+                             res.status(200).send({ authtoken: tokenOb.token });
+                         })
+                //         // }
+                    }
+                //     //checkuId(uId).then()
+                //     // console.log("tok",userObj.token)
+                //     //   res.send({authtoken : userObj.token});
+                })
+        })
+
+        /*-----------------for logout--------------*/
+      
+
+        app.post('/logout', function (req, res) {
+            console.log(req.body);
+            console.log(req.headers.authorization);
+            console.log("GOT LOGOUT");
+            console.log(req.body);
+          //  res.json({ redirect: '/', message: 'OK' });
+        })
 /*---------------------------add title ------------------------*/
-app.post('/addnotetitle', function (req, res) {
-    console.log("req", req.body);
+app.post('/addnotetitle',tokenCheckingMiddleware, function (req, res) {
+    // console.log("req", req.body);
     insertTitle('5b0bc831ccfade2af940e156', req.body.title)
         .then(function (doc, err) {   //returns the inserted document
             if (err) throw err
@@ -128,8 +233,8 @@ app.post('/addnotetitle', function (req, res) {
 
 
 //get all the titles of a specific user - read/retrieve operation
-app.get('/gettitles', function (req, res, next) {
-    console.log("req", req.body);
+app.get('/gettitles',tokenCheckingMiddleware, function (req, res, next) {
+    // console.log("req", req.body);
     var titleToSend = [];
 
     getNotesTitle('5b0bc831ccfade2af940e156')
@@ -151,8 +256,8 @@ app.get('/gettitles', function (req, res, next) {
 })
 
 /*---------------------------add Content--------------------------*/
-app.post('/addnotecontent', function (req, res) {
-    console.log("reqofcontent", req.body);
+app.post('/addnotecontent',tokenCheckingMiddleware, function (req, res) {
+    // console.log("reqofcontent", req.body);
     insertNoteContent('5b0bc831ccfade2af940e156', req.body.content, req.body.isChecked)
         .then(function (doc, err) {   //returns the inserted Content document
             if (err) throw err
@@ -160,6 +265,27 @@ app.post('/addnotecontent', function (req, res) {
         })
     // console.log("fd");
 });
+
+
+
+
+/*-----------test-----------*/
+app.post('/test', function (req, res, next) {
+    console.log("HEUIBHNJhnu")
+    passport.authenticate('localStrategy',
+        {
+            session: false
+        },
+        function (err, user, info) {
+            console.log(" err : ", err)
+            console.log("user : ", user)
+            console.log(" info : ", info)
+        })(req, res, next);
+})
+
+
+
+
 
 app.listen(3001, function () {
     console.log("SERVER RUNNING ON PORT 3001")

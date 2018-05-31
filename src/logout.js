@@ -1,16 +1,41 @@
 import React, { Component } from "react";
 import { Navbar, Nav, NavItem, NavDropdown, MenuItem, Button, Form, Col, FormGroup } from "react-bootstrap";
 import { Link, Redirect } from 'react-router-dom';
-
+import axios from 'axios';
 class HeaderLogout extends Component {
 
     loggingOutFunction() {
-        console.log("Logging out function");
-        localStorage.removeItem('authtoken')
-        //   this.setState({ redirectVar: true }) 
-        //  console.log("this.state : ", this.state)
-
-    }
+       // console.log("Logging out function");
+        // localStorage.removeItem('authtoken');
+       axios.post('http://localhost:3001/logout', {},
+        {
+           headers: {
+             "Authorization": localStorage.getItem('authtoken')
+           }
+         })
+           .then( (response) => {
+                    console.log("loginresponse",response.data);
+                            // if (!localStorage.authtoken) {
+                    if(response.status == 200){
+                        console.log("Logging out function");
+                          // console.log(response.data.authtoken);
+                          localStorage.removeItem('authtoken');
+             /*  this.setState({
+                   redirect: true
+                 })*/
+               }
+           })
+           .catch(function (error) {
+               console.log(error.response);
+           });
+   }
+       // localStorage.removeItem('authtoken');
+        //   this.setState({ redirect: true }) 
+       /* renderRedirect(){
+            if(this.state.redirect){
+                return <Redirect to='/dashboard'/>
+            }
+        }*/
     render() {
         return (
             <Navbar>

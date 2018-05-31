@@ -1,24 +1,12 @@
 import React, { Component } from "react";
 import { Button, Form, Col, FormGroup, FormControl, HelpBlock, ControlLabel } from "react-bootstrap";
 import { Link, Redirect } from 'react-router-dom';
+import Header from './header';
 import axios from 'axios';
 //disabled={!this.validateForm()}
 /*import LoaderButton from "../components/LoaderButton";*/
 /* <span style={{ marginLeft: 8 }}>or</span>  <div style={{borderTop:'1 solid #999',paddingTop:20}} className="form-group">*/
 class Signup extends Component {
-    //  isLoading: false,  newUser: null
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            email: "",
-            username: "",
-            password: "",
-            confpsswd: "",
-            redirect: false
-        };
-        this.handleChange = this.handleChange.bind(this);
-    }
 
     componentWillMount() {
 
@@ -34,8 +22,19 @@ class Signup extends Component {
             }
         )
     }
+    //  isLoading: false,  newUser: null
+    constructor(props) {
+        super(props);
 
-
+        this.state = {
+            email: "",
+            username: "",
+            password: "",
+            confpsswd: "",
+            redirect: false
+        };
+        this.handleChange = this.handleChange.bind(this);
+    }
    /* validateForm() {
         return
         (
@@ -57,7 +56,7 @@ class Signup extends Component {
     }
 
     handleSubmit(e) {
-        // console.log(e)
+      //  e.preventDefault();
         var obj = {
             email: this.state.email,
             username: this.state.username,
@@ -72,6 +71,8 @@ class Signup extends Component {
         })
             .then((response) => {
                 console.log(response.data.authtoken);
+               // if(response.status == 200){
+              
               if (!localStorage.getItem('authtoken')) {
                     //save it in localStorage
                     localStorage.setItem('authtoken', (response.data.authtoken));
@@ -81,18 +82,13 @@ class Signup extends Component {
                         redirect: true
                     })
               }
-               else {
-                    console.log("I AM HERRE!!!!");
-
+             /*  else {
                     if (response.data.redirect == '/')
                         this.setState({
                             redirect: true
                         })
-                 }
+                 }*/
             })
-            /*.then(function (response) {
-                console.log(response);
-            })*/
             .catch(function (error) {
                 console.log(error.response)
                // console.log(error);
@@ -102,7 +98,7 @@ class Signup extends Component {
     render() {
         return (
             <div className="container">
-
+ <Header/>
                 <div id="signupbox" style={{ marginTop: 50 }} className="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
                     <div className="panel panel-info">
                         <div className="panel-heading">
@@ -115,7 +111,7 @@ class Signup extends Component {
                                     <Col componentClass={ControlLabel} md={3}>
                                         Email
                                     </Col>
-                                    <Col md={6}>
+                                    <Col md={9}>
                                         <FormControl type="email" placeholder="Email" value={this.state.email} onChange={(e) => { this.handleChange(e) }} />
                                     </Col>
                                 </FormGroup>
@@ -123,7 +119,7 @@ class Signup extends Component {
                                     <Col componentClass={ControlLabel} md={3}>
                                         User Name
                                     </Col>
-                                    <Col md={6}>
+                                    <Col md={9}>
                                         <FormControl type="text" placeholder="Username" value={this.state.username} onChange={(e) => { this.handleChange(e) }} />
                                     </Col>
                                 </FormGroup>
@@ -131,7 +127,7 @@ class Signup extends Component {
                                     <Col componentClass={ControlLabel} md={3}>
                                         Password
                                     </Col>
-                                    <Col md={6}>
+                                    <Col md={9}>
                                         <FormControl type="password" placeholder="Password" value={this.state.password} onChange={(e) => { this.handleChange(e) }} />
                                     </Col>
                                 </FormGroup>
@@ -139,12 +135,12 @@ class Signup extends Component {
                                     <Col componentClass={ControlLabel} md={3}>
                                         Confirm Password
                                     </Col>
-                                    <Col md={6}>
+                                    <Col md={9}>
                                         <FormControl type="password" placeholder="Confirm Password" value={this.state.confpsswd} onChange={(e) => { this.handleChange(e) }} />
                                     </Col>
                                 </FormGroup>
                                 <FormGroup>
-                                    <Col smOffset={3} mdOffset={3} sm={9} md={9}>
+                                    <Col smOffset={3} mdOffset={3} sm={9} md={6}>
                                         {this.renderRedirect()}
                                         <Button type="button" bsStyle="success" onClick={(e) => this.handleSubmit(e)}><i className="icon-hand-right"></i>Sign Up</Button>
                                         <span style={{ marginLeft: 8 }}> OR </span>
