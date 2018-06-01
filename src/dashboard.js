@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { ListGroup, ListGroupItem, Button, FormGroup, FormControl, ControlLabel, Checkbox } from "react-bootstrap";
-import { Link } from 'react-router-dom';
+import { Link,Redirect } from 'react-router-dom';
 import TodoItem from './todoItem';
 import './dashboard.css';
 import  HeaderLogout from './logout';
@@ -113,7 +113,8 @@ class Dashboard extends Component {
                 ]
             }],*/
            // item: [],
-            description: ''
+            description: '',
+            redirect: false  
         };
         // this.handleChange = this.handleChange.bind(this);
         /*  this.handleSubmit = this.handleSubmit.bind(this);*/
@@ -191,7 +192,12 @@ class Dashboard extends Component {
         // alert('SHOWING HERE')
         this.setState({ selectedTitleContents: obj })
     }
-
+ /*   renderRedirect(){
+        if (this.state.redirect) {
+          //  this.props.history.push("/login")
+            return <Redirect to='/login'/>
+        }
+    }*/
     render() {
 
         var edit = {
@@ -209,6 +215,7 @@ class Dashboard extends Component {
             <div className="container">
                 <header className="page-title">
                 <HeaderLogout/>
+                {/*this.renderRedirect()*/}
                 </header>
                 <div className="todo-in-progress">
                     <h2> Working tasks</h2>

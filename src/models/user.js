@@ -20,22 +20,30 @@ var TokenSchema = new Schema({
     timestamp: Number
 });
 notesTableSchema = new Schema({
-
-    // id of the owner
-    uId: String,
-    title: String,
-    date: Date,
-    isDeleted: Boolean,
-    //collaborators of the note
-    sharedWith: Array
-
+// id of the owner
+uId: String,
+title: String,
+createdAt: {
+    type: Date,
+    default : Date.now()
+},
+updatedAt : Date,
+deletedAt : Date,
+//collaborators of the note
+sharedWith: Array
 });
+
+
+
 contentTableSchema = new Schema({
 
     // the id of the note it is present in
     notesID: String,
     content: String,
-    isChecked: Boolean
+    isChecked: {
+        type: Boolean,
+        default: false
+    }
 
 });
 /* the schema is useless so far we need to create a model using it*/
@@ -125,7 +133,8 @@ exports.getUserData = function(userId){
 }
 
 /*-------delete token of particular user when logout-----*/
-exports.deleteToken = function(oldtoken,newtoken){
-    Token.findOneAndUpdate()
+exports.deleteUserToken = function(tokenvalue){
+    console.log("usersjs",tokenvalue)
+   return Token.findOneAndRemove({token:tokenvalue})
 }
 //{ username: 'starlord55' }, { username: 'starlord88' }

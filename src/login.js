@@ -6,7 +6,7 @@ import axios from 'axios';
 class Login extends Component {
 
     componentWillMount(){
-        axios.post('http://localhost:3001',{}, {
+        axios.post('http://localhost:3001/login',{}, {
             headers: {
                 "Authorization": localStorage.getItem('authtoken')
             }

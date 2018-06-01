@@ -3,7 +3,13 @@ import { Navbar, Nav, NavItem, NavDropdown, MenuItem, Button, Form, Col, FormGro
 import { Link, Redirect } from 'react-router-dom';
 import axios from 'axios';
 class HeaderLogout extends Component {
+   /* constructor(props) {
+        super(props);
+        this.state = {
 
+        redirect: false  
+        }
+    }*/
     loggingOutFunction() {
        // console.log("Logging out function");
         // localStorage.removeItem('authtoken');
@@ -20,9 +26,9 @@ class HeaderLogout extends Component {
                         console.log("Logging out function");
                           // console.log(response.data.authtoken);
                           localStorage.removeItem('authtoken');
-             /*  this.setState({
+              this.setState({
                    redirect: true
-                 })*/
+                 })
                }
            })
            .catch(function (error) {
@@ -31,8 +37,9 @@ class HeaderLogout extends Component {
    }
        // localStorage.removeItem('authtoken');
         //   this.setState({ redirect: true }) 
-       /* renderRedirect(){
-            if(this.state.redirect){
+    /* renderRedirect(){
+            if (this.state.redirect) {
+              //  this.props.history.push("/login")
                 return <Redirect to='/dashboard'/>
             }
         }*/

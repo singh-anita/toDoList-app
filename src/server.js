@@ -1,7 +1,7 @@
 var express = require('express'); // call express
 var app = express();  /* define our app using express*/
 var bodyparser = require("body-parser");
-var { checkUserEmail, newUser, validPassword, newToken, getUId, getUserData, checkuId, insertTitle, getNotesTitle, hashpass, insertNoteContent } = require('./models/user');
+var { checkUserEmail, newUser, validPassword, newToken, getUId, getUserData, checkuId,deleteUserToken, insertTitle, getNotesTitle, hashpass, insertNoteContent } = require('./models/user');
 var r = require('./tokenGenerate');
 var passport = require('passport');
 var flash = require('connect-flash');
@@ -74,9 +74,11 @@ app.use(passport.initialize())
 
 
 function tokenCheckingMiddleware(req, res, next) {
-
-    if (req.headers.authtoken) {
-        getUId(req.headers.authtoken)
+console.log("hello m here")
+//console.log("tokench",req.headers)
+console.log(req.headers.authorization)
+    if (req.headers.authorization) {
+        getUId(req.headers.authorization)
             .then((doc, err) => {
                 if (doc) {
                     console.log("Got token")
@@ -178,12 +180,57 @@ app.post('/signup', function (req, res) {
 });
 
 /*---------------------FOR login---------------------------*/
-app.post('/login', function (req, res, next) {
- 
+app.post('/login',function (req, res) {
+    if (req.headers.authorization != 'null') {
+        console.log("loginuser token already exist so redirect to dashboard with token", req.headers.authorization);
+        getUId(req.headers.authorization)
+        .then((doc, err) => {
+            if (doc) {
+                console.log("Got token")
+                getUserData(doc.uId)
+                    .then((doc, err) => {
+
+                        if (doc) {
+                            res.status(200).send({ authtoken: doc.token });
+                           // next();
+                            console.log("Got user")
+                        }
+                        else {
+                            // unauthorized....
+                            res.status(401).send()
+                            console.log("didnt get user")
+                        }
+                    })
+            }
+
+            else {
+                res.status(401).send()
+                console.log("didnt get token")
+            }
+        })
+        //res.status(200).send();
+       /* checkuId(req.headers.authorization).then(
+            (doc, err) => {
+                if (doc) {
+
+                    console.log("Got token")
+                    //200 means the  token is valid
+                    res.status(200).send();
+
+                }
+                //it means that something is in the body ie the filled form
+                //client side validation to be done separately
+
+            }
+        )*/
+    }
+
+    else
+        if (Object.keys(req.body) != 0) {
     var userlogin = {};
     userlogin.emailId = req.body.loginEmail;
     userlogin.password = req.body.loginPassword;
-    console.log(userlogin)
+    console.log("userlogin",userlogin)
    // var tokenobj = {};
                 //    console.log(req.headers.authorization);
                 // console.log("JHBGYBDTCY")
@@ -198,27 +245,58 @@ app.post('/login', function (req, res, next) {
                 //         // console.log("header", req.headers.authorization);
                 //         // if (req.headers.authorization) {
                         tokenobj.uId = userObj._id;
-                        checkuId(tokenobj.uId).then((tokenOb, err) => {
+                        tokenobj.token = r.randomToken()
+                        tokenobj.timestamp = new Date().getTime()
+        
+                        newToken(tokenobj).save(function (err, tokenOb) {
+                            if (err) throw err
+                            console.log("token SAVE SUCCESSFUL for new login user")
+                            res.status(200).send({ authtoken: tokenOb.token });
+                        })
+                      /*  checkuId(tokenobj.uId).then((tokenOb, err) => {
                             console.log("tokenobject", tokenOb)
                             if (err) throw err;
                              res.status(200).send({ authtoken: tokenOb.token });
-                         })
-                //         // }
+                         })*/
                     }
-                //     //checkuId(uId).then()
-                //     // console.log("tok",userObj.token)
-                //     //   res.send({authtoken : userObj.token});
+                    else{
+                        res.status(401).send({error:"please enter valid emailid or password"})
+                    }
                 })
+            }
+
+           /* else if (req.headers.authorization != 'null') {
+                    console.log("loginuser token already exist so redirect to dashboard with token", req.headers.authorization);
+                    res.status(200).send();
+                  /*  checkuId(req.headers.authorization).then(
+                        (tokenOb, err) => {
+                            if (tokenOb) {
+                                console.log("Got token")
+                                res.status(200).send();
+                            }
+                            else{
+                                res.status(401).send({error:"please enter valid emailid or password"})
+                            }
+                        }
+                    )
+                
+            
+            }*/
         })
 
         /*-----------------for logout--------------*/
       
-
         app.post('/logout', function (req, res) {
             console.log(req.body);
-            console.log(req.headers.authorization);
-            console.log("GOT LOGOUT");
-            console.log(req.body);
+            console.log("tokenloggg",req.headers.authorization);
+          //  console.log("LOGGED OUT");
+          deleteUserToken(req.headers.authorization).then((tokendoc,err)=>{
+           // if (!tokendoc) {res.status(404).send({message:"token not found "})}
+           console.log("tokenobject", tokendoc)
+           if (err) throw err;
+      res.status(200).send({message: "token deleted successfully!"});
+        
+     })
           //  res.json({ redirect: '/', message: 'OK' });
         })
 /*---------------------------add title ------------------------*/

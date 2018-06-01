@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
-import { BrowserRouter as Router, Switch, Route, Link ,hashHistory} from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import './App.css';
 import  HeaderLogout from './logout';
 import Signup from './signup';
@@ -23,7 +23,7 @@ class App extends Component {
               {/* This is Dashboard ROUTE */}
              <Route exact path = '/dashboard' component = { Dashboard } />
                {/* This is LOGIN ROUTE */}
-             <Route exact path='/' component={Login} />
+             <Route exact path='/login' component={Login} />
           </Switch>
        </Router>
     );
