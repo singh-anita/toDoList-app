@@ -121,9 +121,14 @@ class Dashboard extends Component {
         this.addTitle = this.addTitle.bind(this);
     }
 
-
+/*-----get all the titles for that specific user--*/
     componentWillMount(){
-    axios.get('http://localhost:3001/gettitles',{ })
+    axios.get('http://localhost:3001/gettitles',
+    {
+       headers: {
+         "Authorization": localStorage.getItem('authtoken')
+       }
+     })
     .then(response => {
         console.log("CONSOLE DATA : ", response.data)
        this.setState({ list : response.data })
@@ -135,7 +140,7 @@ class Dashboard extends Component {
     })
 }
 
-
+/*on add click will add the title*/ 
     addTitle(e) {
         var updatedList;
         if (this.state.value.length > 0) {
@@ -153,7 +158,11 @@ class Dashboard extends Component {
         };
         console.log("OBJECT : ", { title : this.state.value, list : [] })
         // console.log(""obj)
-        axios.post('http://localhost:3001/addnotetitle', obj)
+        axios.post('http://localhost:3001/addnotetitle', obj,{
+            headers: {
+              "Authorization": localStorage.getItem('authtoken')
+            }
+        })
         .then((response) => {
             console.log("axios", response.data);
         })
@@ -167,25 +176,48 @@ class Dashboard extends Component {
             description: e.target.value
         })
     }
+    /*form the listgroup slecting title*/
     title(key, e) {
           console.log("IN TITLE : ", key)
-
-        /*on selection of title changing state and get the selected title*/
-        this.setState({
-
+         /* this.setState({
             //selectedTitleContents:  [{ title: this.state.value, list: [] }]
           selectedTitleContents: this.state.list.find((arr, idx) => {
                 console.log("arr HERE : ", arr)
                 return arr.title == e.target.value
             })
-        })
+       })*/
+          axios.get('http://localhost:3001/getnotecontent/' + key ,
+          {
+             headers: {
+               "Authorization": localStorage.getItem('authtoken')
+             }
+           })
+             .then( (response) => {
+                      console.log("loginresponse",response.data);
+                              // if (!localStorage.authtoken) {
+                      if(response.status == 200){
+             /*on selection of title changing state and get the selected title*/
+        this.setState({
+            //selectedTitleContents:  [{ title: this.state.value, list: [] }]
+          selectedTitleContents: [{ content: response.data, isChecked: false  }]
+               // console.log("arr HERE : ", arr)
+               // return arr.title == e.target.value
+            })
+     //  })
+               }
+             })
+             .catch(function (error) {
+                 console.log(error.response);
+             });
+    
     }
+    /*title inputbox value changes */
     update(e) {
         // alert(e.target.value)
         this.setState({
             value: e.target.value
         })
-        console.log("VALUE : ", this.state.value)
+       // console.log("VALUE : ", this.state.value)
     }
 
     checkStateChanged(obj) {

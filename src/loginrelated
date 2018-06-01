@@ -44,6 +44,25 @@ app.post('/', function (req, res, next) {
 })
 
 
+           /* else if (req.headers.authorization != 'null') {
+                    console.log("loginuser token already exist so redirect to dashboard with token", req.headers.authorization);
+                    res.status(200).send();
+                  /*  checkuId(req.headers.authorization).then(
+                        (tokenOb, err) => {
+                            if (tokenOb) {
+                                console.log("Got token")
+                                res.status(200).send();
+                            }
+                            else{
+                                res.status(401).send({error:"please enter valid emailid or password"})
+                            }
+                        }
+                    )
+                
+            
+            }*/
+
+
 
 
 

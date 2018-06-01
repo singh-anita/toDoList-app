@@ -105,7 +105,7 @@ exports.checkuId = function (uId) {
     return Token.findOne({ uId: uId })
 }
 
-/* insert a new note title into the notesCollection  collection*/
+/* insert a new note title into the notesCollection  collection using save*/
 exports.insertTitle = function (userTableId, noteTitle) {
     return notesTable({ uId: userTableId, title: noteTitle, date: new Date(), isDeleted: false }).save()
 }
@@ -115,11 +115,15 @@ exports.getNotesTitle = function (userId) {
     return notesTable.find({ uId: userId });
 }
 
-/* insert individual contents on the basis of particular notetitle*/
+/* insert individual contents on the basis of particular notetitleid using save*/
 exports.insertNoteContent = function (noteTitleId, individualNotesEntry, checkBoxStatus) {
     return contentTable({ notesID: noteTitleId, content: individualNotesEntry, isChecked: checkBoxStatus }).save()
 }
 
+exports.getAllContentofNote = function(noteTitleId){
+    console.log(noteTitleId)
+    return contentTable.find({ notesID : noteTitleId })
+}
 
 //get the uid which is bound to the token
 exports.getUId = function(tokenValue){

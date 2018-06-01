@@ -1,7 +1,7 @@
 var express = require('express'); // call express
 var app = express();  /* define our app using express*/
 var bodyparser = require("body-parser");
-var { checkUserEmail, newUser, validPassword, newToken, getUId, getUserData, checkuId,deleteUserToken, insertTitle, getNotesTitle, hashpass, insertNoteContent } = require('./models/user');
+var { checkUserEmail, newUser, validPassword, newToken, getUId, getUserData, checkuId,deleteUserToken, insertTitle,getAllContentofNote, getNotesTitle, hashpass, insertNoteContent } = require('./models/user');
 var r = require('./tokenGenerate');
 var passport = require('passport');
 var flash = require('connect-flash');
@@ -19,63 +19,12 @@ app.use(function (req, res, next) {
     next();
 });
 
-app.use(passport.initialize())
-
-
-//PASSPORT MIDDLEWARE.......
-/*passport.use('localStrategy', new LocalStrategy({
-    usernameField: 'loginEmail',
-    passwordField: 'loginPassword',
-    passReqToCallback: true
-
-}, function (req, loginEmail, loginPassword, done) {
-
-    //make some db calls to check token
-    //and user validity
-
-    console.log("req : ", req.body)
-    console.log("e : ", loginEmail)
-    console.log("p : ", loginPassword)
-
-    var token = req.headers.authtoken
-    console.log(req.body);
-    console.log("token passport: ", req.headers.authtoken)
-
-    if (req.headers.authtoken) {
-        console.log("Herrlooo")
-    }
-
-    getUId(token)
-        .then((doc, err) => {
-            if (doc) {
-                // console.log("doc",doc)
-                console.log("Got token")
-                getUserData(doc.uId)
-                    .then((doc, err) => {
-
-                        if (doc) {
-                            console.log("Got user")
-                            done(null, doc)
-                        }
-                        else {
-                            console.log("didnt get user")
-                            done({ error: "THIS IS AN ERROR" })
-                        }
-                    })
-            }
-
-            else {
-                console.log("didnt get token")
-                done({ error: "THIS IS AN ERRORZZZZZ" }, { info: "INFOZZZZZ" })
-            }
-        })
-
-}))*/
+// app.use(tokenCheckingMiddleware())
 
 
 function tokenCheckingMiddleware(req, res, next) {
 console.log("hello m here")
-//console.log("tokench",req.headers)
+console.log("tokench",req.headers.authorization)
 console.log(req.headers.authorization)
     if (req.headers.authorization) {
         getUId(req.headers.authorization)
@@ -83,9 +32,10 @@ console.log(req.headers.authorization)
                 if (doc) {
                     console.log("Got token")
                     getUserData(doc.uId)
-                        .then((doc, err) => {
+                        .then((user, err) => {
 
-                            if (doc) {
+                            if (user) {
+                                res.locals.user=user;
                                 next();
                                 console.log("Got user")
                             }
@@ -111,11 +61,6 @@ console.log(req.headers.authorization)
 
 
 }
-
-
-
-
-
 
 /* configure app to use bodyParser()-> this will let us get the data from a POST*/
 app.use(bodyparser.json());
@@ -208,7 +153,6 @@ app.post('/login',function (req, res) {
                 console.log("didnt get token")
             }
         })
-        //res.status(200).send();
        /* checkuId(req.headers.authorization).then(
             (doc, err) => {
                 if (doc) {
@@ -218,9 +162,6 @@ app.post('/login',function (req, res) {
                     res.status(200).send();
 
                 }
-                //it means that something is in the body ie the filled form
-                //client side validation to be done separately
-
             }
         )*/
     }
@@ -232,8 +173,6 @@ app.post('/login',function (req, res) {
     userlogin.password = req.body.loginPassword;
     console.log("userlogin",userlogin)
    // var tokenobj = {};
-                //    console.log(req.headers.authorization);
-                // console.log("JHBGYBDTCY")
                  checkUserEmail( userlogin.emailId).then((userObj, err) => {
                     var tokenobj = {};
                    if (err) throw err;
@@ -241,9 +180,6 @@ app.post('/login',function (req, res) {
                     console.log("IS PASSWORD MATCHING : ", validPassword(userlogin.password, userObj.password));
 
                     if (validPassword) {
-
-                //         // console.log("header", req.headers.authorization);
-                //         // if (req.headers.authorization) {
                         tokenobj.uId = userObj._id;
                         tokenobj.token = r.randomToken()
                         tokenobj.timestamp = new Date().getTime()
@@ -264,29 +200,11 @@ app.post('/login',function (req, res) {
                     }
                 })
             }
-
-           /* else if (req.headers.authorization != 'null') {
-                    console.log("loginuser token already exist so redirect to dashboard with token", req.headers.authorization);
-                    res.status(200).send();
-                  /*  checkuId(req.headers.authorization).then(
-                        (tokenOb, err) => {
-                            if (tokenOb) {
-                                console.log("Got token")
-                                res.status(200).send();
-                            }
-                            else{
-                                res.status(401).send({error:"please enter valid emailid or password"})
-                            }
-                        }
-                    )
-                
-            
-            }*/
         })
 
-        /*-----------------for logout--------------*/
+/*-----------------for logout--------------*/
       
-        app.post('/logout', function (req, res) {
+app.post('/logout', function (req, res) {
             console.log(req.body);
             console.log("tokenloggg",req.headers.authorization);
           //  console.log("LOGGED OUT");
@@ -299,53 +217,142 @@ app.post('/login',function (req, res) {
      })
           //  res.json({ redirect: '/', message: 'OK' });
         })
-/*---------------------------add title ------------------------*/
-app.post('/addnotetitle',tokenCheckingMiddleware, function (req, res) {
-    // console.log("req", req.body);
-    insertTitle('5b0bc831ccfade2af940e156', req.body.title)
-        .then(function (doc, err) {   //returns the inserted document
+/*---------------------------adding new title -------------------------*/
+app.post('/addnotetitle',tokenCheckingMiddleware, function (req, res,next) {
+    console.log("req", req.body.title);
+    console.log("Users coming",res.locals.user._id)
+    var user =res.locals.user;
+   // console.log( "users coming",user )
+    if(user){
+        insertTitle(user._id, req.body.title).then((doc, err) => {   //returns the inserted document
             if (err) throw err
             console.log("doc", doc);
         })
+   }
+   else {
+    res.status(401).send({error:"title not inserted"});
+}
 })
 
 
-//get all the titles of a specific user - read/retrieve operation
+/*get all the titles of a specific user -->read/retrieve */
 app.get('/gettitles',tokenCheckingMiddleware, function (req, res, next) {
-    // console.log("req", req.body);
+    // console.log("req", req.headers);
+    // console.log("Users coming",res.locals.user._id)
+     var user =res.locals.user;
+     if(user){
     var titleToSend = [];
 
-    getNotesTitle('5b0bc831ccfade2af940e156')
-        .then((notesTitleArray, err) => {
+  getNotesTitle(user._id)
+        .then((noteTitles, err) => {
             if (err) throw err
-
-            titleToSend = notesTitleArray.map((note) => {
+          //  console.log("notestitleobj",noteTitles)
+            /*---array of notetitles objects came so to get specific title map*/
+            titleToSend = noteTitles.map((note) => {
                 return { _id: note._id, title: note.title }
             })
 
             res.status(200).send(titleToSend);
 
         })
-
-
-
-    //    console.log("Unauthorized user")
-    //    res.status(401).send();
+    }
+    else {
+             console.log("Unauthorized user")
+        res.status(401).send({error:"title not inserted"});
+    }
 })
 
-/*---------------------------add Content--------------------------*/
+/*----------------get titleid of particular note-------------------*/
+app.get('/getnotecontent/:id',tokenCheckingMiddleware, function (req, res, next) {
+    // console.log("req", req.headers);
+    console.log("reqnote", req.params.id);
+     console.log("Users coming",res.locals.user)
+     var user= res.locals.user;
+     if(user){
+   var contentToSend =[];
+    //{ _id: req.params}
+    getNotesTitle(user._id)
+    .then((notesTitleArray, err1) => {
+        // console.log("singleNoteEntry : ", notesTitleArray)
+        notesTitleArray.map((noteTitle, titleIndex) => {
+            //create a new entry with the title and _id
+            contentToSend[titleIndex] = { _id: noteTitle._id, title: noteTitle.title, list: [] }
+     getAllContentofNote( noteTitle._id).then((NoteContents, err)=>{
+       
+         console.log("content",NoteContents)
+         //if (err) throw err
+      // NoteContents.map((individualTitleentry, noteContentIdx) => {
+            NoteContents.map((individualTitleentry, noteContentIdx) => {
+                contentToSend[titleIndex].list.push( {  content: individualTitleentry.content, isChecked: individualTitleentry.isChecked }
+            )
+        })
+         //  res.status(200).send(contentToSend);
+
+     })
+    })
+})
+     }
+    })
+    // var user =res.locals.user;
+   /*  if(user){
+    var titleIdToSend = [];
+
+  getNotesTitle(user._id)
+        .then((noteTitles, err) => {
+            if (err) throw err
+            console.log("notestitleobj",noteTitles)
+           
+            titleToSend = noteTitles.map((note) => {
+                return { _id: note._id, title: note.title }
+            })
+
+            res.status(200).send(titleToSend);
+
+        })
+    }
+    else {
+             console.log("Unauthorized user")
+        res.status(401).send({error:"title not inserted"});
+    }*/
+
+
+
+/*---------------------------adding new Content--------------------------*/
 app.post('/addnotecontent',tokenCheckingMiddleware, function (req, res) {
-    // console.log("reqofcontent", req.body);
-    insertNoteContent('5b0bc831ccfade2af940e156', req.body.content, req.body.isChecked)
+     console.log("reqofcontent", req.body);
+    console.log("Users coming",res.locals.user)
+    var user =res.locals.user;
+    if(user){
+       // var titleIdToSend = [];
+        getNotesTitle(user._id)
+        .then((noteTitles, err) => {
+            if (err) throw err
+     
+       /*    noteTitles.map((note,idx) => {
+            insertNoteContent(note._id, req.body.content, req.body.isChecked)
+        
+            })*/
+
+            res.status(200).send(titleIdToSend);
+
+        })
+    }
+    else {
+             console.log("Unauthorized user")
+        res.status(401).send({error:"title not inserted"});
+    }
+   /* insertNoteContent(user._id, req.body.content, req.body.isChecked)
         .then(function (doc, err) {   //returns the inserted Content document
             if (err) throw err
             console.log("content doc", doc);
         })
+    }
+    else {
+        console.log("Unauthorized user")
+   res.status(401).send({error:"title not inserted"});
+}*/
     // console.log("fd");
 });
-
-
-
 
 /*-----------test-----------*/
 app.post('/test', function (req, res, next) {

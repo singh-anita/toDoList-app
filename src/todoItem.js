@@ -46,7 +46,11 @@ class TodoItem extends Component {
            content: this.state.description, isChecked: false 
       };
       console.log("OBJECT : ",{ content: this.state.description, isChecked: false })
-          axios.post('http://localhost:3001/addnotecontent', contentObj)
+          axios.post('http://localhost:3001/addnotecontent', contentObj,  {
+            headers: {
+              "Authorization": localStorage.getItem('authtoken')
+            }
+          })
         .then((response) => {
             console.log("axios", response.data);
         })
