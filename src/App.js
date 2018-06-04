@@ -19,11 +19,11 @@ class App extends Component {
         <Switch>
 
            {/* THE SIGN UP ROUTE */}
-             <Route exact path='/signup' component={Signup} />
+             <Route path='/signup'  render = {(props) => <Signup {...props} />} />
               {/* This is Dashboard ROUTE */}
-             <Route exact path = '/dashboard' component = { Dashboard } />
+             <Route  path = '/dashboard' render = {(props) => <Dashboard {...props} />} />
                {/* This is LOGIN ROUTE */}
-             <Route exact path='/login' component={Login} />
+             <Route  path='/login' render = {(props) => <Login {...props} />}  />
           </Switch>
        </Router>
     );

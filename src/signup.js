@@ -51,7 +51,8 @@ class Signup extends Component {
     }
     renderRedirect() {
         if(this.state.redirect){
-            return <Redirect to='/dashboard'/>
+           // return <Redirect to='/dashboard'/>
+           this.props.history.push('/dashboard')
         }
     }
 
@@ -103,7 +104,7 @@ class Signup extends Component {
                     <div className="panel panel-info">
                         <div className="panel-heading">
                             <div className="panel-title">Sign Up</div>
-                            <div><Link to="./">Sign In</Link></div>
+                            <div><Link to="/login">Sign In</Link></div>
                         </div>
                         <div className="panel-body" >
                             <Form horizontal style={{ marginTop: 50 }}>

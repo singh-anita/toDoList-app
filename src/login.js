@@ -36,7 +36,8 @@ class Login extends Component {
 
     renderRedirect(){
         if(this.state.redirect){
-            return <Redirect to='/dashboard'/>
+            //return <Redirect to='/dashboard'/>
+            this.props.history.push('/dashboard')
         }
     }
 

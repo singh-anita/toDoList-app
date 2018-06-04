@@ -119,6 +119,7 @@ class Dashboard extends Component {
         // this.handleChange = this.handleChange.bind(this);
         /*  this.handleSubmit = this.handleSubmit.bind(this);*/
         this.addTitle = this.addTitle.bind(this);
+        this.handleitems=this.handleitems.bind(this)
     }
 
 /*-----get all the titles for that specific user--*/
@@ -178,6 +179,8 @@ class Dashboard extends Component {
     }
     /*form the listgroup slecting title*/
     title(key, e) {
+        var temp =e.target.value;
+        console.log(temp)
           console.log("IN TITLE : ", key)
          /* this.setState({
             //selectedTitleContents:  [{ title: this.state.value, list: [] }]
@@ -195,21 +198,43 @@ class Dashboard extends Component {
              .then( (response) => {
                       console.log("loginresponse",response.data);
                               // if (!localStorage.authtoken) {
-                      if(response.status == 200){
+                                  var obj={}
+                                  obj.id=key,
+                                  obj.title = temp,
+                                  obj.list=response.data
+                     if(response.status == 200){
+                        this.setState({
+                            selectedTitleContents:obj
+                        })
              /*on selection of title changing state and get the selected title*/
-        this.setState({
-            //selectedTitleContents:  [{ title: this.state.value, list: [] }]
-          selectedTitleContents: [{ content: response.data, isChecked: false  }]
+      //  this.setState({
+          /*  selectedTitleContents: response.data.find((arr, idx) => {
+                if(arr._id === key){
+                    console.log("arr HERE : ", arr)
+                    return arr 
+                }
+            })*/
+         //   selectedTitleContents:  [{ title: response.data, list: [] }]
+        // selectedTitleContents: [{ content: response.data, isChecked: false  }]
                // console.log("arr HERE : ", arr)
                // return arr.title == e.target.value
-            })
-     //  })
-               }
+        //    })
+      //})
+              }
              })
              .catch(function (error) {
-                 console.log(error.response);
+                 console.log("error",error.response);
              });
     
+    }
+
+    /*getting data to update state list from todoitems */
+    handleitems = (titleid,content,checked) => {
+        console.log(titleid,content,checked)
+        var temp = this.state.selectedTitleContents
+           temp.list.push({titleId:titleid,content: content,isChecked:checked})
+        this.setState({selectedTitleContents:temp});
+
     }
     /*title inputbox value changes */
     update(e) {
@@ -224,12 +249,12 @@ class Dashboard extends Component {
         // alert('SHOWING HERE')
         this.setState({ selectedTitleContents: obj })
     }
- /*   renderRedirect(){
-        if (this.state.redirect) {
-          //  this.props.history.push("/login")
-            return <Redirect to='/login'/>
+ renderRedirect(){
+            if (this.state.redirect) {
+                this.props.history.push("/login")
+                //return <Redirect to='/dashboard'/>
+            }
         }
-    }*/
     render() {
 
         var edit = {
@@ -247,7 +272,7 @@ class Dashboard extends Component {
             <div className="container">
                 <header className="page-title">
                 <HeaderLogout/>
-                {/*this.renderRedirect()*/}
+               {this.renderRedirect()}
                 </header>
                 <div className="todo-in-progress">
                     <h2> Working tasks</h2>
@@ -273,7 +298,7 @@ class Dashboard extends Component {
                             }
                         </ListGroup>
                     </div>
-                    <TodoItem checkStateChange={this.checkStateChanged.bind(this)} noteObj={this.state.selectedTitleContents} />
+                    <TodoItem checkStateChange={this.checkStateChanged.bind(this)} noteObj={this.state.selectedTitleContents} handleItems={this.handleitems} />
                 </div>
             </div>
         );

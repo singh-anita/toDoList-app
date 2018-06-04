@@ -114,7 +114,10 @@ exports.getNotesTitle = function (userId) {
     /*returns an array consisting of note titles created by a particular user*/
     return notesTable.find({ uId: userId });
 }
-
+//find single note with title and titleid for dashboard
+//exports.getTitleId =function(titleId,titlevalue){
+   // return notesTable.findById({ uId: titleId ,title:titlevalue});
+//}
 /* insert individual contents on the basis of particular notetitleid using save*/
 exports.insertNoteContent = function (noteTitleId, individualNotesEntry, checkBoxStatus) {
     return contentTable({ notesID: noteTitleId, content: individualNotesEntry, isChecked: checkBoxStatus }).save()

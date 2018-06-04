@@ -265,34 +265,39 @@ app.get('/gettitles',tokenCheckingMiddleware, function (req, res, next) {
 /*----------------get titleid of particular note-------------------*/
 app.get('/getnotecontent/:id',tokenCheckingMiddleware, function (req, res, next) {
     // console.log("req", req.headers);
-    console.log("reqnote", req.params.id);
+    console.log("reqnote", req.params);
      console.log("Users coming",res.locals.user)
      var user= res.locals.user;
-     if(user){
-   var contentToSend =[];
-    //{ _id: req.params}
-    getNotesTitle(user._id)
+     //if(user){
+      //  req.params.id.find((arr, idx) => {
+       //     if(arr._id === key){
+      //          console.log("arr HERE : ", arr)
+      //          return arr 
+      //      }
+  // var titleToSend =[];
+  /*  getNotesTitle(user._id)
     .then((notesTitleArray, err1) => {
-        // console.log("singleNoteEntry : ", notesTitleArray)
+       //  console.log("singleNoteEntry : ", notesTitleArray)
         notesTitleArray.map((noteTitle, titleIndex) => {
             //create a new entry with the title and _id
-            contentToSend[titleIndex] = { _id: noteTitle._id, title: noteTitle.title, list: [] }
-     getAllContentofNote( noteTitle._id).then((NoteContents, err)=>{
+            titleToSend[titleIndex] = { _id: noteTitle._id, title: noteTitle.title }
+         */
+         if(user){
+        var  contentToSend=[]
+     getAllContentofNote(req.params.id).then((NoteContents, err)=>{
        
          console.log("content",NoteContents)
          //if (err) throw err
-      // NoteContents.map((individualTitleentry, noteContentIdx) => {
-            NoteContents.map((individualTitleentry, noteContentIdx) => {
-                contentToSend[titleIndex].list.push( {  content: individualTitleentry.content, isChecked: individualTitleentry.isChecked }
+           NoteContents.map((individualTitleentry, noteContentIdx) => {
+                contentToSend.push( {id:individualTitleentry._id  ,content: individualTitleentry.content, isChecked: individualTitleentry.isChecked }
             )
         })
-         //  res.status(200).send(contentToSend);
+          res.status(200).send(contentToSend);
 
      })
-    })
-})
+
      }
-    })
+   })
     // var user =res.locals.user;
    /*  if(user){
     var titleIdToSend = [];
@@ -320,26 +325,33 @@ app.get('/getnotecontent/:id',tokenCheckingMiddleware, function (req, res, next)
 /*---------------------------adding new Content--------------------------*/
 app.post('/addnotecontent',tokenCheckingMiddleware, function (req, res) {
      console.log("reqofcontent", req.body);
+     console.log("reqofcontent", req.body.titleid);
     console.log("Users coming",res.locals.user)
     var user =res.locals.user;
     if(user){
        // var titleIdToSend = [];
-        getNotesTitle(user._id)
-        .then((noteTitles, err) => {
-            if (err) throw err
+       // getNotesTitle(user._id)
+     //   .then((noteTitles, err) => {
+         //   if (err) throw err
      
-       /*    noteTitles.map((note,idx) => {
-            insertNoteContent(note._id, req.body.content, req.body.isChecked)
-        
-            })*/
+      //  noteTitles.map((note,idx) => {
+          //  console.log('singlenote',note)
+        //  if(req.body.id)
+         // {
+            insertNoteContent(req.body.titleid, req.body.content, req.body.isChecked).then((notecontent,err)=>{
+              console.log(notecontent)
+              if (err) throw err
+              res.status(200).send();
+            })
+        //}
+           // res.status(200).send(titleIdToSend);
 
-            res.status(200).send(titleIdToSend);
-
-        })
-    }
+      //  })
+   // })
+}
     else {
              console.log("Unauthorized user")
-        res.status(401).send({error:"title not inserted"});
+        res.status(401).send({error:"content not inserted"});
     }
    /* insertNoteContent(user._id, req.body.content, req.body.isChecked)
         .then(function (doc, err) {   //returns the inserted Content document
