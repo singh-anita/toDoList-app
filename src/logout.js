@@ -54,7 +54,7 @@ class HeaderLogout extends Component {
                 <Nav>
                 
                     <Link onClick={this.loggingOutFunction}
-                        className="btn btn-info btn-lg" to="/">
+                        className="btn btn-info btn-lg" to="/login">
                         <span class="glyphicon glyphicon-log-out"></span> Logout
           </Link>
                     {/*  <a href="#" class="btn btn-info btn-lg">

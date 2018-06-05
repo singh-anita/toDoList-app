@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { ListGroup, ListGroupItem, Button, FormGroup, FormControl, ControlLabel, Checkbox } from "react-bootstrap";
-import { Link,Redirect,Route} from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, Link,Redirect} from 'react-router-dom';
 import TodoItem from './todoItem';
 import TodoTitle from './todotitle';
 import './dashboard.css';
@@ -10,16 +10,33 @@ class Dashboard extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            redirect: false  
+            redirect: false,
+            isInitialRender : true,
+            currentlySelected : null,
+            noteTitleId:null
+          // selectedTitleContents
         };
 
     }
+
+    checkStateChanged(obj) {
+        // alert('SHOWING HERE')
+        this.setState({ noteTitle: obj })
+    }
+
     renderRedirect(){
         if (this.state.redirect) {
             this.props.history.push("/login")
             //return <Redirect to='/dashboard'/>
         }
     }
+  /*Define a callback in my parent which takes the data I need in as a parameter.*/
+    x(objFromtitleselect, noteTitleId){
+        console.log(noteTitleId)
+        this.setState({ currentlySelected : objFromtitleselect , isInitialRender : false, noteTitleId : noteTitleId })
+    }
+
+
 render() {
 
     return (
@@ -28,8 +45,12 @@ render() {
                 <HeaderLogout/>
                 {this.renderRedirect()}
                 </header>
-            <TodoTitle/>
-             
+            <TodoTitle x = { this.x.bind(this) } checkStateChanged={this.checkStateChanged.bind(this)}/>
+            {
+                (this.state.isInitialRender)
+                ?  null
+                :<TodoItem list = {this.state.currentlySelected}   keyz = { this.state.noteTitleId } />
+            }
     </div>
     )
 }
