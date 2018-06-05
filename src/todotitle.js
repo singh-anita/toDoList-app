@@ -11,6 +11,7 @@ class TodoTitle extends Component {
         this.state = {
             list: [],
             value: ''
+          //  titleObjArray:[]
         };
         this.addTitle = this.addTitle.bind(this);
     }
@@ -37,13 +38,13 @@ class TodoTitle extends Component {
 /*on add click will add the title*/ 
     addTitle(e) {
         var updatedList;
-        if (this.state.value.length > 0) {
-         updatedList = [...this.state.list, { title: this.state.value, list: [] }]
-            this.setState({
-                list: updatedList,
-                value: ''
-            });
-        }
+        // if (this.state.value.length > 0) {
+        //  updatedList = [...this.state.list, { title: this.state.value, list: [] }]
+        //     this.setState({
+        //         list: updatedList,
+        //         value: ''
+        //     });
+        // }
         var obj = {
             title : this.state.value,
             list: []
@@ -55,7 +56,12 @@ class TodoTitle extends Component {
             }
         })
         .then((response) => {
+            this.props.checkStateChanged(response.data)
             console.log("axios", response.data);
+           var titleObjArray=this.state.list.slice();
+        //    console.log(titleObjArray)
+          titleObjArray.push({_id:response.data._id,title:response.data.title})
+          this.setState({list:titleObjArray})
         })
         .catch(err => {
                 console.error(err);
@@ -63,18 +69,29 @@ class TodoTitle extends Component {
     }
   /*title inputbox value changes */
   update(e) {
-    // alert(e.target.value)
     this.setState({
         value: e.target.value
     })
    // console.log("VALUE : ", this.state.value)
 }
-title(key, e) {
-    var temp =e.target.value;
-    console.log(temp)
-      console.log("IN TITLE : ", key)
+
+/*titleselected(key, e) {
+    axios.get('http://localhost:3001/getnotecontent/' + key ,
+    {
+       headers: {
+         "Authorization": localStorage.getItem('authtoken')
+       }
+     })
+       .then((response) => {
+           this.props.x(response.data, key) //Call the callback using this.props.[callback] in the child 
+
+           console.log("responsedata",response.data,key)
+         }).catch(function (error) {
+    console.log("error",error.response);
+});*/
+
+// }
      
-}
     render() {
         return (
                 <div className="todo-in-progress">
@@ -97,7 +114,7 @@ title(key, e) {
                             {
                                 this.state.list.map((curr, index) => {
                                     return (
-                                        <ListGroupItem key = { curr._id } bsStyle="success" value={curr.title}>{curr.title}</ListGroupItem>
+                                        <Link to={'/todoItem/'+curr._id}><ListGroupItem key = { curr._id } bsStyle="success"  value={curr.title}>{curr.title}</ListGroupItem></Link>
                                     );
                                 })
                             }
