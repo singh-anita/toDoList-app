@@ -123,6 +123,7 @@ exports.insertNoteContent = function (noteTitleId, individualNotesEntry, checkBo
     return contentTable({ notesID: noteTitleId, content: individualNotesEntry, isChecked: checkBoxStatus }).save()
 }
 
+/*---------get all contents using titleid--------*/
 exports.getAllContentofNote = function(noteTitleId){
     console.log(noteTitleId)
     return contentTable.find({ notesID : noteTitleId })

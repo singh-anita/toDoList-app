@@ -226,7 +226,8 @@ app.post('/addnotetitle',tokenCheckingMiddleware, function (req, res,next) {
     if(user){
         insertTitle(user._id, req.body.title).then((doc, err) => {   //returns the inserted document
             if (err) throw err
-            console.log("doc", doc);
+            console.log("doc",doc );
+            res.status(200).send(doc);
         })
    }
    else {
@@ -260,9 +261,50 @@ app.get('/gettitles',tokenCheckingMiddleware, function (req, res, next) {
     }
 })
 
+/*----------------get titleid of particular note-------------------*/
+app.get('/getnotecontent/:id',tokenCheckingMiddleware, function (req, res, next) {
+    // console.log("req", req.headers);
+    console.log("reqnoteconetnt", req.params);
+     console.log("Users coming",res.locals.user)
+     var user= res.locals.user;
+         if(user){
+        var  contentToSend=[]
+     getAllContentofNote(req.params.id).then((NoteContents, err)=>{
+       
+         console.log("content",NoteContents)
+         //if (err) throw err
+           NoteContents.map((individualTitleentry, noteContentIdx) => {
+                contentToSend.push( {id:individualTitleentry._id  ,content: individualTitleentry.content, isChecked: individualTitleentry.isChecked }
+            )
+        })
+        console.log("sending",contentToSend)
+          res.status(200).send(contentToSend);
 
+     })
 
+     }
+   })
 
+/*---------------------------adding new Content--------------------------*/
+app.post('/addnotecontent',tokenCheckingMiddleware, function (req,res,next) {
+    console.log("reqofaddingcontent", req.body);
+   // console.log("reqofcontent", req.body.titleid);
+   console.log("Users coming",res.locals.user)
+   var user =res.locals.user;
+  if(user){
+           insertNoteContent(req.body.titleid, req.body.content, req.body.isChecked).then((notecontent,err)=>{
+             console.log(notecontent)
+             if (err) throw err
+             res.status(200).send(notecontent);
+           })
+
+}
+   else {
+            console.log("Unauthorized user")
+       res.status(401).send({error:"content not inserted"});
+   }
+
+});
 
 /*-----------test-----------*/
 app.post('/test', function (req, res, next) {

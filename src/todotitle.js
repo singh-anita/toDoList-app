@@ -37,14 +37,14 @@ class TodoTitle extends Component {
 
 /*on add click will add the title*/ 
     addTitle(e) {
-        var updatedList;
-        // if (this.state.value.length > 0) {
-        //  updatedList = [...this.state.list, { title: this.state.value, list: [] }]
-        //     this.setState({
-        //         list: updatedList,
-        //         value: ''
-        //     });
-        // }
+      /*  var updatedList;
+         if (this.state.value.length > 0) {
+         updatedList = [...this.state.list, { title: this.state.value, list: [] }]
+             this.setState({
+                list: updatedList,
+                 value: ''
+             });
+         }*/
         var obj = {
             title : this.state.value,
             list: []
@@ -56,12 +56,12 @@ class TodoTitle extends Component {
             }
         })
         .then((response) => {
-            this.props.checkStateChanged(response.data)
+           this.props.checkStateChanged(response.data.title)
             console.log("axios", response.data);
            var titleObjArray=this.state.list.slice();
-        //    console.log(titleObjArray)
-          titleObjArray.push({_id:response.data._id,title:response.data.title})
-          this.setState({list:titleObjArray})
+           console.log(titleObjArray)
+         titleObjArray.push({_id:response.data._id,title:response.data.title})
+          this.setState({list:titleObjArray,value:''})
         })
         .catch(err => {
                 console.error(err);

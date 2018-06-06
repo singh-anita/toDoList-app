@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import './dashboard.css';
 import Headerhome from './logout';
 import axios from 'axios';
+import { set } from 'mongoose';
 
 class TodoItem extends Component {
 
@@ -15,21 +16,50 @@ class TodoItem extends Component {
     };
     this.addContent = this.addContent.bind(this);
     this.handleChange = this.handleChange.bind(this);
+   // this.checkStateChanged=this.checkStateChanged.bind(this);
   }
+
   /*selecting checkbox on selection*/
 
-  /* checkStateChanged(index, e) {
+  checkStateChanged(index,e) {
+    console.log("checkbox", index)
+     console.log("CHECKBOX CHANGED : ", this.state.list[index].isChecked);
+     var objToChange = this.state.list.slice();
+     console.log( "changevar",objToChange)
+     objToChange[index].isChecked = !this.state.list[index].isChecked;
+     this.setState({list:objToChange})
+   }
+   componentWillMount()
+   {
+     console.log("currprops",this.props.params.id)
+    /* let {
+        id
+      } = this.props.params.id*/
+      if(this.props.params.id){
+      // call todoitems using id
+      axios.get('http://localhost:3001/getnotecontent/' + this.props.params.id ,
+    {
+       headers: {
+         "Authorization": localStorage.getItem('authtoken')
+       }
+     })
+       .then((response) => {
+       // this.props.x(response.data) 
+            //Call the callback using this.props.[callback] in the child 
+console.log(response.data)
+          this.setState({ list : response.data })
+         }).catch(function (error) {
+    console.log("error",error.response);
+});
+    }
  
-     console.log("CHECKBOX CHANGED : ", this.props.noteObj.list[index].isChecked);
-     var objToChange = this.props.noteObj;
-     objToChange.list[index].isChecked = !this.props.noteObj.list[index].isChecked
-     this.props.checkStateChange(objToChange);
-   }*/
+   }
   /*contents display*/
 
   componentWillReceiveProps(nextProps) {
     // this.setState({ list:this.props.list })
-    console.log(nextProps)
+    console.log("nextprops",nextProps.params)
+    console.log("currprops",this.props.params.id)
     let {
       id
     } = nextProps.params 
@@ -43,6 +73,7 @@ class TodoItem extends Component {
        }
      })
        .then((response) => {
+       // this.props.x(response.data) 
             //Call the callback using this.props.[callback] in the child 
 console.log(response.data)
           this.setState({ list : response.data })
@@ -56,7 +87,7 @@ console.log(response.data)
   addContent() {
     var updatedContents;
     //console.log(this.props.noteObj)
-    console.log("list", this.props)
+    console.log("props", this.props)
     console.log(this.props.params)
     //  if (this.state.value.length > 0) {
    /* updatedContents = [...this.state.list, { content: this.state.description, isChecked: false }];
@@ -79,7 +110,7 @@ console.log(response.data)
         console.log("axios", response.data);
         const temp = this.state.list.slice()
         console.log(temp)
-        temp.push({ isChecked: response.data.isChecked, content: response.data.content, id: response.data._id })
+        temp.push({  content: response.data.content,isChecked: response.data.isChecked, id: response.data._id })
         this.setState({ list:temp ,description:''})
         // this.props.handleItems(this.props.noteObj.id,contentObj.content,contentObj.isChecked)
       })
@@ -113,7 +144,7 @@ console.log(response.data)
         <div style={{ marginLeft: '6px', paddingTop: '3px', marginTop: '30px' }}>
 
           <h3>
-            {/*this.props.noteObj*/}
+            {this.props.titlename}
           </h3>
 
         </div>
@@ -134,7 +165,7 @@ console.log(response.data)
                     return (
                       <ListGroupItem key={noteEntry.notesID}>
                         <div className="description">
-                          <Checkbox checked={noteEntry.isChecked} value={noteEntry.content}>{noteEntry.content}</Checkbox>
+                          <Checkbox onChange={this.checkStateChanged.bind(this,index)} checked={noteEntry.isChecked} value={noteEntry.content}>{noteEntry.content}</Checkbox>
                         </div>
                         <div className="action">
                           <Button style={{

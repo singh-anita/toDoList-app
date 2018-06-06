@@ -24,6 +24,8 @@ class App extends Component {
              <Route  path = '/dashboard' render = {(props) => <Dashboard {...props} />} />
                {/* This is LOGIN ROUTE */}
              <Route  path='/login' render = {(props) => <Login {...props} />}  />
+             <Route path ='/todoItem/:id' render = {(props) => <Dashboard {...props} />} />
+
           </Switch>
        </Router>
     );
