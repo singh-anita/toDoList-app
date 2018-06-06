@@ -1,28 +1,41 @@
-import React, { Component } from 'react';
+import React, {Component } from 'react';
 import { ListGroup, ListGroupItem, Button, FormGroup, FormControl, ControlLabel, Checkbox } from "react-bootstrap";
 import { Link } from 'react-router-dom';
 import './dashboard.css';
 import Headerhome from './logout';
 import axios from 'axios';
 import { set } from 'mongoose';
-import TodoItem from './todoItem';
+// import TodoItem from './todoItem';
 
-class listGroupCom extends Component {
+class listGroupComp extends Component {
 
     componentWillMount(){
-        console.log("THIS PROPS : ", this.props.list)
+        console.log("-------------THIS PROPS : ", this.props.list)
     }
 
-    // constructor(props) {
-    //     super(props);
+    constructor(props) {
+        super(props);
+        this.state = {
+          show:true
+        } 
         
-     
-    //   }
+    }
+    /*editing content inputbox value change */
+    editingcontent(index,e){
+      console.log("index of content", index)
+      this.setState({show : !this.state.show})
+    }
 
-    state = {
-      show:true
-  };
-      render() {
+    checkStateChanged(index,e) {
+      console.log("checkbox", index)
+       console.log("CHECKBOX CHANGED : ", this.state.list[index].isChecked);
+       var objToChange = this.state.list.slice();
+       console.log( "changevar",objToChange)
+       objToChange[index].isChecked = !this.state.list[index].isChecked;
+       this.setState({list:objToChange})
+     }
+    
+    render() {
         var edit = {
             marginRight: '15px',
             marginTop: '3px'
@@ -76,4 +89,5 @@ class listGroupCom extends Component {
         
     
 }
-export default listGroupCom;
+
+export default listGroupComp

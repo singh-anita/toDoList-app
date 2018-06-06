@@ -5,7 +5,7 @@ import './dashboard.css';
 import Headerhome from './logout';
 import axios from 'axios';
 import { set } from 'mongoose';
-import  listGroupCom  from './listgroupComponent';
+import ListGroupComp  from './listgroupComponent';
 class TodoItem extends Component {
 
   constructor(props) {
@@ -21,14 +21,7 @@ class TodoItem extends Component {
 
   /*selecting checkbox on selection*/
 
-  checkStateChanged(index,e) {
-    console.log("checkbox", index)
-     console.log("CHECKBOX CHANGED : ", this.state.list[index].isChecked);
-     var objToChange = this.state.list.slice();
-     console.log( "changevar",objToChange)
-     objToChange[index].isChecked = !this.state.list[index].isChecked;
-     this.setState({list:objToChange})
-   }
+  
    componentWillMount()
    {
      console.log("currprops",this.props.params.id)
@@ -46,7 +39,6 @@ class TodoItem extends Component {
        .then((response) => {
        // this.props.x(response.data) 
             //Call the callback using this.props.[callback] in the child 
-console.log(response.data)
           this.setState({ list : response.data })
          }).catch(function (error) {
     console.log("error",error.response);
@@ -125,11 +117,6 @@ console.log(response.data)
       description: e.target.value
     })
   }
-  /*editing content inputbox value change */
-  editingcontent(index,e){
-    console.log("index of content", index)
-    this.setState({show : !this.state.show})
-  }
   /*contents display*/
 
   render() {
@@ -161,7 +148,8 @@ console.log(response.data)
         </div>
 
         <div className="contentlist" style={{ marginTop: '105px' }}>
-        <listGroupCom list={this.state.list}/>
+         in here 
+          <ListGroupComp list={this.state.list}></ListGroupComp>
          
         </div>
       </div>
