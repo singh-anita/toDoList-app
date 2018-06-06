@@ -5,7 +5,7 @@ import './dashboard.css';
 import Headerhome from './logout';
 import axios from 'axios';
 import { set } from 'mongoose';
-
+import  listGroupCom  from './listgroupComponent';
 class TodoItem extends Component {
 
   constructor(props) {
@@ -119,12 +119,17 @@ console.log(response.data)
       });
     // }
   }
+  /*adding content inputbox value change*/
   handleChange(e) {
     this.setState({
       description: e.target.value
     })
   }
-
+  /*editing content inputbox value change */
+  editingcontent(index,e){
+    console.log("index of content", index)
+    this.setState({show : !this.state.show})
+  }
   /*contents display*/
 
   render() {
@@ -156,35 +161,8 @@ console.log(response.data)
         </div>
 
         <div className="contentlist" style={{ marginTop: '105px' }}>
-          <ListGroup componentClass="ul">
-            {/*this.selectedcontents()*/}
-            {
-              (this.state.list.length != 0)
-                ? (
-                  this.state.list.map((noteEntry, index) => {
-                    return (
-                      <ListGroupItem key={noteEntry.notesID}>
-                        <div className="description">
-                          <Checkbox onChange={this.checkStateChanged.bind(this,index)} checked={noteEntry.isChecked} value={noteEntry.content}>{noteEntry.content}</Checkbox>
-                        </div>
-                        <div className="action">
-                          <Button style={{
-                            marginRight: '15px',
-                            marginTop: '3px'
-                          }}>
-                            <i className="glyphicon glyphicon-pencil"></i>
-                          </Button>
-                          <Button style={{ marginTop: '3px' }}>
-                            <i className="glyphicon glyphicon-trash"></i>
-                          </Button>
-                        </div>
-                      </ListGroupItem>
-                    )
-                  })
-                )
-                : null
-            }
-          </ListGroup>
+        <listGroupCom list={this.state.list}/>
+         
         </div>
       </div>
     );
