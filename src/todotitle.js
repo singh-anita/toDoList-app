@@ -26,6 +26,7 @@ class TodoTitle extends Component {
      })
     .then(response => {
         console.log("CONSOLE DATA : ", response.data)
+      
        this.setState({ list : response.data })
     })
     .catch((err) => {
@@ -58,10 +59,12 @@ class TodoTitle extends Component {
         .then((response) => {
            this.props.checkStateChanged(response.data.title)
             console.log("axios", response.data);
+            if(response.status === 200){
            var titleObjArray=this.state.list.slice();
            console.log(titleObjArray)
          titleObjArray.push({_id:response.data._id,title:response.data.title})
           this.setState({list:titleObjArray,value:''})
+            }
         })
         .catch(err => {
                 console.error(err);

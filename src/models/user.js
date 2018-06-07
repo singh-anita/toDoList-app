@@ -146,3 +146,14 @@ exports.deleteUserToken = function(tokenvalue){
    return Token.findOneAndRemove({token:tokenvalue})
 }
 //{ username: 'starlord55' }, { username: 'starlord88' }
+
+/*-----------update the todoitems -------------------------- */
+exports.updateItems = function(contentId, content, isChecked){
+    console.log("db",contentId, content, isChecked)
+    return contentTable.findOneAndUpdate({ _id : contentId } , { $set : { content : content, isChecked : isChecked } }, { new: true })
+}
+
+/*----------deleteing the todoitems ---------------*/
+exports.removeNotesContent = function(contentId){
+    return contentTable.findOneAndRemove({ _id : contentId })
+}

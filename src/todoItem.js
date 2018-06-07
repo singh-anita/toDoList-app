@@ -5,7 +5,7 @@ import './dashboard.css';
 import Headerhome from './logout';
 import axios from 'axios';
 import { set } from 'mongoose';
-import ListGroupComp  from './listgroupComponent';
+import ListGroupComp from './listgroupComponent';
 class TodoItem extends Component {
 
   constructor(props) {
@@ -16,78 +16,73 @@ class TodoItem extends Component {
     };
     this.addContent = this.addContent.bind(this);
     this.handleChange = this.handleChange.bind(this);
-   // this.checkStateChanged=this.checkStateChanged.bind(this);
   }
 
   /*selecting checkbox on selection*/
 
-  
-   componentWillMount()
-   {
-     console.log("currprops",this.props.params.id)
-    /* let {
-        id
-      } = this.props.params.id*/
-      if(this.props.params.id){
-      // call todoitems using id
-      axios.get('http://localhost:3001/getnotecontent/' + this.props.params.id ,
-    {
-       headers: {
-         "Authorization": localStorage.getItem('authtoken')
-       }
-     })
-       .then((response) => {
-       // this.props.x(response.data) 
-            //Call the callback using this.props.[callback] in the child 
-          this.setState({ list : response.data })
-         }).catch(function (error) {
-    console.log("error",error.response);
-});
-    }
- 
-   }
-  /*contents display*/
 
-  componentWillReceiveProps(nextProps) {
-    // this.setState({ list:this.props.list })
-    console.log("nextprops",nextProps.params)
-    console.log("currprops",this.props.params.id)
-    let {
-      id
-    } = nextProps.params 
-    if(id && this.props.params.id !== id){
-      
+  componentWillMount() {
+    console.log("currprops", this.props.params.id);
+    if (this.props.params.id) {
       // call todoitems using id
-      axios.get('http://localhost:3001/getnotecontent/' + id ,
-    {
-       headers: {
-         "Authorization": localStorage.getItem('authtoken')
-       }
-     })
-       .then((response) => {
-       // this.props.x(response.data) 
-            //Call the callback using this.props.[callback] in the child 
-console.log(response.data)
-          this.setState({ list : response.data })
-         }).catch(function (error) {
-    console.log("error",error.response);
-});
+      axios.get('http://localhost:3001/getnotecontent/' + this.props.params.id,
+        {
+          headers: {
+            "Authorization": localStorage.getItem('authtoken')
+          }
+        })
+        .then((response) => {
+          // this.props.x(response.data) 
+          //Call the callback using this.props.[callback] in the child 
+          if(response.status === 200){
+          this.setState({ list: response.data })
+          }
+        }).catch(function (error) {
+          console.log("error", error.response);
+        });
     }
-  //  console.log("xcdfcth : ", this.props, this.props.keyz)
+
   }
 
+  /*contents display*/
+  componentWillReceiveProps(nextProps) {
+    console.log("nextprops", nextProps.params)
+    console.log("currprops", this.props.params.id)
+    let {
+      id
+    } = nextProps.params
+    if (id && this.props.params.id !== id) {
+
+      // call todoitems using id
+      axios.get('http://localhost:3001/getnotecontent/' + id,
+        {
+          headers: {
+            "Authorization": localStorage.getItem('authtoken')
+          }
+        })
+        .then((response) => {
+          // this.props.x(response.data) 
+          //Call the callback using this.props.[callback] in the child 
+          console.log(response.data)
+          if(response.status === 200){
+          this.setState({ list: response.data })
+          }
+        }).catch(function (error) {
+          console.log("error", error.response);
+        });
+    }
+  }
+/*adding contentlist items on button click*/
   addContent() {
     var updatedContents;
-    //console.log(this.props.noteObj)
-    console.log("props", this.props)
-    console.log(this.props.params)
+    console.log("props",this.props.params)
     //  if (this.state.value.length > 0) {
-   /* updatedContents = [...this.state.list, { content: this.state.description, isChecked: false }];
-    this.setState({
-      list: updatedContents,
-      description: '',
-      // selectedTitleContents: ''
-    });*/
+    /* updatedContents = [...this.state.list, { content: this.state.description, isChecked: false }];
+     this.setState({
+       list: updatedContents,
+       description: '',
+       // selectedTitleContents: ''
+     });*/
     var contentObj = {
       content: this.state.description, isChecked: false,
       titleid: this.props.params.id
@@ -100,11 +95,13 @@ console.log(response.data)
     })
       .then((response) => {
         console.log("axios", response.data);
+        if(response.status === 200){
         const temp = this.state.list.slice()
         console.log(temp)
-        temp.push({  content: response.data.content,isChecked: response.data.isChecked, id: response.data._id })
-        this.setState({ list:temp ,description:''})
+        temp.push({ content: response.data.content, isChecked: response.data.isChecked, id: response.data._id })
+        this.setState({ list: temp, description: '' })
         // this.props.handleItems(this.props.noteObj.id,contentObj.content,contentObj.isChecked)
+        }
       })
       .catch(err => {
         console.error(err);
@@ -117,7 +114,23 @@ console.log(response.data)
       description: e.target.value
     })
   }
-  /*contents display*/
+
+ /*Define a callback in my parent which takes the data I need in as a parameter.*/
+    x(objFromupdatingcontent) {
+      console.log("list",this.state.list)
+      var templist=this.state.list.slice()
+      // console.log("chhhh",templist)
+      console.log("qq", objFromupdatingcontent)
+
+      templist.map((c,idx) =>{
+        if(c.id === objFromupdatingcontent._id){
+          c.content = objFromupdatingcontent.content,
+          c.isChecked =objFromupdatingcontent.isChecked
+        }
+      })
+      this.setState({ list : templist })
+       // this.setState({  list: objFromupdatingcontent})
+    }
 
   render() {
     var edit = {
@@ -134,23 +147,34 @@ console.log(response.data)
     return (
       <div className="content_container">
         <div style={{ marginLeft: '6px', paddingTop: '3px', marginTop: '30px' }}>
-
           <h3>
             {this.props.titlename}
           </h3>
-
         </div>
         <div className="addcontent">
           <div className="col-md-9 addlist">
             <input type="text" className="form-control add-todo" value={this.state.description} onChange={(e) => { this.handleChange(e) }} placeholder="Add items" />
-          </div><div className="col-md-3"> <Button onClick={this.addContent} style={{ marginBottom: '20px' }}>Add Item</Button>
+          </div>
+          <div className="col-md-3"> 
+          <Button onClick={this.addContent} style={{ marginBottom: '20px' }}>Add Item</Button>
           </div>
         </div>
-
         <div className="contentlist" style={{ marginTop: '105px' }}>
-         in here 
-          <ListGroupComp list={this.state.list}></ListGroupComp>
-         
+          {/*this.selectedcontents()*/}
+          <ListGroup componentClass="ul">
+            {
+              (this.state.list.length != 0)
+                ? (
+
+                  this.state.list.map((noteEntry, index) => {
+                    return (
+                      <ListGroupComp noteEntry={noteEntry} index={index} x={this.x.bind(this)} />
+                    )
+                  })
+                )
+                : null
+            }
+          </ListGroup>
         </div>
       </div>
     );
