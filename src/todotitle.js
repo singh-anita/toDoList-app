@@ -5,8 +5,8 @@ import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import TodoItem from './todoItem';
 import './dashboard.css';
 import axios from 'axios';
-import DeleteTitleComp from './deleteTitle'
-import UpdateTitleComp from './updateTitle'
+import TitleListGroupComp from './titlelistgroup'
+//import UpdateTitleComp from './updateTitle'
 class TodoTitle extends Component {
     constructor(props) {
         super(props);
@@ -79,7 +79,21 @@ class TodoTitle extends Component {
         })
         // console.log("VALUE : ", this.state.value)
     }
+/*Define a callback in my parent which takes the data I need in as a parameter.*/
+t(objFromupdatingTitle) {
+    console.log("list", this.state.list)
+    var templist = this.state.list.slice()
+    // console.log("chhhh",templist)
+    console.log("qq", objFromupdatingTitle)
 
+    templist.map((tO, idx) => {
+      if (tO.id === objFromupdatingTitle._id) {
+        tO.title = objFromupdatingTitle.title
+      }
+    })
+    this.setState({ list: templist })
+    // this.setState({  list: objFromupdatingcontent})
+  }
     /*titleselected(key, e) {
         axios.get('http://localhost:3001/getnotecontent/' + key ,
         {
@@ -115,19 +129,20 @@ class TodoTitle extends Component {
                             <span>Add Project</span>
                         </Button>
                     </div>
-                    <ListGroup>
+                    <div className="allTitlelists">
+                    <ListGroup >
                         {
-                            this.state.list.map((curr, index) => {
+                            this.state.list.map((currentTitle, index) => {
                                 return (
-                                <Link to={'/todoItem/' + curr._id}><ListGroupItem key={curr._id} bsStyle="success" value={curr.title}>{curr.title}
-                                 <UpdateTitleComp />   
-                                <DeleteTitleComp/>
-                                </ListGroupItem>
-                                 </Link>
+                                  
+                         <TitleListGroupComp titleEntry={currentTitle} index={index} t={this.t.bind(this)} />
+                                 
+                               
                                 );
                             })
                         }
                     </ListGroup>
+                    </div>
                 </div>
 
             </div>

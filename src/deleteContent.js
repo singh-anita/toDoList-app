@@ -9,7 +9,7 @@ class DeleteContentComp extends Component {
     /*deleting content onclick content item deleted*/
     constructor(props){
         super(props);
-        console.log('deleted component --------------------', this.props);
+      //  console.log('deleted component --------------------', this.props);
     }
   deletingcontent() {
      // alert("clicked")

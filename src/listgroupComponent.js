@@ -22,9 +22,9 @@ class ListGroupComp extends Component {
     this.updateContent = this.updateContent.bind(this);
   }
 
-  componentWillMount() {
-    console.log("-------------THIS PROPS : ", this.props.noteEntry, this.props.index)
-  }
+  //componentWillMount() {
+  //  console.log("-------------THIS PROPS : ", this.props.noteEntry, this.props.index)
+ // }
 
   /*editing content onclick inputbox comes with button*/
   editingcontent() {

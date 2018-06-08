@@ -8,7 +8,7 @@ class DeleteTitleComp extends Component {
     /*deleting content onclick content item deleted*/
     constructor(props) {
         super(props);
-        console.log('deleted title --------------------', this.props);
+       // console.log('deleted title --------------------', this.props);
     }
 
     deletetitle() {
@@ -31,7 +31,7 @@ class DeleteTitleComp extends Component {
     }
     render() {
         return (
-            <Button style={{ marginTop: '3px' }} onClick={this.deletetitle.bind(this)}>
+            <Button style={{ marginTop: '0px',paddingBottom:'0px' }} onClick={this.deletetitle.bind(this)}>
                 <i className="glyphicon glyphicon-trash"></i>
             </Button>
         )

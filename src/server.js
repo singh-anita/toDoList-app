@@ -1,7 +1,7 @@
 var express = require('express'); // call express
 var app = express();  /* define our app using express*/
 var bodyparser = require("body-parser");
-var { checkUserEmail, newUser, validPassword, newToken, getUId, getUserData, checkuId, deleteUserToken, insertTitle, getAllContentofNote, getNotesTitle, hashpass, insertNoteContent ,updateItems,removeNotesContent} = require('./models/user');
+var { checkUserEmail, newUser, validPassword, newToken, getUId, getUserData, checkuId, deleteUserToken, insertTitle, getAllContentofNote, getNotesTitle, hashpass, insertNoteContent ,updateItems,removeNotesContent,updateTitles} = require('./models/user');
 var r = require('./tokenGenerate');
 var passport = require('passport');
 var flash = require('connect-flash');
@@ -249,17 +249,17 @@ app.post('/updatenotetitle', tokenCheckingMiddleware, function (req, res, next) 
     // console.log("reqofcontent", req.body.titleid);
     console.log("Users coming", res.locals.user)
     var user = res.locals.user;
-  /*  if (user) {
-        updateItems(req.body.contentId, req.body.content, req.body.isChecked).then((updatecontent, err) => {
-            console.log("doc",updatecontent)
+   if (user) {
+        updateTitles(req.body.titleId, req.body.title).then((updatedoc, err) => {
+            console.log("doc",updatedoc)
             if (err) throw err
-            res.status(200).send(updatecontent);
+            res.status(200).send(updatedoc);
         })
     }
     else {
         console.log("Unauthorized user")
         res.status(401).send({ error: "content not updated" });
-    }*/
+    }
 
 });
 
@@ -332,9 +332,9 @@ app.post('/updatenotecontent', tokenCheckingMiddleware, function (req, res, next
 
 /*---------------------------deleting the content---------------------------------------------------*/
 app.delete('/deletenotecontent/:id', tokenCheckingMiddleware, function (req, res, next) {
-    console.log("dddd")
-    console.log("reqofdeletecontent", req.params);
-    console.log("Users coming", res.locals.user)
+   // console.log("dddd")
+   // console.log("reqofdeletecontent", req.params);
+  //  console.log("Users coming", res.locals.user)
     var user = res.locals.user;
     var contentToSend = []
     if (user) {
@@ -346,7 +346,7 @@ app.delete('/deletenotecontent/:id', tokenCheckingMiddleware, function (req, res
                     contentToSend.push({ id: individualTitleentry._id, content: individualTitleentry.content, isChecked: individualTitleentry.isChecked }
                     )
                 })
-                  console.log("sending", contentToSend)
+                 // console.log("sending", contentToSend)
                 res.status(200).send(contentToSend);
             })
            // if (err) throw err

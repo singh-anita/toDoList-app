@@ -41,8 +41,6 @@
   .cont{
   position: relative;
   margin-bottom:20px;
-  /*width: 280px;
-  height: 50px;*/
   }
   /*.adder_icon {
     position: absolute;
@@ -61,11 +59,15 @@
   .action{
       float:right;
   }
+  .ttaction
+  {
+    float:right;
+  }
   .left_menu
   {
    /* user-select: none !important;*/
     float: left;
-    width: 265px;
+    width: 325px;
     padding-left: 0px;
     padding-top: 0px;
    /* position: fixed;
@@ -78,7 +80,7 @@
     min-height: 380px;
    /* background-color: #fff;*/
     padding: 0 20px;
-    margin-left: 280px;
+    margin-left: 335px;
     border-right: 1px solid #f1f1f1;
 }
 .addcontent
@@ -96,3 +98,6 @@
 .no-border {
     border: 0 !important;
 }*/
+.edittitle{
+  width: 235px;
+}

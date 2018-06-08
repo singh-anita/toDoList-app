@@ -158,7 +158,11 @@ exports.removeNotesContent = function(contentId){
     return contentTable.findOneAndRemove({ _id : contentId })
 }
 
-
+/*-----------update the todotitle -------------------------- */
+exports.updateTitles = function(titleId, title){
+    console.log("db",titleId, title)
+    return notesTable.findOneAndUpdate({ _id : titleId } , { $set : { title: title } }, { new: true })
+}
 /*----------deleteing the todoitems ---------------*/
 //exports.getContent = function(notesId){
   //  return contentTable.find({ notesID  : notesId })
