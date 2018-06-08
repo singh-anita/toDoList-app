@@ -243,6 +243,26 @@ app.get('/gettitles', tokenCheckingMiddleware, function (req, res, next) {
     }
 })
 
+/*---------------------------updating title--------------------------*/
+app.post('/updatenotetitle', tokenCheckingMiddleware, function (req, res, next) {
+    console.log("reqofupdatetitle", req.body);
+    // console.log("reqofcontent", req.body.titleid);
+    console.log("Users coming", res.locals.user)
+    var user = res.locals.user;
+  /*  if (user) {
+        updateItems(req.body.contentId, req.body.content, req.body.isChecked).then((updatecontent, err) => {
+            console.log("doc",updatecontent)
+            if (err) throw err
+            res.status(200).send(updatecontent);
+        })
+    }
+    else {
+        console.log("Unauthorized user")
+        res.status(401).send({ error: "content not updated" });
+    }*/
+
+});
+
 /*----------------get contents basedon titleid of particular note-------------------*/
 app.get('/getnotecontent/:id', tokenCheckingMiddleware, function (req, res, next) {
     // console.log("req", req.headers);
@@ -316,11 +336,21 @@ app.delete('/deletenotecontent/:id', tokenCheckingMiddleware, function (req, res
     console.log("reqofdeletecontent", req.params);
     console.log("Users coming", res.locals.user)
     var user = res.locals.user;
+    var contentToSend = []
     if (user) {
         removeNotesContent(req.params.id).then((deletecontent, err) => {
             console.log("doc",deletecontent)
-            if (err) throw err
-            res.status(200).send(deletecontent);
+            getAllContentofNote(deletecontent.notesID).then((NoteContents, err) => {
+                // console.log("content", NoteContents)
+                NoteContents.map((individualTitleentry, noteContentIdx) => {
+                    contentToSend.push({ id: individualTitleentry._id, content: individualTitleentry.content, isChecked: individualTitleentry.isChecked }
+                    )
+                })
+                  console.log("sending", contentToSend)
+                res.status(200).send(contentToSend);
+            })
+           // if (err) throw err
+           // res.status(200).send({message:"successfully deleted"});
         })
     }
     else {

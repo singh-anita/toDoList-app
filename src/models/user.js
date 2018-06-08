@@ -157,3 +157,9 @@ exports.updateItems = function(contentId, content, isChecked){
 exports.removeNotesContent = function(contentId){
     return contentTable.findOneAndRemove({ _id : contentId })
 }
+
+
+/*----------deleteing the todoitems ---------------*/
+//exports.getContent = function(notesId){
+  //  return contentTable.find({ notesID  : notesId })
+//}

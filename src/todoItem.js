@@ -34,8 +34,8 @@ class TodoItem extends Component {
         .then((response) => {
           // this.props.x(response.data) 
           //Call the callback using this.props.[callback] in the child 
-          if(response.status === 200){
-          this.setState({ list: response.data })
+          if (response.status === 200) {
+            this.setState({ list: response.data })
           }
         }).catch(function (error) {
           console.log("error", error.response);
@@ -64,18 +64,18 @@ class TodoItem extends Component {
           // this.props.x(response.data) 
           //Call the callback using this.props.[callback] in the child 
           console.log(response.data)
-          if(response.status === 200){
-          this.setState({ list: response.data })
+          if (response.status === 200) {
+            this.setState({ list: response.data })
           }
         }).catch(function (error) {
           console.log("error", error.response);
         });
     }
   }
-/*adding contentlist items on button click*/
+  /*adding contentlist items on button click*/
   addContent() {
     var updatedContents;
-    console.log("props",this.props.params)
+    console.log("props", this.props.params)
     //  if (this.state.value.length > 0) {
     /* updatedContents = [...this.state.list, { content: this.state.description, isChecked: false }];
      this.setState({
@@ -95,12 +95,12 @@ class TodoItem extends Component {
     })
       .then((response) => {
         console.log("axios", response.data);
-        if(response.status === 200){
-        const temp = this.state.list.slice()
-        console.log(temp)
-        temp.push({ content: response.data.content, isChecked: response.data.isChecked, id: response.data._id })
-        this.setState({ list: temp, description: '' })
-        // this.props.handleItems(this.props.noteObj.id,contentObj.content,contentObj.isChecked)
+        if (response.status === 200) {
+          const temp = this.state.list.slice()
+          console.log(temp)
+          temp.push({ content: response.data.content, isChecked: response.data.isChecked, id: response.data._id })
+          this.setState({ list: temp, description: '' })
+          // this.props.handleItems(this.props.noteObj.id,contentObj.content,contentObj.isChecked)
         }
       })
       .catch(err => {
@@ -115,23 +115,41 @@ class TodoItem extends Component {
     })
   }
 
- /*Define a callback in my parent which takes the data I need in as a parameter.*/
-    x(objFromupdatingcontent) {
-      console.log("list",this.state.list)
-      var templist=this.state.list.slice()
-      // console.log("chhhh",templist)
-      console.log("qq", objFromupdatingcontent)
+  /*Define a callback in my parent which takes the data I need in as a parameter.*/
+  x(objFromupdatingcontent) {
+    console.log("list", this.state.list)
+    var templist = this.state.list.slice()
+    // console.log("chhhh",templist)
+    console.log("qq", objFromupdatingcontent)
 
-      templist.map((c,idx) =>{
-        if(c.id === objFromupdatingcontent._id){
-          c.content = objFromupdatingcontent.content,
-          c.isChecked =objFromupdatingcontent.isChecked
-        }
-      })
-      this.setState({ list : templist })
-       // this.setState({  list: objFromupdatingcontent})
-    }
+    templist.map((c, idx) => {
+      if (c.id === objFromupdatingcontent._id) {
+        c.content = objFromupdatingcontent.content,
+          c.isChecked = objFromupdatingcontent.isChecked
+      }
+    })
+    this.setState({ list: templist })
+    // this.setState({  list: objFromupdatingcontent})
+  }
+  y(objFromcontent) {
+    // console.log("list", this.state.list)
+    var templist = this.state.list.slice()
+    console.log("chhhh", objFromcontent)
 
+    // templist.map((c, idx) => {
+    //   if (c.id != objFromcontent._id) {
+    //     c.content = objFromcontent.content,
+    //     c.isChecked = objFromcontent.isChecked
+    //   }
+     // return c.id != objFromcontent._id
+    // })
+    templist.map((c, idx) => {
+    this.setState({ list:  objFromcontent })
+    })
+    // this.setState({ list: templist }, () => {
+    //   console.log("new state : ", this.state.list)
+    // })
+  }
   render() {
     var edit = {
       marginRight: '15px',
@@ -155,8 +173,8 @@ class TodoItem extends Component {
           <div className="col-md-9 addlist">
             <input type="text" className="form-control add-todo" value={this.state.description} onChange={(e) => { this.handleChange(e) }} placeholder="Add items" />
           </div>
-          <div className="col-md-3"> 
-          <Button onClick={this.addContent} style={{ marginBottom: '20px' }}>Add Item</Button>
+          <div className="col-md-3">
+            <Button onClick={this.addContent} style={{ marginBottom: '20px' }}>Add Item</Button>
           </div>
         </div>
         <div className="contentlist" style={{ marginTop: '105px' }}>
@@ -168,7 +186,7 @@ class TodoItem extends Component {
 
                   this.state.list.map((noteEntry, index) => {
                     return (
-                      <ListGroupComp noteEntry={noteEntry} index={index} x={this.x.bind(this)} />
+                      <ListGroupComp noteEntry={noteEntry} index={index} x={this.x.bind(this)} y={this.y.bind(this)} />
                     )
                   })
                 )

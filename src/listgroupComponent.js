@@ -104,7 +104,7 @@ class ListGroupComp extends Component {
                 <Button style={{ marginRight: '15px', marginTop: '3px' }} onClick={this.editingcontent.bind(this)}>
                   <i className="glyphicon glyphicon-pencil"></i>
                 </Button>
-                <DeleteContentComp item={this.props.noteEntry.id} /></span> :
+                <DeleteContentComp item={this.props.noteEntry.id} y={this.props.y}/></span> :
               <Button style={{ float: 'left' }} onClick={this.updateContent}>Save</Button>
           }
         </div>

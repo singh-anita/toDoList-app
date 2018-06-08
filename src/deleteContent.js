@@ -12,7 +12,7 @@ class DeleteContentComp extends Component {
         console.log('deleted component --------------------', this.props);
     }
   deletingcontent() {
-      alert("clicked")
+     // alert("clicked")
      console.log("OBJECT dete: ",this.props.item )
      axios.delete('http://localhost:3001/deletenotecontent/' +this.props.item,{
         headers: {
@@ -20,9 +20,9 @@ class DeleteContentComp extends Component {
         }
       })
         .then((response) => {
-          console.log("axios", response.data);
           if (response.status === 200) {
-              
+                      // console.log("axios", response.data);
+             this.props.y(response.data)
           }
        })
        .catch(err => {
