@@ -10,14 +10,24 @@ import DeleteTitleComp from './deleteTitle'
 
 
 class TitleListGroupComp extends Component {
+  componentDidMount(){
+    this.setState({ updatevalue : this.props.titleEntry.title },
+    () =>{
+      this.baseState = this.state
+    })
+  }
     constructor(props) {
         super(props);
         this.state = {
           show: true,
           updatevalue: ''
         }
+        this.resetForm =this.resetForm.bind(this)
         this.updateTitle = this.updateTitle .bind(this);
         this.updateChange= this.updateChange.bind(this);
+      }
+      resetForm(){
+        this.setState(this.baseState)
       }
          /*editing note onclick inputbox comes with button*/
          editingtitle() {
@@ -85,7 +95,10 @@ return (
             </Button>
             <DeleteTitleComp titleId={this.props.titleEntry._id} u={this.props.u}/>
             </span>:
+            <span>
               <Button style={{ float: 'left',marginTop: '-36px' }} onClick={this.updateTitle}>Save</Button>
+              <Button style={{ marginBottom: '20px' ,marginLeft:'5px'}} onClick={this.resetForm}>Cancel</Button>
+              </span>
           }
         </div>
 
