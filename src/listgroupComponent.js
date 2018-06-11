@@ -11,13 +11,22 @@ import  DeleteContentComp from './deleteContent';
 
 class ListGroupComp extends Component {
 
+  componentDidMount(){
+    this.setState({ updatevalue : this.props.noteEntry.content },
+    () =>{
+      this.baseState = this.state
+    })
+  }
 
   constructor(props) {
     super(props);
     this.state = {
       show: true,
-      updatevalue: ''
+     updatevalue: ''
     }
+       // preserve the initial state in a new object
+       
+       this.resetForm =this.resetForm.bind(this)
     this.updateChange = this.updateChange.bind(this);
     this.updateContent = this.updateContent.bind(this);
   }
@@ -25,13 +34,16 @@ class ListGroupComp extends Component {
   //componentWillMount() {
   //  console.log("-------------THIS PROPS : ", this.props.noteEntry, this.props.index)
  // }
-
+ resetForm(){
+  this.setState(this.baseState)
+}
   /*editing content onclick inputbox comes with button*/
   editingcontent() {
     this.setState({ show: !this.state.show })
   }
   /*update list inputbox value change*/
   updateChange(e) {
+//    updatevalue()
     this.setState({
       updatevalue: e.target.value
     })
@@ -123,7 +135,7 @@ class ListGroupComp extends Component {
                 </Button>
                 <DeleteContentComp item={this.props.noteEntry.id} y={this.props.y}/></span> :
              <span> <Button style={{ float: 'left' }} onClick={this.updateContent}>Save</Button>
-              <Button style={{ marginBottom: '20px' ,marginLeft:'5px'}}>Cancel</Button></span>
+              <Button style={{ marginBottom: '20px' ,marginLeft:'5px'}} onClick={this.resetForm}>Cancel</Button></span>
           }
         </div>
       </ListGroupItem>
