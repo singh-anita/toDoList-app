@@ -83,7 +83,7 @@ return (
                <Button style={{ marginRight: '5px', marginTop: '0px' ,paddingBottom:'0px'}} onClick={this.editingtitle.bind(this)}>
                 <i className="glyphicon glyphicon-pencil"></i>
             </Button>
-            <DeleteTitleComp />
+            <DeleteTitleComp titleId={this.props.titleEntry._id} u={this.props.u}/>
             </span>:
               <Button style={{ float: 'left',marginTop: '-36px' }} onClick={this.updateTitle}>Save</Button>
           }
@@ -112,7 +112,7 @@ export default TitleListGroupComp;
                 <Button style={{ marginRight: '15px', marginTop: '3px' }} onClick={this.editingcontent.bind(this)}>
                   <i className="glyphicon glyphicon-pencil"></i>
                 </Button>
-                <DeleteContentComp item={this.props.noteEntry.id} y={this.props.y}/></span> :
+                <DeleteContentComp item={this.props.noteEntry.id} /></span> :
               <Button style={{ float: 'left' }} onClick={this.updateContent}>Save</Button>
           }
         </div> */}

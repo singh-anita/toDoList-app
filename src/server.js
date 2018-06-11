@@ -1,7 +1,7 @@
 var express = require('express'); // call express
 var app = express();  /* define our app using express*/
 var bodyparser = require("body-parser");
-var { checkUserEmail, newUser, validPassword, newToken, getUId, getUserData, checkuId, deleteUserToken, insertTitle, getAllContentofNote, getNotesTitle, hashpass, insertNoteContent ,updateItems,removeNotesContent,updateTitles} = require('./models/user');
+var { checkUserEmail, newUser, validPassword, newToken, getUId, getUserData, checkuId, deleteUserToken, insertTitle, getAllContentofNote, getNotesTitle, hashpass, insertNoteContent ,updateItems,removeNotesContent,updateTitles,deleteNotesTitle} = require('./models/user');
 var r = require('./tokenGenerate');
 var passport = require('passport');
 var flash = require('connect-flash');
@@ -263,10 +263,41 @@ app.post('/updatenotetitle', tokenCheckingMiddleware, function (req, res, next) 
 
 });
 
+
+/*---------------------------deleting the title---------------------------------------------------*/
+app.delete('/deletenotetitle/:id', tokenCheckingMiddleware, function (req, res, next) {
+    // console.log("dddd")
+     console.log("reqofdeleteetitle", req.params);
+    console.log("Users coming", res.locals.user)
+     var user = res.locals.user;
+     var titlesToSend = []
+    if (user) {
+        deleteNotesTitle(req.params.id).then((deleteTitle, err) => {
+             console.log("doc",deleteTitle)
+             getNotesTitle(deleteTitle.uId).then((NoteTitles, err) => {
+                 // console.log("content", NoteContents)
+                 titlesToSend = NoteTitles.map((note) => {
+                   return { _id: note._id, title: note.title ,deletedAt:note.deletedAt}
+                  //return note
+                })
+
+                  // console.log("sending", contentToSend)
+                 res.status(200).send(titlesToSend);
+             })
+         if (err) throw err
+            // res.status(200).send({message:"successfully deleted"});*/
+      })
+     }
+     else {
+         console.log("content not deleted")
+         res.status(401).send({ error: "content not deleted" });
+     }
+ 
+ });
 /*----------------get contents basedon titleid of particular note-------------------*/
 app.get('/getnotecontent/:id', tokenCheckingMiddleware, function (req, res, next) {
     // console.log("req", req.headers);
-   // console.log("reqnoteconetnt", req.params);
+  // console.log("reqnoteconetnt", req.params);
    // console.log("Users coming", res.locals.user)
     var user = res.locals.user;
     if (user) {
@@ -326,9 +357,26 @@ app.post('/updatenotecontent', tokenCheckingMiddleware, function (req, res, next
         console.log("Unauthorized user")
         res.status(401).send({ error: "content not updated" });
     }
-
 });
 
+/*-----------updating checkbox-------*/
+app.post('/checkStateChange', tokenCheckingMiddleware, function (req, res, next) {
+    console.log("reqofupdatecheckbox", req.body);
+    // console.log("reqofcontent", req.body.titleid);
+    console.log("Users coming", res.locals.user)
+    var user = res.locals.user;
+   /* if (user) {
+        updateItems(req.body.contentId, req.body.content, req.body.isChecked).then((updatecontent, err) => {
+            console.log("doc",updatecontent)
+            if (err) throw err
+            res.status(200).send(updatecontent);
+        })
+    }
+    else {
+        console.log("Unauthorized user")
+        res.status(401).send({ error: "content not updated" });
+    }*/
+});
 
 /*---------------------------deleting the content---------------------------------------------------*/
 app.delete('/deletenotecontent/:id', tokenCheckingMiddleware, function (req, res, next) {

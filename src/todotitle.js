@@ -87,12 +87,27 @@ t(objFromupdatingTitle) {
     console.log("qq", objFromupdatingTitle)
 
     templist.map((tO, idx) => {
-      if (tO.id === objFromupdatingTitle._id) {
+      if (tO._id === objFromupdatingTitle._id) {
         tO.title = objFromupdatingTitle.title
       }
     })
     this.setState({ list: templist })
     // this.setState({  list: objFromupdatingcontent})
+  }
+ u(objofnotestitle) {
+    var templist = this.state.list.slice()
+    console.log("chhhh", objofnotestitle)
+    this.setState({ list:   objofnotestitle })
+  }
+  /*for checkbox*/
+  chkboxupdate(index)
+  {
+    console.log("checkbox", index)
+    // console.log("CHECKBOX CHANGED : ", this.props.list[index].isChecked);
+   // var objToChange = this.props.list.slice();
+    // console.log( "changevar",objToChange)
+   // objToChange[index].isChecked = !this.props.list[index].isChecked;
+    //this.setState({ list: objToChange })
   }
     /*titleselected(key, e) {
         axios.get('http://localhost:3001/getnotecontent/' + key ,
@@ -134,10 +149,7 @@ t(objFromupdatingTitle) {
                         {
                             this.state.list.map((currentTitle, index) => {
                                 return (
-                                  
-                         <TitleListGroupComp titleEntry={currentTitle} index={index} t={this.t.bind(this)} />
-                                 
-                               
+                         <TitleListGroupComp titleEntry={currentTitle} index={index} t={this.t.bind(this)}  u={this.u.bind(this)} chkboxupdate={this.chkboxupdate.bind(this)}/>
                                 );
                             })
                         }

@@ -12,22 +12,22 @@ class DeleteTitleComp extends Component {
     }
 
     deletetitle() {
-        alert("clicked")
-        console.log("OBJECT dete: ", this.props.item)
-      /* axios.delete('http://localhost:3001/deletenotetitle/' + this.props.item, {
+        console.log("OBJECT check: ", this.props.titleId)
+       axios.delete('http://localhost:3001/deletenotetitle/' + this.props.titleId, {
             headers: {
                 "Authorization": localStorage.getItem('authtoken')
             }
         })
             .then((response) => {
-                if (response.status === 200) {
+               if (response.status === 200) {
                     console.log("axios delete title", response.data);
-                   // this.props.y(response.data)
-                }
+                   this.props.u(response.data)
+                //}*/
+               }
             })
             .catch(err => {
                 console.error(err);
-            });*/
+            });
     }
     render() {
         return (

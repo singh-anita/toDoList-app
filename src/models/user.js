@@ -107,12 +107,12 @@ exports.checkuId = function (uId) {
 
 /* insert a new note title into the notesCollection  collection using save*/
 exports.insertTitle = function (userTableId, noteTitle) {
-    return notesTable({ uId: userTableId, title: noteTitle, date: new Date(), isDeleted: false }).save()
+    return notesTable({ uId: userTableId, title: noteTitle, date: new Date() }).save()
 }
 //get notes title for dashboard
 exports.getNotesTitle = function (userId) {
     /*returns an array consisting of note titles created by a particular user*/
-    return notesTable.find({ uId: userId });
+    return notesTable.find({ uId: userId , deletedAt: { $eq: null} });
 }
 //find single note with title and titleid for dashboard
 //exports.getTitleId =function(titleId,titlevalue){
@@ -162,6 +162,13 @@ exports.removeNotesContent = function(contentId){
 exports.updateTitles = function(titleId, title){
     console.log("db",titleId, title)
     return notesTable.findOneAndUpdate({ _id : titleId } , { $set : { title: title } }, { new: true })
+}
+
+
+/*----------deleteing the todoTitles ---------------*/
+exports.deleteNotesTitle = function(titleId){
+    console.log("rtttid",titleId)
+    return  notesTable.findOneAndUpdate({ _id : titleId },{ $set : {deletedAt : Date.now()} }, {new : true} )
 }
 /*----------deleteing the todoitems ---------------*/
 //exports.getContent = function(notesId){

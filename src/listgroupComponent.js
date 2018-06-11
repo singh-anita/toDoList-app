@@ -37,12 +37,29 @@ class ListGroupComp extends Component {
     })
   }
   checkStateChanged(index, e) {
-    // console.log("checkbox", index)
+   console.log("CHECKBOX CHANGED :",this.props.noteEntry)
+   /*axios.delete('http://localhost:3001/checkStateChange/',{
+    headers: {
+      "Authorization": localStorage.getItem('authtoken')
+    }
+  })
+    .then((response) => {
+      if (response.status === 200) {
+                console.log("chkaa", response.data);
+       //  this.props.y(response.data)
+      }
+   })
+   .catch(err => {
+     console.error(err);
+   });*/
+    //this.props.chkboxupdate(this.props.noteEntry)
+    // var objToChange = this.props.list.slice();
+    //console.log("checkbox", index)
     // console.log("CHECKBOX CHANGED : ", this.props.list[index].isChecked);
-    var objToChange = this.props.list.slice();
-    //  console.log( "changevar",objToChange)
-    objToChange[index].isChecked = !this.props.list[index].isChecked;
-    this.setState({ list: objToChange })
+   // var objToChange = this.props.list.slice();
+    // console.log( "changevar",objToChange)
+   // objToChange[index].isChecked = !this.props.list[index].isChecked;
+    //this.setState({ list: objToChange })
   }
   /*updating contentlist items on button click */
   updateContent() {
@@ -105,7 +122,8 @@ class ListGroupComp extends Component {
                   <i className="glyphicon glyphicon-pencil"></i>
                 </Button>
                 <DeleteContentComp item={this.props.noteEntry.id} y={this.props.y}/></span> :
-              <Button style={{ float: 'left' }} onClick={this.updateContent}>Save</Button>
+             <span> <Button style={{ float: 'left' }} onClick={this.updateContent}>Save</Button>
+              <Button style={{ marginBottom: '20px' ,marginLeft:'5px'}}>Cancel</Button></span>
           }
         </div>
       </ListGroupItem>
