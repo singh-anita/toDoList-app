@@ -74,36 +74,39 @@ class TitleListGroupComp extends Component {
 
   render() {
 return (
-    <Link to={'/todoItem/' + this.props.titleEntry._id}>
-        <ListGroupItem key={this.props.titleEntry._id} bsStyle="success" value={this.props.titleEntry.title}>
-        <div className="description">
+        <ListGroupItem bsStyle="success" >
+        <div  className="row">
+        <div className="descript col-md-7 col-lg-7">
         {
          (this.state.show)?
-         <span>
-        {this.props.titleEntry.title}</span>
-        :<div className="edittitle col-md-10 col-lg-10" >
+       <Link to={'/todoItem/' + this.props.titleEntry._id} value={this.props.titleEntry.title} key={this.props.titleEntry._id}> {this.props.titleEntry.title}</Link>
+        :
          <input type="text"  onChange={this.updateChange} value={this.state.updatevalue} className="form-control edit" placeholder="Edit Title" />
-         </div>
+        
         }
         </div>
-         <div className="ttaction">
+         <div className="ttaction col-md-5 col-lg-5">
           {
             (this.state.show)?
               <span>
-               <Button style={{ marginRight: '5px', marginTop: '0px' ,paddingBottom:'0px'}} onClick={this.editingtitle.bind(this)}>
+               <Button style={{ marginRight: '6px', marginTop: '0px'}} onClick={this.editingtitle.bind(this)}>
                 <i className="glyphicon glyphicon-pencil"></i>
             </Button>
             <DeleteTitleComp titleId={this.props.titleEntry._id} u={this.props.u}/>
             </span>:
             <span>
-              <Button style={{ float: 'left',marginTop: '-36px' }} onClick={this.updateTitle}>Save</Button>
-              <Button style={{ marginBottom: '20px' ,marginLeft:'5px'}} onClick={this.resetForm}>Cancel</Button>
+              <Button style={{ marginRight: '6px' }} onClick={this.updateTitle}>
+              <i class="glyphicon glyphicon-ok"></i>
+             </Button>
+              <Button onClick={this.resetForm}>
+              <i class="glyphicon glyphicon-remove"></i>
+              </Button>
               </span>
           }
         </div>
-
+     </div>
         </ListGroupItem>
-    </Link>
+   
 )
   }
 }

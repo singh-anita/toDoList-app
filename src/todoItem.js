@@ -12,7 +12,8 @@ class TodoItem extends Component {
     super(props);
     this.state = {
       list: [],
-      description: ''
+      description: '',
+      titlename:''
     };
     this.addContent = this.addContent.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -32,10 +33,12 @@ class TodoItem extends Component {
           }
         })
         .then((response) => {
+          console.log("what response",response.data)
           // this.props.x(response.data) 
           //Call the callback using this.props.[callback] in the child 
           if (response.status === 200) {
-            this.setState({ list: response.data })
+         //   console.log("what obj",response.data)
+            this.setState({ list: response.data.entries,titlename:response.data.note_title })
           }
         }).catch(function (error) {
           console.log("error", error.response);
@@ -63,9 +66,9 @@ class TodoItem extends Component {
         .then((response) => {
           // this.props.x(response.data) 
           //Call the callback using this.props.[callback] in the child 
-          console.log(response.data)
+          console.log("for title check",response.data)
           if (response.status === 200) {
-            this.setState({ list: response.data })
+            this.setState({ list: response.data.entries ,titlename:response.data.note_title})
           }
         }).catch(function (error) {
           console.log("error", error.response);
@@ -99,8 +102,10 @@ class TodoItem extends Component {
           const temp = this.state.list.slice()
           console.log(temp)
           temp.push({ content: response.data.content, isChecked: response.data.isChecked, id: response.data._id })
+          if (this.state.description.length > 0) {
           this.setState({ list: temp, description: '' })
           // this.props.handleItems(this.props.noteObj.id,contentObj.content,contentObj.isChecked)
+          }
         }
       })
       .catch(err => {
@@ -146,9 +151,10 @@ class TodoItem extends Component {
     templist.map((c, idx) => {
     this.setState({ list:  objFromcontent })
     })
-    // this.setState({ list: templist }, () => {
-    //   console.log("new state : ", this.state.list)
-    // })
+  }
+
+  checkboxChange(objToChange){
+    this.setState({ list: objToChange })
   }
   render() {
     var edit = {
@@ -163,22 +169,28 @@ class TodoItem extends Component {
     }
 
     return (
+    
       <div className="content_container">
+       
         <div style={{ marginLeft: '6px', paddingTop: '3px', marginTop: '30px' }}>
           <h3>
-            {this.props.titlename}
+            {this.state.titlename}
           </h3>
         </div>
+      
         <div className="addcontent">
           <div className="col-md-9 addlist">
             <input type="text" className="form-control add-todo" value={this.state.description} onChange={(e) => { this.handleChange(e) }} placeholder="Add items" />
           </div>
           <div className="col-md-3">
-            <Button onClick={this.addContent} style={{ marginBottom: '20px' }}>Add Item</Button>
+            <Button onClick={this.addContent} style={{ marginBottom: '20px' }} disabled={!this.state.description}>Add Item</Button>
           </div>
         </div>
+      
+        
         <div className="contentlist" style={{ marginTop: '105px' }}>
           {/*this.selectedcontents()*/}
+          
           <ListGroup componentClass="ul">
             {
               (this.state.list.length != 0)
@@ -186,7 +198,7 @@ class TodoItem extends Component {
 
                   this.state.list.map((noteEntry, index) => {
                     return (
-                      <ListGroupComp noteEntry={noteEntry} index={index} x={this.x.bind(this)} y={this.y.bind(this)} />
+                      <ListGroupComp noteEntry={noteEntry} index={index} x={this.x.bind(this)} y={this.y.bind(this)} checkboxChange={this.checkboxChange.bind(this)} />
                     )
                   })
                 )
@@ -195,6 +207,7 @@ class TodoItem extends Component {
           </ListGroup>
         </div>
       </div>
+          
     );
   }
 }

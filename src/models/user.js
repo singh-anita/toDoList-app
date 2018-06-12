@@ -114,6 +114,11 @@ exports.getNotesTitle = function (userId) {
     /*returns an array consisting of note titles created by a particular user*/
     return notesTable.find({ uId: userId , deletedAt: { $eq: null} });
 }
+exports.getSingleTitle = function (TitleId){
+    return notesTable.findById({_id:TitleId})
+}
+
+
 //find single note with title and titleid for dashboard
 //exports.getTitleId =function(titleId,titlevalue){
    // return notesTable.findById({ uId: titleId ,title:titlevalue});

@@ -20,6 +20,7 @@ class TodoTitle extends Component {
 
     /*-----get all the titles for that specific user--*/
     componentWillMount() {
+
         axios.get('http://localhost:3001/gettitles',
             {
                 headers: {
@@ -30,6 +31,10 @@ class TodoTitle extends Component {
                 console.log("CONSOLE DATA : ", response.data)
 
                 this.setState({ list: response.data })
+                console.log(this.state.list);
+                if(this.state.list.length) {
+                    this.props.updateState(false);
+                } 
             })
             .catch((err) => {
                 // if (err.response.status == 401) {
@@ -59,13 +64,18 @@ class TodoTitle extends Component {
             }
         })
             .then((response) => {
-                this.props.checkStateChanged(response.data.title)
+               // this.props.checkStateChanged("checkStateChanged",response.data.title)
                 console.log("axios", response.data);
                 if (response.status === 200) {
                     var titleObjArray = this.state.list.slice();
                     console.log(titleObjArray)
                     titleObjArray.push({ _id: response.data._id, title: response.data.title })
+                    if (this.state.value.length > 0) {
                     this.setState({ list: titleObjArray, value: '' })
+                    console.log(this.state.list)
+                    this.props.updateState(false)
+                }
+                
                 }
             })
             .catch(err => {
@@ -140,7 +150,7 @@ t(objFromupdatingTitle) {
                         <div className="addlist">
                             <input type="text" onChange={(e) => { this.update(e) }} className="form-control add-todo" placeholder="Add todo" value={this.state.value} />
                         </div>
-                        <Button onClick={this.addTitle}>
+                        <Button onClick={this.addTitle}  disabled={!this.state.value}>
                             <span>Add Project</span>
                         </Button>
                     </div>

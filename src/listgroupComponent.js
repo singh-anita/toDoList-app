@@ -50,6 +50,7 @@ class ListGroupComp extends Component {
   }
   checkStateChanged(index, e) {
    console.log("CHECKBOX CHANGED :",this.props.noteEntry)
+  // this.props.checkboxChange(this.props.noteEntry[index].isChecked)
    /*axios.delete('http://localhost:3001/checkStateChange/',{
     headers: {
       "Authorization": localStorage.getItem('authtoken')
@@ -65,12 +66,13 @@ class ListGroupComp extends Component {
      console.error(err);
    });*/
     //this.props.chkboxupdate(this.props.noteEntry)
-    // var objToChange = this.props.list.slice();
+     var objToChange = this.props.list.slice();
     //console.log("checkbox", index)
     // console.log("CHECKBOX CHANGED : ", this.props.list[index].isChecked);
    // var objToChange = this.props.list.slice();
     // console.log( "changevar",objToChange)
-   // objToChange[index].isChecked = !this.props.list[index].isChecked;
+    objToChange[index].isChecked = !this.props.list[index].isChecked;
+    this.props.checkboxChange( objToChange)
     //this.setState({ list: objToChange })
   }
   /*updating contentlist items on button click */
@@ -92,12 +94,6 @@ class ListGroupComp extends Component {
         if (response.status === 200) {
           this.props.x(response.data)   //Call the callback using this.props.[callback] in the child 
           this.setState({ show: true })
-        /* this.setState({
-            content:updateObj.content,
-            isChecked: updateObj.isChecked,
-            contentId:updateObj._id,
-            show: true
-          })*/
         }
       })
       .catch(err => {

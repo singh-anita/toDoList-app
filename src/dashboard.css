@@ -11,6 +11,12 @@
   {
     display: inline-block;
   }
+  .descript
+  {
+    display: inline-block;
+    text-align: center;
+    margin-top:3px;
+  }
   .md-36-title {
     font-size: 36px;
     float:right;
@@ -62,7 +68,15 @@
   .ttaction
   {
     float:right;
+  } 
+  /* .editt
+  {
+    float:right;
   }
+  .savedel
+  {
+    float:right;
+  } */
   .left_menu
   {
    /* user-select: none !important;*/
@@ -99,5 +113,5 @@
     border: 0 !important;
 }*/
 .edittitle{
-  width: 235px;
+  width: 215px;
 }

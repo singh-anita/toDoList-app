@@ -31,24 +31,34 @@ class Dashboard extends Component {
         }
     }
     /*Define a callback in my parent which takes the data I need in as a parameter.*/
-  /*  x(objFromtitleselect) {
-     //   console.log(noteTitleId)
-     console.log(this.props.match.params)
-        this.setState({ currentlySelected: objFromtitleselect, isInitialRender: false})
-    }*/
+    // x() {
+    //  //   console.log(noteTitleId)
+    //  console.log(this.props.match.params)
+    //     this.setState({ currentlySelected: this.props.match.params, isInitialRender: false})
+    // }
 
+    updateState(value){
+        console.log("calling update state")
+
+        this.setState({isInitialRender: value})
+    }
+    
 
     render() {
-
+        //console.log('rendering dashboard')
         return (
             <div className="container">
                 <header className="page-title">
                     <HeaderLogout />
                     {this.renderRedirect()}
                 </header>
-                <TodoTitle checkStateChanged={this.checkStateChanged.bind(this)} />
-                <TodoItem titlename={this.state.noteTitle} params={this.props.match.params} />
-            </div>
+                <TodoTitle checkStateChanged={this.checkStateChanged.bind(this)} updateState={this.updateState.bind(this)}/>
+                { this.state.isInitialRender 
+                    ? null 
+                    : <TodoItem params={this.props.match.params} initialRender= {this.state.isInitialRender}/>
+                }
+             
+                </div>
         )
     }
 }

@@ -1,7 +1,7 @@
 var express = require('express'); // call express
 var app = express();  /* define our app using express*/
 var bodyparser = require("body-parser");
-var { checkUserEmail, newUser, validPassword, newToken, getUId, getUserData, checkuId, deleteUserToken, insertTitle, getAllContentofNote, getNotesTitle, hashpass, insertNoteContent ,updateItems,removeNotesContent,updateTitles,deleteNotesTitle} = require('./models/user');
+var { checkUserEmail, newUser, validPassword, newToken, getUId, getUserData, checkuId, deleteUserToken, insertTitle, getAllContentofNote, getNotesTitle, hashpass, insertNoteContent ,updateItems,removeNotesContent,updateTitles,deleteNotesTitle,getSingleTitle} = require('./models/user');
 var r = require('./tokenGenerate');
 var passport = require('passport');
 var flash = require('connect-flash');
@@ -301,20 +301,36 @@ app.get('/getnotecontent/:id', tokenCheckingMiddleware, function (req, res, next
    // console.log("Users coming", res.locals.user)
     var user = res.locals.user;
     if (user) {
-        var contentToSend = []
-        getAllContentofNote(req.params.id).then((NoteContents, err) => {
+        var objToSend = {
+            note_title : '',
+            entries : []
+        }
+    getSingleTitle(req.params.id).then((notesobj,err) =>{
+      //  console.log(titles)
+        objToSend.note_title=notesobj.title;
 
+        getAllContentofNote(req.params.id).then((NoteContents, err) => {
+           
             // console.log("content", NoteContents)
             //if (err) throw err
             NoteContents.map((individualTitleentry, noteContentIdx) => {
-                contentToSend.push({ id: individualTitleentry._id, content: individualTitleentry.content, isChecked: individualTitleentry.isChecked }
+                objToSend.entries.push({ id: individualTitleentry._id, content: individualTitleentry.content, isChecked: individualTitleentry.isChecked }
                 )
+                  console.log("sending : ", individualTitleentry)
             })
-            //   console.log("sending", contentToSend)
-            res.status(200).send(contentToSend);
+            console.log("drftre",objToSend)
+            res.status(200).send(objToSend);
 
         })
-
+        // console.log("drftdfgdse",objToSend)
+       // res.status(200).send(objToSend);
+    })
+  
+       
+    }
+    else {
+        console.log("content not deleted")
+        res.status(401).send({ error: "not able to get id" });
     }
 })
 
@@ -365,7 +381,7 @@ app.post('/checkStateChange', tokenCheckingMiddleware, function (req, res, next)
     // console.log("reqofcontent", req.body.titleid);
     console.log("Users coming", res.locals.user)
     var user = res.locals.user;
-   /* if (user) {
+  /*  if (user) {
         updateItems(req.body.contentId, req.body.content, req.body.isChecked).then((updatecontent, err) => {
             console.log("doc",updatecontent)
             if (err) throw err
