@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { ListGroup, ListGroupItem, Button, FormGroup, FormControl, ControlLabel, Checkbox } from "react-bootstrap";
 import { Link } from 'react-router-dom';
-import './dashboard.css';
+import './css/dashboard.css';
 import axios from 'axios';
 import { set } from 'mongoose';
 class DeleteTitleComp extends Component {

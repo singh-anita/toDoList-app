@@ -3,12 +3,12 @@ var app = express();  /* define our app using express*/
 var bodyparser = require("body-parser");
 var { checkUserEmail, newUser, validPassword, newToken, getUId, getUserData, checkuId, deleteUserToken, insertTitle, getAllContentofNote, getNotesTitle, hashpass, insertNoteContent ,updateItems,removeNotesContent,updateTitles,deleteNotesTitle,getSingleTitle} = require('./models/user');
 var r = require('./tokenGenerate');
-var passport = require('passport');
-var flash = require('connect-flash');
+//var passport = require('passport');
+//var flash = require('connect-flash');
 const saltRounds = 10;
 var bcrypt = require('bcrypt');
 
-var LocalStrategy = require('passport-local').Strategy
+//var LocalStrategy = require('passport-local').Strategy
 
 //var db ='mongodb://localhost/test';
 //mongoose.connect(db); // connect to our database
