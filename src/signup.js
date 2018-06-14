@@ -4,6 +4,7 @@ import { Link, Redirect } from 'react-router-dom';
 import Header from './header';
 import axios from 'axios';
 import validator from 'validator';
+//import Button from 'react-bootstrap-button-loader';
 //import validator from 'validator';
 //disabled={!this.validateForm()}
 /*import LoaderButton from "../components/LoaderButton";*/
@@ -169,6 +170,8 @@ class Signup extends Component {
 
     handleSubmit(e) {
 
+        alert("huhuhu")
+
         if (!this.allSet) {
             e.preventDefault();
             return;
@@ -259,7 +262,7 @@ class Signup extends Component {
                                 <FormGroup>
                                     <Col smOffset={3} mdOffset={3} sm={9} md={6}>
                                         {this.renderRedirect()}
-                                        <Button type="button" bsStyle="success"  disabled = {this.state.disabled} 
+                                        <Button type="button" bsStyle="success"  disabled = {this.state.disabled} onClick={(e) => this.handleSubmit(e)}
                                         ><i className="icon-hand-right"></i>Sign Up</Button>
                                         <span style={{ marginLeft: 8 }}> OR </span>
                                         <Button type="submit" bsStyle="primary">Sign Up with Stackoverflow</Button>
