@@ -107,7 +107,11 @@ app.post('/signup', function (req, res) {
                 newToken(tokendata).save(function (err, data) {
                     if (err) throw err
                     console.log("token SAVE SUCCESSFUL")
-                    res.status(200).send({ authtoken: data.token });
+                    setTimeout(() =>{ 
+                        res.status(200).send({ authtoken: data.token });
+                     }, 5000)
+                    
+                    
                 })
 
             })

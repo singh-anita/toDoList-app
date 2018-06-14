@@ -4,9 +4,7 @@ import { Link, Redirect } from 'react-router-dom';
 import Header from './header';
 import axios from 'axios';
 import validator from 'validator';
-//import Button from 'react-bootstrap-button-loader';
-//import validator from 'validator';
-//disabled={!this.validateForm()}
+import {Loading }from 'react-loading-spinner';
 /*import LoaderButton from "../components/LoaderButton";*/
 /* <span style={{ marginLeft: 8 }}>or</span>  <div style={{borderTop:'1 solid #999',paddingTop:20}} className="form-group">*/
 
@@ -50,6 +48,7 @@ class Signup extends Component {
         isPasswordMatching: false,
         disabled: true,
         canBeSubmitted: false,
+        loading: false
     };
 
     handleEmailChange(event) {
@@ -90,18 +89,18 @@ class Signup extends Component {
 
     isUsernameLengthZero() {
         var alphaExp = /^[a-zA-Z]+$/;
-        if (!(this.state.username.length === 0 ) && (this.state.username.match(alphaExp))) {
-             this.setState({ usernameLengthZero: false },
-                () =>{
+        if (!(this.state.username.length === 0) && (this.state.username.match(alphaExp))) {
+            this.setState({ usernameLengthZero: false },
+                () => {
                     this.allSet()
                 })
         }
         else {
-          
-                this.setState({ usernameLengthZero: true },
-                    () =>{
-                        this.allSet()
-                    })
+
+            this.setState({ usernameLengthZero: true },
+                () => {
+                    this.allSet()
+                })
         }
     }
 
@@ -110,29 +109,29 @@ class Signup extends Component {
         if (validator.equals(this.state.password, this.state.confirmPassword)) {
             console.log("same")
             this.setState({ isPasswordMatching: true },
-                () =>{
+                () => {
                     this.allSet()
                 })
         }
         else {
             console.log("different")
             this.setState({ isPasswordMatching: false },
-                () =>{
-                   this.allSet()
+                () => {
+                    this.allSet()
                 })
         }
     }
 
     validateEmail() {
-        if ( /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test((this.state.email) ) ){
+        if (/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test((this.state.email))) {
             this.setState({ isInvalidEmail: false },
-                () =>{
+                () => {
                     this.allSet()
                 })
         }
         else {
             this.setState({ isInvalidEmail: true },
-                () =>{
+                () => {
                     this.allSet()
                 })
         }
@@ -141,25 +140,25 @@ class Signup extends Component {
 
     /* WHEN EVERYTHING IS RIGHT, EXECUTE THIS.... */
     allSet() {
-           console.log("invalidEmail : " ,this.state.isInvalidEmail,
-           "passwordLengthZero : " , this.state.passwordLengthZero ,
-           "username:",this.state.usernameLengthZero,
-           "match? : ",this.state.isPasswordMatching);   
-           
-        if(!this.state.isInvalidEmail && !this.state.passwordLengthZero && !this.state.usernameLengthZero &&
-            this.state.isPasswordMatching) {
-                this.setState({ disabled: false },function() {
-                    console.log('callbacked ', this.state)
+        console.log("invalidEmail : ", this.state.isInvalidEmail,
+            "passwordLengthZero : ", this.state.passwordLengthZero,
+            "username:", this.state.usernameLengthZero,
+            "match? : ", this.state.isPasswordMatching);
 
-                }) 
-            } 
+        if (!this.state.isInvalidEmail && !this.state.passwordLengthZero && !this.state.usernameLengthZero &&
+            this.state.isPasswordMatching) {
+            this.setState({ disabled: false }, function () {
+                console.log('callbacked ', this.state)
+
+            })
+        }
         else {
             console.log("all matched else ", this.state);
-            this.setState({ disabled: true },function() {
+            this.setState({ disabled: true }, function () {
                 console.log('callbacked ', this.state)
-                
-            }) 
-        }    
+
+            })
+        }
     }
 
     renderRedirect() {
@@ -170,7 +169,7 @@ class Signup extends Component {
 
     handleSubmit(e) {
 
-        alert("huhuhu")
+      //  alert("huhuhu")
 
         if (!this.allSet) {
             e.preventDefault();
@@ -199,9 +198,18 @@ class Signup extends Component {
                     localStorage.setItem('authtoken', (response.data.authtoken));
                     console.log("Saved in localStorage ");
                     console.log("RESPONSE : ", response)
-                    this.setState({
-                        redirect: true
-                    })
+                    setTimeout(() => {
+                        this.setState
+                        ({
+                            loading: true,
+                            redirect: true
+                        })
+                    }, 5000)
+
+                    // this.setState({
+                    //     redirect: true,
+                    //     loading:true
+                    // })
                 }
             })
             .catch(function (error) {
@@ -262,10 +270,11 @@ class Signup extends Component {
                                 <FormGroup>
                                     <Col smOffset={3} mdOffset={3} sm={9} md={6}>
                                         {this.renderRedirect()}
-                                        <Button type="button" bsStyle="success"  disabled = {this.state.disabled} onClick={(e) => this.handleSubmit(e)}
-                                        ><i className="icon-hand-right"></i>Sign Up</Button>
+                                        <Button type="button" bsStyle="success" disabled={this.state.disabled} onClick={(e) => this.handleSubmit(e)}>
+                                            <i class="fa fa-circle-o-notch fa-spin"></i>Sign Up</Button>
                                         <span style={{ marginLeft: 8 }}> OR </span>
                                         <Button type="submit" bsStyle="primary">Sign Up with Stackoverflow</Button>
+                                      
                                     </Col>
 
                                 </FormGroup>

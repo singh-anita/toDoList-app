@@ -16,4 +16,8 @@ import registerServiceWorker from './registerServiceWorker';
 //ReactDOM.render(<Dashboard/>, document.getElementById('root'));
 //ReactDOM.render(<App/>, document.getElementById('root'));
 /*registerServiceWorker();*/
-ReactDOM.render(<Router><App /></Router>, document.getElementById('root'));
+ReactDOM.render(
+    <Router>
+        <App />
+    </Router>,
+    document.getElementById('root'));
