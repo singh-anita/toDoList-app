@@ -4,7 +4,10 @@ import { Link, Redirect } from 'react-router-dom';
 import Header from './header';
 import axios from 'axios';
 import validator from 'validator';
-import {Loading }from 'react-loading-spinner';
+import { ClipLoader } from 'react-spinners';
+import './css/signup.css';
+// import Loader from 'react-loader-spinner'
+//import {Loading }from 'react-loading-spinner';
 /*import LoaderButton from "../components/LoaderButton";*/
 /* <span style={{ marginLeft: 8 }}>or</span>  <div style={{borderTop:'1 solid #999',paddingTop:20}} className="form-group">*/
 
@@ -47,7 +50,6 @@ class Signup extends Component {
         passwordLengthZero: true,
         isPasswordMatching: false,
         disabled: true,
-        canBeSubmitted: false,
         loading: false
     };
 
@@ -169,8 +171,8 @@ class Signup extends Component {
 
     handleSubmit(e) {
 
-      //  alert("huhuhu")
-
+        //  alert("huhuhu")
+        this.setState({loading: true})
         if (!this.allSet) {
             e.preventDefault();
             return;
@@ -198,13 +200,12 @@ class Signup extends Component {
                     localStorage.setItem('authtoken', (response.data.authtoken));
                     console.log("Saved in localStorage ");
                     console.log("RESPONSE : ", response)
-                    setTimeout(() => {
+                    // setTimeout(() => {
                         this.setState
-                        ({
-                            loading: true,
-                            redirect: true
-                        })
-                    }, 5000)
+                            ({
+                                redirect: true
+                            })
+                    // }, 1000)
 
                     // this.setState({
                     //     redirect: true,
@@ -268,13 +269,23 @@ class Signup extends Component {
                                     </Col>
                                 </FormGroup>
                                 <FormGroup>
-                                    <Col smOffset={3} mdOffset={3} sm={9} md={6}>
+                                    <Col smOffset={3} mdOffset={3} sm={9} md={9}>
                                         {this.renderRedirect()}
+                
                                         <Button type="button" bsStyle="success" disabled={this.state.disabled} onClick={(e) => this.handleSubmit(e)}>
-                                            <i class="fa fa-circle-o-notch fa-spin"></i>Sign Up</Button>
-                                        <span style={{ marginLeft: 8 }}> OR </span>
-                                        <Button type="submit" bsStyle="primary">Sign Up with Stackoverflow</Button>
-                                      
+                                        {/* <ClipLoader size={17} color={'#123abc'} /><span style={{marginLeft:'8px'}}>Loading</span> */}
+                                             {(this.state.loading) ? <span><ClipLoader size={17} color={'#123abc'}/><span style={{marginLeft:'8px'}}>Loading</span></span>:<span>SignUp</span>} 
+                                            </Button>
+                                        <span style={{ marginLeft: '8px' }}>OR</span>
+                                    </Col>
+                                </FormGroup>
+                                <FormGroup>
+                                    <Col smOffset={3} mdOffset={3} sm={9} md={9} >
+                                        <Button type="submit" bsStyle="primary">
+                                        {/* <ClipLoader size={17} color={'#123abc'} />  */}
+                                            Sign Up with Stackoverflow</Button>
+
+
                                     </Col>
 
                                 </FormGroup>
