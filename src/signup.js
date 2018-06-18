@@ -182,7 +182,8 @@ class Signup extends Component {
         var obj = {
             email: this.state.email,
             username: this.state.username,
-            password: this.state.password
+            password: this.state.password,
+            confirmPassword:this.state.confirmPassword
         };
         // console.log("TOKEN IN SIGNUP : ", localStorage.getItem("authtoken"))
         /*Posting Data From React to the Node Service*/

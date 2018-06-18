@@ -1,7 +1,8 @@
 var express = require('express'); // call express
 var app = express();  /* define our app using express*/
 var bodyparser = require("body-parser");
-var { checkUserEmail, newUser, validPassword, newToken, getUId, getUserData, checkuId, deleteUserToken, insertTitle, getAllContentofNote, getNotesTitle, hashpass, insertNoteContent ,updateItems,removeNotesContent,updateTitles,deleteNotesTitle,getSingleTitle} = require('./models/user');
+var { checkUserEmail, addnewUser, validPassword, newToken, getUId, getUserData, checkuId, deleteUserToken, insertTitle, getAllContentofNote, getNotesTitle, hashpass, insertNoteContent ,updateItems,removeNotesContent,updateTitles,deleteNotesTitle,getSingleTitle} = require('./models/userSchema');
+const user = require('../controllers/usercontroller.js');
 var r = require('./tokenGenerate');
 //var passport = require('passport');
 //var flash = require('connect-flash');
@@ -64,8 +65,10 @@ app.use(bodyparser.json());
 /* required for passport*/
 //app.use(passport.initialize());
 
+app.post('/signup', user.addnewUser );
+
 /*----- FOR SIGN UP - create user accounts-------*/
-app.post('/signup', function (req, res) {
+/*app.post('/signup', function (req, res) {
 
     if (req.headers.authorization != 'null') {
         console.log("user token already exist so redirect to dashboard with token", req.headers.authorization);
@@ -75,13 +78,10 @@ app.post('/signup', function (req, res) {
                 if (doc) {
 
                     console.log("Got token")
-                    //200 means the  token is valid
                     res.status(200).send();
 
                 }
-                //it means that something is in the body ie the filled form
-                //client side validation to be done separately
-
+              
             }
         )
     }
@@ -94,7 +94,7 @@ app.post('/signup', function (req, res) {
             userdata.emailId = req.body.email;
             userdata.username = req.body.username;
             // console.log("PWD : ", bcrypt.hashSync("pwd", saltRounds))
-            userdata.password = hashpass(req.body.password, saltRounds);/*Store hash in your password DB.*/
+            userdata.password = hashpass(req.body.password, saltRounds);//Store hash in your password DB.
             newUser(userdata).save(function (err, data) {
                 if (err) throw err
                 console.log("userdat SAVE SUCCESSFUL")
@@ -118,9 +118,39 @@ app.post('/signup', function (req, res) {
         }
 
 });
-
-/*---------------------FOR login---------------------------*/
+*/
 app.post('/login', function (req, res) {
+    // if (req.headers.authorization ){
+    var userlogin = {};
+    userlogin.emailId = req.body.loginEmail;
+    userlogin.password = req.body.loginPassword;
+    console.log("userlogin", userlogin)
+    // var tokenobj = {};
+    checkUserEmail(userlogin.emailId).then((userObj, err) => {
+        var tokenobj = {};
+        if (err) throw err;
+        console.log("userobj find", userObj);
+        console.log("IS PASSWORD MATCHING : ", validPassword(userlogin.password, userObj.password));
+
+       if (validPassword(userlogin.password, userObj.password)) {
+            tokenobj.uId = userObj._id;
+            tokenobj.token = r.randomToken()
+            tokenobj.timestamp = new Date().getTime()
+
+            newToken(tokenobj).save(function (err, tokenOb) {
+                if (err) throw err
+                console.log("token SAVE SUCCESSFUL for new login user")
+                res.status(200).send({ authtoken: tokenOb.token });
+            })
+        }
+        else {
+            res.status(401).send({ error: "please enter valid password" })
+        }
+  })
+// }
+})
+/*---------------------FOR login---------------------------*/
+/*app.post('/login', function (req, res) {
     if (req.headers.authorization != 'null') {
         console.log("loginuser token already exist so redirect to dashboard with token", req.headers.authorization);
         getUId(req.headers.authorization)
@@ -159,7 +189,7 @@ app.post('/login', function (req, res) {
                  }
              }
          )*/
-    }
+    /*}
 
     else
         if (Object.keys(req.body) != 0) {
@@ -190,7 +220,7 @@ app.post('/login', function (req, res) {
                 }
             })
         }
-})
+})*/
 
 /*-----------------for logout--------------*/
 

@@ -6,18 +6,18 @@ import { ClipLoader } from 'react-spinners';
 
 class Login extends Component {
 
-    componentWillMount(){
-        axios.post('http://localhost:3001/login',{}, {
-            headers: {
-                "Authorization": localStorage.getItem('authtoken')
-            }
-      }
-    ).then((response) =>{
-      if(response.status == 200 ){
-      this.setState({  redirect : true })
-      }
-    })
-    }
+    // componentWillMount(){
+    //     axios.post('http://localhost:3001/login',{}, {
+    //         headers: {
+    //             "Authorization": localStorage.getItem('authtoken')
+    //         }
+    //   }
+    // ).then((response) =>{
+    //   if(response.status == 200 ){
+    //   this.setState({  redirect : true })
+    //   }
+    // })
+    // }
     constructor(props) {
         super(props);
 
@@ -28,7 +28,8 @@ class Login extends Component {
             isInvalidEmail: true,
             passwordLengthZero: true,
             redirect: false,
-            disabled: true 
+            disabled: true,
+            loading: false
         };
         this.handleEmailChange = this.handleEmailChange.bind(this);
         this.handlePassword = this.handlePassword.bind(this);
@@ -108,6 +109,7 @@ class Login extends Component {
     }
 
     login(e) {
+        this.setState({loading: true})
         if (!this.allSet) {
             e.preventDefault();
             return;
