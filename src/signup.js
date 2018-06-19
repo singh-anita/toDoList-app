@@ -169,8 +169,7 @@ class Signup extends Component {
         var obj = {
             email: this.state.email,
             username: this.state.username,
-            password: this.state.password,
-            confirmPassword:this.state.confirmPassword
+            password: this.state.password
         };
         // console.log("TOKEN IN SIGNUP : ", localStorage.getItem("authtoken"))
         /*Posting Data From React to the Node Service*/
@@ -181,7 +180,7 @@ class Signup extends Component {
         })
             .then((response) => {
                 console.log(response.data.authtoken);
-                // if(response.status == 200){
+                 if(response.status == 200){
 
                 if (!localStorage.getItem('authtoken')) {
                     //save it in localStorage
@@ -200,9 +199,11 @@ class Signup extends Component {
                     //     loading:true
                     // })
                 }
+            }
+       
             })
             .catch(function (error) {
-                console.log(error.response)
+                console.log("ERROR : " ,error.response)
             });
     }
 
@@ -226,6 +227,7 @@ class Signup extends Component {
                                     <Col md={9}>
                                         <FormControl onChange={this.handleEmailChange.bind(this)} name="email" type="email" placeholder="Email" value={this.state.email} />
                                         {(this.state.isInvalidEmail && this.state.touched) ? <div>Invalid email format!</div> : null}
+
                                     </Col>
 
                                 </FormGroup>

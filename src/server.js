@@ -3,7 +3,7 @@ var app = express();  /* define our app using express*/
 var bodyParser = require("body-parser");
 //var { checkUserEmail, addnewUser, validPassword, newToken, getUId, getUserData, checkuId, deleteUserToken, insertTitle, getAllContentofNote, getNotesTitle, hashpass, insertNoteContent ,updateItems,removeNotesContent,updateTitles,deleteNotesTitle,getSingleTitle} = require('./models/userSchema');
 // const Users = require('../controllers/userController.js');
-
+global.salt = "$2b$20$qnRfTkFUVT1CEjzZkjMmGu";
 app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
