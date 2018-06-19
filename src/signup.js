@@ -6,20 +6,7 @@ import axios from 'axios';
 import validator from 'validator';
 import { ClipLoader } from 'react-spinners';
 import './css/signup.css';
-// import Loader from 'react-loader-spinner'
-//import {Loading }from 'react-loading-spinner';
-/*import LoaderButton from "../components/LoaderButton";*/
-/* <span style={{ marginLeft: 8 }}>or</span>  <div style={{borderTop:'1 solid #999',paddingTop:20}} className="form-group">*/
 
-// function validate(email,username, password,confpsswd) {
-//       return
-//       (
-//                 this.state.email.length === 0 &&
-//                 this.state.username.length === 0 &&
-//                 this.state.password.length === 0 &&
-//                 this.state.confpsswd !== this.state.confpsswd
-//             );
-//           }
 class Signup extends Component {
 
     componentWillMount() {

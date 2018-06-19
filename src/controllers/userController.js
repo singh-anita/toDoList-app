@@ -1,36 +1,42 @@
-const User = require('./models/userModel.js');
-const saltRounds = 10;
-exports.userRegister = (req, res) => {
+const User = require('../models/userModel');
+//const saltRounds = 10;
+var r = require('../tokenGenerate');
+var Token= require('../models/tokenModel');
+exports.addNewUser = (req, res) => {
  
     console.log("from clientside data coming: ", req.body)
 
-    var email = req.body.email;
+    var emailId = req.body.email;
     var username = req.body.username;
     
  
-    User.findOne({emailId:email})
+    User.findOne({emailId:emailId})
     .then(users => {
         if(!users){
-            var password =req.body.password;//Store hash in your password DB.
+            var password =req.body.password;
             var confirmPassword = req.body.confirmPassword;
-
-            var buf1 = Buffer.from(password);
-            var buf2 = Buffer.from(confirmPassword);
-            if(!buf1.equals(buf2)){
-                res.cookie("registrationError","Password doesn't match");
-                res.redirect("/register");
-            }
+               // test a matching password
+           users.comparePassword(password, function(err, isMatch) {
+             if (err) throw err;
+            console.log("checking password match",password, isMatch); // -> Password123: true
+           });
+           //password;
+            //confirmPassword;
+          /*  if(!password.equals(confirmPassword)){
+                //"Password doesn't match");
+                //redirect to signup
+            }*/
                // Create a User
                const user = new User({
-                emailId: email, 
+                emailId: emailId, 
                 username:username,
-                password: hashpass(password, saltRounds)
+                password: password
             });
             // Save User in the database
             var userdata = {};
-
+            var tokendata = {};
             user(userdata).save()
-            .then(success => {
+            .then(data => {
                 // if (err) throw err
                 console.log("userdat SAVE SUCCESSFUL")
 
@@ -39,24 +45,26 @@ exports.userRegister = (req, res) => {
                 tokendata.token = r.randomToken()
                 tokendata.timestamp = new Date().getTime()
 
-                newToken(tokendata).save(function (err, data) {
+                Token(tokendata).save(function (err, data) {
                     if (err) throw err
                     console.log("token SAVE SUCCESSFUL")
                     setTimeout(() =>{ 
                         res.status(200).send({ authtoken: data.token });
-                     }, 5000)
-                    
-                    
+                     }, 2000)
                 })
-
             })
             .catch(err => {
-                
-                res.redirect("/signup");
+                res.status(401).send({error:"user already exist"})
+                //res.redirect("/signup");
             });
         }
+
+        else{
+
+        }
         }).catch(err => {
-            res.cookie("registrationError",err.message);
-            res.redirect("/signup");
+            if (err) throw err
+           //errmessage
+            //res.redirect("/signup");
         })
     }

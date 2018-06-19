@@ -1,9 +1,8 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-require('./config.js');
-//var dbase = mongoose.createConnection("mongodb://localhost/");
-
-
+require('./configdb.js');
+var bcrypt = require('bcrypt');
+const saltRounds = 10;
 
 // create a schema for user
 var UserSchema = new Schema({
@@ -45,6 +44,36 @@ var UserSchema = new Schema({
     //   timestamp : Number
 });
 
+
+UserSchema.pre('save', function(next) {
+    var user = this;
+
+// only hash the password if it has been modified (or is new)
+if (!user.isModified('password')) return next();
+
+// generate a salt
+bcrypt.genSalt(saltRounds, function(err, salt) {
+    if (err) return next(err);
+
+    // hash the password using our new salt
+    bcrypt.hash(user.password, salt, function(err, hash) {
+        if (err) return next(err);
+
+        // override the cleartext password with the hashed one
+        user.password = hash;
+        next();
+    });
+});
+
+
+});
+
+UserSchema.methods.comparePassword = function(candidatePassword, cb) {
+    bcrypt.compare(candidatePassword, this.password, function(err, isMatch) {
+        if (err) return cb(err);
+        cb(null, isMatch);
+    });
+};
 /* the schema is useless so far we need to create a model using it*/
 module.exports = mongoose.model('User', UserSchema);
 
