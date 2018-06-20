@@ -1,9 +1,3 @@
-//create a schema for Token
-var TokenSchema = new Schema({
-    uId: String,
-    token: String,
-    timestamp: Number
-});
 
 //create a schema for notesTable
 var notesTableSchema = new Schema({

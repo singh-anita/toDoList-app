@@ -1,19 +1,16 @@
 import React, { Component } from 'react';
 import { ListGroup, ListGroupItem, Button, FormGroup, FormControl, ControlLabel, Checkbox } from "react-bootstrap";
-//import { Link,Redirect } from 'react-router-dom';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
-import TodoItem from './todoItem';
 import './css/dashboard.css';
 import axios from 'axios';
-import TitleListGroupComp from './titlelistgroup'
-//import UpdateTitleComp from './updateTitle'
+import TitleListGroupComp from './titlelistgroup';
+
 class TodoTitle extends Component {
     constructor(props) {
         super(props);
         this.state = {
             list: [],
             value: ''
-            //  titleObjArray:[]
         };
         this.addTitle = this.addTitle.bind(this);
     }
@@ -32,9 +29,9 @@ class TodoTitle extends Component {
 
                 this.setState({ list: response.data })
                 console.log(this.state.list);
-                if(this.state.list.length) {
+                if (this.state.list.length) {
                     this.props.updateState(false);
-                } 
+                }
             })
             .catch((err) => {
                 // if (err.response.status == 401) {
@@ -64,18 +61,18 @@ class TodoTitle extends Component {
             }
         })
             .then((response) => {
-               // this.props.checkStateChanged("checkStateChanged",response.data.title)
+                // this.props.checkStateChanged("checkStateChanged",response.data.title)
                 console.log("axios", response.data);
                 if (response.status === 200) {
                     var titleObjArray = this.state.list.slice();
                     console.log(titleObjArray)
                     titleObjArray.push({ _id: response.data._id, title: response.data.title })
                     if (this.state.value.length > 0) {
-                    this.setState({ list: titleObjArray, value: '' })
-                    console.log(this.state.list)
-                    this.props.updateState(false)
-                }
-                
+                        this.setState({ list: titleObjArray, value: '' })
+                        console.log(this.state.list)
+                        this.props.updateState(false)
+                    }
+
                 }
             })
             .catch(err => {
@@ -87,54 +84,37 @@ class TodoTitle extends Component {
         this.setState({
             value: e.target.value
         })
-        // console.log("VALUE : ", this.state.value)
+        //  console.log("VALUE : ", this.state.value)
     }
-/*Define a callback in my parent which takes the data I need in as a parameter.*/
-t(objFromupdatingTitle) {
-    console.log("list", this.state.list)
-    var templist = this.state.list.slice()
-    // console.log("chhhh",templist)
-    console.log("qq", objFromupdatingTitle)
+    /*Define a callback in my parent which takes the data I need in as a parameter.*/
+    t(objFromupdatingTitle) {
+        console.log("list", this.state.list)
+        var templist = this.state.list.slice()
+        // console.log("chhhh",templist)
+        console.log("qq", objFromupdatingTitle)
 
-    templist.map((tO, idx) => {
-      if (tO._id === objFromupdatingTitle._id) {
-        tO.title = objFromupdatingTitle.title
-      }
-    })
-    this.setState({ list: templist })
-    // this.setState({  list: objFromupdatingcontent})
-  }
- u(objofnotestitle) {
-    var templist = this.state.list.slice()
-    console.log("chhhh", objofnotestitle)
-    this.setState({ list:   objofnotestitle })
-  }
-  /*for checkbox*/
-  chkboxupdate(index)
-  {
-    console.log("checkbox", index)
-    // console.log("CHECKBOX CHANGED : ", this.props.list[index].isChecked);
-   // var objToChange = this.props.list.slice();
-    // console.log( "changevar",objToChange)
-   // objToChange[index].isChecked = !this.props.list[index].isChecked;
-    //this.setState({ list: objToChange })
-  }
-    /*titleselected(key, e) {
-        axios.get('http://localhost:3001/getnotecontent/' + key ,
-        {
-           headers: {
-             "Authorization": localStorage.getItem('authtoken')
-           }
-         })
-           .then((response) => {
-               this.props.x(response.data, key) //Call the callback using this.props.[callback] in the child 
-    
-               console.log("responsedata",response.data,key)
-             }).catch(function (error) {
-        console.log("error",error.response);
-    });*/
-
-    // }
+        templist.map((tO, idx) => {
+            if (tO._id === objFromupdatingTitle._id) {
+                tO.title = objFromupdatingTitle.title
+            }
+        })
+        this.setState({ list: templist })
+        // this.setState({  list: objFromupdatingcontent})
+    }
+    u(objofnotestitle) {
+        var templist = this.state.list.slice()
+        console.log("chhhh", objofnotestitle)
+        this.setState({ list: objofnotestitle })
+    }
+    /*for checkbox*/
+    chkboxupdate(index) {
+        console.log("checkbox", index)
+        // console.log("CHECKBOX CHANGED : ", this.props.list[index].isChecked);
+        // var objToChange = this.props.list.slice();
+        // console.log( "changevar",objToChange)
+        // objToChange[index].isChecked = !this.props.list[index].isChecked;
+        //this.setState({ list: objToChange })
+    }
 
     render() {
         return (
@@ -150,20 +130,20 @@ t(objFromupdatingTitle) {
                         <div className="addlist">
                             <input type="text" onChange={(e) => { this.update(e) }} className="form-control add-todo" placeholder="Add todo" value={this.state.value} />
                         </div>
-                        <Button onClick={this.addTitle}  disabled={!this.state.value}>
-                            <span>Add Project</span>
+                        <Button onClick={this.addTitle} disabled={!this.state.value}>
+                            <span>Add Title</span>
                         </Button>
                     </div>
                     <div className="allTitlelists">
-                    <ListGroup >
-                        {
-                            this.state.list.map((currentTitle, index) => {
-                                return (
-                         <TitleListGroupComp titleEntry={currentTitle} index={index} t={this.t.bind(this)}  u={this.u.bind(this)} chkboxupdate={this.chkboxupdate.bind(this)}/>
-                                );
-                            })
-                        }
-                    </ListGroup>
+                        <ListGroup >
+                            {
+                                this.state.list.map((currentTitle, index) => {
+                                    return (
+                                        <TitleListGroupComp titleEntry={currentTitle} index={index} t={this.t.bind(this)} u={this.u.bind(this)} chkboxupdate={this.chkboxupdate.bind(this)} />
+                                    );
+                                })
+                            }
+                        </ListGroup>
                     </div>
                 </div>
 
