@@ -37,6 +37,7 @@ class Signup extends Component {
         passwordLengthZero: true,
         isPasswordMatching: false,
         disabled: true,
+        emailIdExist:false,
         loading: false
     };
 
@@ -119,7 +120,7 @@ class Signup extends Component {
                 })
         }
         else {
-            this.setState({ isInvalidEmail: true },
+            this.setState({ isInvalidEmail: true ,emailIdExist:false},
                 () => {
                     this.allSet()
                 })
@@ -135,7 +136,7 @@ class Signup extends Component {
             "match? : ", this.state.isPasswordMatching);
 
         if (!this.state.isInvalidEmail && !this.state.passwordLengthZero && !this.state.usernameLengthZero &&
-            this.state.isPasswordMatching) {
+            this.state.isPasswordMatching ) {
             this.setState({ disabled: false }, function () {
                 console.log('callbacked ', this.state)
 
@@ -157,9 +158,7 @@ class Signup extends Component {
     }
 
     handleSubmit(e) {
-
-        //  alert("huhuhu")
-        this.setState({loading: true})
+         this.setState({loading: true})
         if (!this.allSet) {
             e.preventDefault();
             return;
@@ -173,6 +172,7 @@ class Signup extends Component {
         };
         // console.log("TOKEN IN SIGNUP : ", localStorage.getItem("authtoken"))
         /*Posting Data From React to the Node Service*/
+          // if(req.headers.authorization === 'null' && Object.keys(req.body) != 0){
         axios.post('http://localhost:3001/signup', obj, {
             headers: {
                 "Authorization": localStorage.getItem('authtoken')
@@ -180,18 +180,32 @@ class Signup extends Component {
         })
             .then((response) => {
                 console.log(response.data.authtoken);
-                 if(response.status == 200){
+                console.log(response.data.message)
+//                 if (response.status === 200)
+// {
+    if(response.data.message == 'already')
+    {
+      console.log(response.data.message);
+      console.log('alredyklll');
+      this.setState({loading: false});
+      this.setState({ emailIdExist: true })
 
+    }
+    else
+    {
                 if (!localStorage.getItem('authtoken')) {
                     //save it in localStorage
                     localStorage.setItem('authtoken', (response.data.authtoken));
                     console.log("Saved in localStorage ");
                     console.log("RESPONSE : ", response)
                     // setTimeout(() => {
+                        
                         this.setState
                             ({
                                 redirect: true
                             })
+                    
+
                     // }, 1000)
 
                     // this.setState({
@@ -200,6 +214,8 @@ class Signup extends Component {
                     // })
                 }
             }
+        // }
+      
        
             })
             .catch(function (error) {
@@ -226,8 +242,8 @@ class Signup extends Component {
                                     </Col>
                                     <Col md={9}>
                                         <FormControl onChange={this.handleEmailChange.bind(this)} name="email" type="email" placeholder="Email" value={this.state.email} />
-                                        {(this.state.isInvalidEmail && this.state.touched) ? <div>Invalid email format!</div> : null}
-
+                                        {(this.state.isInvalidEmail && this.state.touched ) ? <div>Invalid email format!</div> : null}
+                                        <span>{(this.state.emailIdExist && !this.state.isInvalidEmail)?<span>email Id already exist</span>:null}</span>
                                     </Col>
 
                                 </FormGroup>

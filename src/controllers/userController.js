@@ -3,31 +3,30 @@ var bcrypt = require('bcrypt');
 // const saltRounds = 10;
 var r = require('../tokenGenerate');
 var Token = require('../models/tokenModel');
-
+var tokenChecking =require('../functionality/tokenCheckingmw')
 
 /*----- FOR SIGN UP - create user accounts-------*/
 exports.addNewUser = (req, res) => {
 
     console.log("from clientside data coming: ", req.body)
-
+    console.log(Object.keys(req.body))
     var emailId = req.body.email;
     var username = req.body.username;
     var password = req.body.password;
-    // User.find({}).then((user)=>{
-    //     console.log(user)
-    // },(err)=>{
-    //     console.log(err)
-    // })
+
+    console.log("headers",req.headers.authorization);
+    if(req.headers.authorization === 'null' && Object.keys(req.body) != 0){
     User.findOne({ emailId: emailId })
     .then(users => {
         console.log("ss",users)
+    //     if (users == null)
+    //     res.status(200).json({ message: 'not there' });
+    // else{
+    //     res.status(200).json({emailId:users.emailId, message: 'already' });
+  //  }
+        // emailId:users.emailId})
         if(!users){
-        // var userdata = {};
-        // userdata.emailId = req.body.email;
-        // userdata.username = req.body.username;
-        // userdata.password =req.body.password;
-        //bcrypt.hashSync(password, saltRounds);
-        // userdata.password = hashpass(req.body.password, saltRounds);//
+            // res.status(200).json({ message: 'not there' });
         var hash = bcrypt.hashSync(password, global.salt);
 
         const userdata = {
@@ -39,7 +38,7 @@ exports.addNewUser = (req, res) => {
         // Save User in the database
         var tokendata = {};
         User(userdata).save()
-        .then(data => {
+        .then((data)=> {
         // if (err) throw err
         console.log("userdata SAVE SUCCESSFUL",data)
         
@@ -48,19 +47,25 @@ exports.addNewUser = (req, res) => {
         tokendata.token = r.randomToken()
         tokendata.timestamp = new Date().getTime()
         
-        Token(tokendata).save(function (err, data) {
-        if (err) throw err
-        console.log("token SAVE SUCCESSFUL")
-        setTimeout(() =>{ 
+        Token(tokendata).save().
+        then((data)=>{
         res.status(200).send({ authtoken: data.token, message: 'Create user successful with token'});
-        }, 2000)
         })
+        .catch((err)=>{
+        res.status(500).send({error:"Some error occured while creating the token",message:""});
         })
+        
+        })
+        .catch((err)=>{
+            res.status(500).send({error:"Some error occured while creating the user",message:""});
+            })
         }
         else{
         console.log("else part")
-        res.status(409).send({error:"email Id already exist",message:""});
-        //res.status(401).send({error:"email Id already exist"})
+    //    if (users.emailId == req.body.emailId)
+          res.status(200).json({emailId:users.emailId, message: 'already' });
+      //  res.status(409).send({error:"email Id already exist",message:""});
+        //res.status(400).send({error:"email Id already exist"})
         //redirect to dashboard
         }
         
@@ -68,11 +73,32 @@ exports.addNewUser = (req, res) => {
     .catch(err => {
         console.log('Error occured not able to find emailid from mongoose ', err);
         res.status(500).send({error:err,message:"Some error occurred while creating the User"});
-        //errmessage
-        //res.redirect("/signup");
     })
-        
+} 
+else{
+    Token.findOne({ token : req.headers.authorization })
+    .then((doc, err) => {
+        if (doc) {
+            console.log("Got token")
+            User.findOne({ _id : doc.uId })
+                .then((user) => {
+                    if (user) {
+                        console.log("Got user",user)
+                        res.status(200).send({ message: 'Got user'});
+                    }
+                  
+                })
+                .catch(()=>
+            {
+                    res.status(409).send({error:"didnt get user",message:""});
+                    console.log("didnt get user")
+               
+            })
+        }
+    })
+}    
 }
+
 
 /*---------------------FOR login---------------------------*/
 exports.userLogin = (req, res) => {
@@ -86,15 +112,9 @@ exports.userLogin = (req, res) => {
     User.findOne({ emailId: emailId })
     .then((userObj) => {
         console.log("userobj find", userObj);
-        if(!userObj){
-            console.log("Invalid username or password entered!")
-            res.status(400).send({error:"Invalid username or password entered",message:""});
-        }
-        else{
+      
         var tokenobj = {};
-       // var validPassword  = bcrypt.compareSync(hashPassword, userObj.password);
-        
-        console.log("IS PASSWORD MATCHING : ", validPassword);
+      
      if (bcrypt.compareSync(password, userObj.password)) {
         tokenobj.uId = userObj._id;
         tokenobj.token = r.randomToken();
@@ -110,7 +130,6 @@ exports.userLogin = (req, res) => {
         console.log("PASSWORD not MATCHING ");
         res.status(401).send({ error: "please enter valid password" });
     }
-}
     })
     .catch(err => {
         console.log('Error occured not able to find emailid and password from mongoose ', err);
@@ -122,22 +141,16 @@ exports.userLogin = (req, res) => {
 
 exports.logout = (req,res)=>{
     console.log("logoutbody",req.body);
-    console.log("tokenlog", req.headers.authorization);
+  //  console.log("tokenlog", req.headers.authorization);
     var token =req.headers.authorization;
     Token.findOneAndRemove({token:token })
     .then((tokendoc)=>{
-        console.log("tokenobject", tokendoc);
+        //console.log("tokenobject", tokendoc);
         res.status(200).send({ message: "token deleted successfully!" });
     })
     .catch((err)=>{
         res.status(400).send({error:err,message:"Some Error occured "});
     })
-   /* deleteUserToken(req.headers.authorization).then((tokendoc, err) => {
-        // if (!tokendoc) {res.status(404).send({message:"token not found "})}
-        console.log("tokenobject", tokendoc)
-        if (err) throw err;
-        res.status(200).send({ message: "token deleted successfully!" });
-    })*/
 }
 
 exports.dashboard = (req,res)=>{
