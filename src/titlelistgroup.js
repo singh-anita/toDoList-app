@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import { ListGroup, ListGroupItem, Button, FormGroup, FormControl, ControlLabel, Checkbox } from "react-bootstrap";
+import { ListGroupItem, Button} from "react-bootstrap";
 //import { Link,Redirect } from 'react-router-dom';
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
-import TodoItem from './todoItem';
+import {  Link } from 'react-router-dom';
 import './css/dashboard.css';
 import axios from 'axios';
 import DeleteTitleComp from './deleteTitle'
@@ -23,7 +22,8 @@ class TitleListGroupComp extends Component {
           updatevalue: ''
         }
         this.resetForm =this.resetForm.bind(this)
-        this.updateTitle = this.updateTitle .bind(this);
+        this.updateTitle = this.updateTitle.bind(this);
+        this.linkOnClick = this.linkOnClick.bind(this);
         this.updateChange= this.updateChange.bind(this);
       }
       resetForm(){
@@ -41,15 +41,13 @@ class TitleListGroupComp extends Component {
   }
   /*updating contentlist items on button click */
   updateTitle () {
-    console.log("halo sree")
-    alert("clicked")
    console.log("TITLEENTRY", this.props.titleEntry)
   var updateObj = {
        title: this.state.updatevalue,
             titleId:this.props.titleEntry._id
   };
   console.log("OBJECT : ", updateObj)
-  axios.post('http://localhost:3001/updatenotetitle', updateObj, {
+  axios.put('http://localhost:3001/updatenotetitle', updateObj, {
     headers: {
       "Authorization": localStorage.getItem('authtoken')
     }
@@ -72,6 +70,10 @@ class TitleListGroupComp extends Component {
     });
   }
 
+  linkOnClick(){
+    this.props.updateState(false)
+  }
+
   render() {
 return (
         <ListGroupItem bsStyle="success" >
@@ -79,7 +81,7 @@ return (
         <div className="descript col-md-7 col-lg-7">
         {
          (this.state.show)?
-       <Link to={'/todoItem/' + this.props.titleEntry._id} value={this.props.titleEntry.title} key={this.props.titleEntry._id}> {this.props.titleEntry.title}</Link>
+       <Link onClick={ this.linkOnClick } to={'/todoItem/' + this.props.titleEntry._id} value={this.props.titleEntry.title} key={this.props.titleEntry._id}> {this.props.titleEntry.title}</Link>
         :
          <input type="text"  onChange={this.updateChange} value={this.state.updatevalue} className="form-control edit" placeholder="Edit Title" />
         
@@ -89,17 +91,17 @@ return (
           {
             (this.state.show)?
               <span>
-               <Button style={{ marginRight: '6px', marginTop: '0px'}} onClick={this.editingtitle.bind(this)}>
+               <Button bsStyle="info" style={{ marginRight: '6px', marginTop: '0px'}} onClick={this.editingtitle.bind(this)}>
                 <i className="glyphicon glyphicon-pencil"></i>
             </Button>
-            <DeleteTitleComp titleId={this.props.titleEntry._id} u={this.props.u}/>
+            <DeleteTitleComp titleId={this.props.titleEntry._id} u={this.props.u} updateState={this.props.updateState}/>
             </span>:
             <span>
-              <Button style={{ marginRight: '6px' }} onClick={this.updateTitle}>
-              <i class="glyphicon glyphicon-ok"></i>
+              <Button  bsStyle="success" style={{ marginRight: '6px' }} onClick={this.updateTitle} disabled={!this.state.updatevalue}>
+              <i className="glyphicon glyphicon-ok"></i>
              </Button>
-              <Button onClick={this.resetForm}>
-              <i class="glyphicon glyphicon-remove"></i>
+              <Button bsStyle="warning"  onClick={this.resetForm}>
+              <i className="glyphicon glyphicon-remove"></i>
               </Button>
               </span>
           }
@@ -111,24 +113,3 @@ return (
   }
 }
 export default TitleListGroupComp;
-
-{/* <div className="description">
-          {
-            (this.state.show) ?
-              <Checkbox onChange={this.checkStateChanged.bind(this, this.props.index)} checked={this.props.isChecked} value={this.props.noteEntry.content}>{this.props.noteEntry.content}</Checkbox>
-              : <div className="editcontent col-md-12 col-lg-12" >
-                <input type="text" onChange={this.updateChange} value={this.state.updatevalue} className="form-control edit" placeholder="Edit Content" />
-              </div>
-          }
-        </div>
-        <div className="action">
-          {
-            (this.state.show) ?
-              <span>
-                <Button style={{ marginRight: '15px', marginTop: '3px' }} onClick={this.editingcontent.bind(this)}>
-                  <i className="glyphicon glyphicon-pencil"></i>
-                </Button>
-                <DeleteContentComp item={this.props.noteEntry.id} /></span> :
-              <Button style={{ float: 'left' }} onClick={this.updateContent}>Save</Button>
-          }
-        </div> */}

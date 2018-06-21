@@ -1,10 +1,7 @@
 import React, { Component } from 'react';
-import { ListGroup, ListGroupItem, Button, FormGroup, FormControl, ControlLabel, Checkbox } from "react-bootstrap";
-import { Link } from 'react-router-dom';
+import { ListGroup, Button } from "react-bootstrap";
 import './css/dashboard.css';
-import Headerhome from './logout';
 import axios from 'axios';
-import { set } from 'mongoose';
 import ListGroupComp from './listgroupComponent';
 class TodoItem extends Component {
 
@@ -18,9 +15,6 @@ class TodoItem extends Component {
     this.addContent = this.addContent.bind(this);
     this.handleChange = this.handleChange.bind(this);
   }
-
-  /*selecting checkbox on selection*/
-
 
   componentWillMount() {
     console.log("currprops", this.props.params.id);
@@ -39,6 +33,10 @@ class TodoItem extends Component {
           if (response.status === 200) {
          //   console.log("what obj",response.data)
             this.setState({ list: response.data.entries,titlename:response.data.note_title })
+          // if (this.state.list.length) {
+              //console.log( "check",this.props.initialRender(false))
+              this.props.updateState(false);
+         // }
           }
         }).catch(function (error) {
           console.log("error", error.response);
@@ -68,7 +66,11 @@ class TodoItem extends Component {
           //Call the callback using this.props.[callback] in the child 
           console.log("for title check",response.data)
           if (response.status === 200) {
-            this.setState({ list: response.data.entries ,titlename:response.data.note_title})
+            // this.setState({ list: response.data.entries ,titlename:response.data.note_title})
+            
+            this.props.updateState(false);
+            //this.props.updateState(false)
+           // this.props.initialRender(false);
           }
         }).catch(function (error) {
           console.log("error", error.response);
@@ -77,7 +79,7 @@ class TodoItem extends Component {
   }
   /*adding contentlist items on button click*/
   addContent() {
-    var updatedContents;
+    // var updatedContents;
     console.log("props", this.props.params)
     //  if (this.state.value.length > 0) {
     /* updatedContents = [...this.state.list, { content: this.state.description, isChecked: false }];
@@ -90,7 +92,7 @@ class TodoItem extends Component {
       content: this.state.description, isChecked: false,
       titleid: this.props.params.id
     };
-    console.log("OBJECT : ", contentObj)
+    console.log("OBJECT : ", contentObj);
     axios.post('http://localhost:3001/addnotecontent', contentObj, {
       headers: {
         "Authorization": localStorage.getItem('authtoken')
@@ -99,9 +101,9 @@ class TodoItem extends Component {
       .then((response) => {
         console.log("axios", response.data);
         if (response.status === 200) {
-          const temp = this.state.list.slice()
-          console.log(temp)
-          temp.push({ content: response.data.content, isChecked: response.data.isChecked, id: response.data._id })
+          const temp = this.state.list.slice();
+          console.log(temp);
+          temp.push({ content: response.data.content, isChecked: response.data.isChecked, id: response.data._id });
           if (this.state.description.length > 0) {
           this.setState({ list: temp, description: '' })
           // this.props.handleItems(this.props.noteObj.id,contentObj.content,contentObj.isChecked)
@@ -129,8 +131,10 @@ class TodoItem extends Component {
 
     templist.map((c, idx) => {
       if (c.id === objFromupdatingcontent._id) {
+        return(
         c.content = objFromupdatingcontent.content,
           c.isChecked = objFromupdatingcontent.isChecked
+        )
       }
     })
     this.setState({ list: templist })
@@ -153,20 +157,20 @@ class TodoItem extends Component {
     })
   }
 
-  checkboxChange(objToChange){
-    this.setState({ list: objToChange })
+  checkboxChange(idx){
+
+    var temp = this.state.list.slice();
+
+    temp.map((n,i) =>{
+      if(i == idx){
+        n.isChecked = !n.isChecked
+      }
+    })
+
+    this.setState({ list: temp })
   }
   render() {
-    var edit = {
-      marginRight: '15px',
-      marginTop: '3px'
-    }
-    var delet = {
-      marginTop: '3px'
-    }
-    var content = {
-      marginBottom: '10px'
-    }
+
 
     return (
     
@@ -183,7 +187,7 @@ class TodoItem extends Component {
             <input type="text" className="form-control add-todo" value={this.state.description} onChange={(e) => { this.handleChange(e) }} placeholder="Add items" />
           </div>
           <div className="col-md-3">
-            <Button onClick={this.addContent} style={{ marginBottom: '20px' }} disabled={!this.state.description}>Add Item</Button>
+            <Button bsStyle="success" onClick={this.addContent} style={{ marginBottom: '20px' }} disabled={!this.state.description}>Add Item</Button>
           </div>
         </div>
       
@@ -193,12 +197,13 @@ class TodoItem extends Component {
           
           <ListGroup componentClass="ul">
             {
-              (this.state.list.length != 0)
+              (this.state.list.length !== 0)
                 ? (
 
                   this.state.list.map((noteEntry, index) => {
+                    {console.log("noteentry:",noteEntry)}
                     return (
-                      <ListGroupComp noteEntry={noteEntry} index={index} x={this.x.bind(this)} y={this.y.bind(this)} checkboxChange={this.checkboxChange.bind(this)} />
+                      <ListGroupComp key={index} noteEntry={noteEntry} index={index} x={this.x.bind(this)} y={this.y.bind(this)} checkboxChange={this.checkboxChange.bind(this)} />
                     )
                   })
                 )

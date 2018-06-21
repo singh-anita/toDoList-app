@@ -1,14 +1,10 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import './App.css';
-import  HeaderLogout from './logout';
 import Signup from './signup';
 import Login from './login';
 import UserProfile from './useprofile';
-import MaterialIcon from 'react-google-material-icons'
 import Dashboard from './dashboard';
-import TodoItem from './todoItem';
 
 class App extends Component {
   render() {

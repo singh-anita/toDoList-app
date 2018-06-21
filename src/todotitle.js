@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { ListGroup, ListGroupItem, Button, FormGroup, FormControl, ControlLabel, Checkbox } from "react-bootstrap";
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import { ListGroup, Button} from "react-bootstrap";
 import './css/dashboard.css';
 import axios from 'axios';
 import TitleListGroupComp from './titlelistgroup';
@@ -29,9 +28,9 @@ class TodoTitle extends Component {
 
                 this.setState({ list: response.data })
                 console.log(this.state.list);
-                if (this.state.list.length) {
+              /*  if (this.state.list.length) {
                     this.props.updateState(false);
-                }
+                }*/
             })
             .catch((err) => {
                 // if (err.response.status == 401) {
@@ -70,7 +69,6 @@ class TodoTitle extends Component {
                     if (this.state.value.length > 0) {
                         this.setState({ list: titleObjArray, value: '' })
                         console.log(this.state.list)
-                        this.props.updateState(false)
                     }
 
                 }
@@ -130,7 +128,7 @@ class TodoTitle extends Component {
                         <div className="addlist">
                             <input type="text" onChange={(e) => { this.update(e) }} className="form-control add-todo" placeholder="Add todo" value={this.state.value} />
                         </div>
-                        <Button onClick={this.addTitle} disabled={!this.state.value}>
+                        <Button bsStyle="success" onClick={this.addTitle} disabled={!this.state.value}>
                             <span>Add Title</span>
                         </Button>
                     </div>
@@ -139,7 +137,7 @@ class TodoTitle extends Component {
                             {
                                 this.state.list.map((currentTitle, index) => {
                                     return (
-                                        <TitleListGroupComp titleEntry={currentTitle} index={index} t={this.t.bind(this)} u={this.u.bind(this)} chkboxupdate={this.chkboxupdate.bind(this)} />
+                                        <TitleListGroupComp key ={index}  updateState={this.props.updateState} titleEntry={currentTitle} index={index} t={this.t.bind(this)} u={this.u.bind(this)} chkboxupdate={this.chkboxupdate.bind(this)} />
                                     );
                                 })
                             }

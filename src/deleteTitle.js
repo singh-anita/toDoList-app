@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import { ListGroup, ListGroupItem, Button, FormGroup, FormControl, ControlLabel, Checkbox } from "react-bootstrap";
-import { Link } from 'react-router-dom';
+import { Button} from "react-bootstrap";
 import './css/dashboard.css';
 import axios from 'axios';
-import { set } from 'mongoose';
+
 class DeleteTitleComp extends Component {
     /*deleting content onclick content item deleted*/
     constructor(props) {
@@ -19,9 +18,12 @@ class DeleteTitleComp extends Component {
             }
         })
             .then((response) => {
+                console.log("daass",response.data)
                if (response.status === 200) {
                     console.log("axios delete title", response.data);
                    this.props.u(response.data)
+                   if(Object.keys(response.data).length ==0)
+                   this.props.updateState(true);
                 //}*/
                }
             })
@@ -31,7 +33,7 @@ class DeleteTitleComp extends Component {
     }
     render() {
         return (
-            <Button style={{ marginTop: '0px'}} onClick={this.deletetitle.bind(this)}>
+            <Button  bsStyle="danger" style={{ marginTop: '0px'}} onClick={this.deletetitle.bind(this)}>
                 <i className="glyphicon glyphicon-trash"></i>
             </Button>
         )

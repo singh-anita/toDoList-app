@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import { Button, Form, Col, FormGroup, FormControl, HelpBlock, ControlLabel } from "react-bootstrap";
-import { Link, Redirect } from 'react-router-dom';
+import { Button, Form, Col, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
+import { Link } from 'react-router-dom';
 import Header from './header';
 import axios from 'axios';
 import validator from 'validator';
@@ -17,7 +17,7 @@ class Signup extends Component {
             }
         }).then(
             (response) => {
-                if (response.status == 200) {
+                if (response.status === 200) {
                     this.setState({ redirect: true })
                 }
             }
@@ -183,10 +183,10 @@ class Signup extends Component {
                 console.log(response.data.message)
 //                 if (response.status === 200)
 // {
-    if(response.data.message == 'already')
+    if(response.data.message === 'already')
     {
       console.log(response.data.message);
-      console.log('alredyklll');
+      console.log('ready');
       this.setState({loading: false});
       this.setState({ emailIdExist: true })
 
@@ -197,15 +197,9 @@ class Signup extends Component {
                     //save it in localStorage
                     localStorage.setItem('authtoken', (response.data.authtoken));
                     console.log("Saved in localStorage ");
-                    console.log("RESPONSE : ", response)
+                    console.log("RESPONSE : ", response);
                     // setTimeout(() => {
-                        
-                        this.setState
-                            ({
-                                redirect: true
-                            })
-                    
-
+                        this.setState({redirect: true})
                     // }, 1000)
 
                     // this.setState({
@@ -215,8 +209,6 @@ class Signup extends Component {
                 }
             }
         // }
-      
-       
             })
             .catch(function (error) {
                 console.log("ERROR : " ,error.response)

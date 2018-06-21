@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Button, Form, Col, FormGroup, FormControl, InputGroup, ControlLabel, Glyphicon } from "react-bootstrap";
-import { Link,Redirect } from 'react-router-dom';
+import { Button, Form, Col, FormGroup, FormControl, InputGroup, Glyphicon } from "react-bootstrap";
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { ClipLoader } from 'react-spinners';
 
@@ -129,7 +129,7 @@ class Login extends Component {
             .then( (response) => {
                      console.log("loginresponse",response);
                              // if (!localStorage.authtoken) {
-                     if(response.status == 200){
+                     if(response.status === 200){
                            // console.log(response.data.authtoken);
                         localStorage.setItem('authtoken', (response.data.authtoken));
                 this.setState({
@@ -148,7 +148,7 @@ class Login extends Component {
                     <div className="panel panel-info" >
                         <div className="panel-heading">
                             <div className="panel-title">Sign In</div>
-                            <div><a href="#">Forgot password?</a></div>
+                            {/* <div><a href="#">Forgot password?</a></div> */}
                         </div>
                         
                         <div style={{ paddingTop: 30 }} className="panel-body" >

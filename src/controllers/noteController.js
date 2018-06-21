@@ -59,7 +59,7 @@ exports.updateTitle= function (req, res) {
         // Find note and update it with the request body
     notesTable.findOneAndUpdate({ _id : req.body.titleId } , { $set : { title: req.body.title } }, { new: true })
         .then((updatedoc) => {
-            console.log("doc",updatedoc)
+            console.log("updatedoc",updatedoc)
             res.status(200).send(updatedoc);
         })
         .catch(()=>{
@@ -70,64 +70,31 @@ exports.updateTitle= function (req, res) {
 
 /*---------------------------deleting the title---------------------------------------------------*/
 exports.deleteTitle= function (req, res) {
-    // console.log("dddd")
      console.log("reqofdeleteetitle", req.params);
     console.log("Users coming", res.locals.user)
      var user = res.locals.user;
      var titlesToSend = []
-
+        
         notesTable.findOneAndUpdate({ _id : req.params.id},{ $set : {deletedAt : Date.now()} }, {new : true} )
         .then((deleteTitle, err) => {
              console.log("doc",deleteTitle);
              notesTable.find({ uId:deleteTitle.uId , deletedAt: { $eq: null} })
-             .then((NoteTitles, err) => {
-                 // console.log("content", NoteContents)
+             .then((NoteTitles) => {
                  titlesToSend = NoteTitles.map((note) => {
                    return { _id: note._id, title: note.title ,deletedAt:note.deletedAt}
                   //return note
                 })
                  res.status(200).send(titlesToSend);
              })
+             .catch(()=>{
+                res.status(400).send({error: err, message:"Note not found for user" });
+               })
             // res.status(200).send({message:"successfully deleted"});*/
       })
+      .catch(()=>{
+        res.status(400).send({error: err, message:"Error deleting note" });
+       })
    
  
  }
-/*----------------get contents basedon titleid of particular note-------------------*/
-/*app.get('/getnotecontent/:id', tokenCheckingMiddleware, function (req, res, next) {
-    console.log("req", req.headers);
-  console.log("reqnoteconetnt", req.params);
-   console.log("Users coming", res.locals.user)
-    var user = res.locals.user;
-    if (user) {
-        var objToSend = {
-            note_title : '',
-            entries : []
-        }
-    getSingleTitle(req.params.id).then((notesobj,err) =>{
-  
-        objToSend.note_title=notesobj.title;
-
-        getAllContentofNote(req.params.id).then((NoteContents, err) => {
-           
-            NoteContents.map((individualTitleentry, noteContentIdx) => {
-                objToSend.entries.push({ id: individualTitleentry._id, content: individualTitleentry.content, isChecked: individualTitleentry.isChecked }
-                )
-                  console.log("sending : ", individualTitleentry)
-            })
-            console.log("drftre",objToSend)
-            res.status(200).send(objToSend);
-
-        })
-        // console.log("drftdfgdse",objToSend)
-       // res.status(200).send(objToSend);
-    })
-  
-       
-    }
-    else {
-        console.log("content not deleted")
-        res.status(401).send({ error: "not able to get id" });
-    }
-})*/
 

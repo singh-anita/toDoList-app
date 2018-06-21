@@ -1,11 +1,8 @@
 import React, { Component } from 'react';
-import { ListGroup, ListGroupItem, Button, FormGroup, FormControl, ControlLabel, Checkbox } from "react-bootstrap";
-import { BrowserRouter as Router, Switch, Route, Link, Redirect } from 'react-router-dom';
 import TodoItem from './todoItem';
 import TodoTitle from './todotitle';
 import './css/dashboard.css';
 import HeaderLogout from './logout';
-import axios from 'axios';
 class Dashboard extends Component {
     constructor(props) {
         super(props);
@@ -14,7 +11,6 @@ class Dashboard extends Component {
             isInitialRender: true,
             currentlySelected: null,
             noteTitleId: null
-            // selectedTitleContents
         };
 
     }
@@ -39,23 +35,24 @@ class Dashboard extends Component {
 
     updateState(value){
         console.log("calling update state")
-
         this.setState({isInitialRender: value})
     }
-    
+    // initialRender(value){
+    //     console.log("calling update state")
+    //     this.setState({isInitialRender: value})
+    // }
 
     render() {
-        //console.log('rendering dashboard')
         return (
             <div className="container">
                 <header className="page-title">
                     <HeaderLogout />
                     {this.renderRedirect()}
                 </header>
-                <TodoTitle checkStateChanged={this.checkStateChanged.bind(this)} updateState={this.updateState.bind(this)}/>
+                <TodoTitle checkStateChanged={this.checkStateChanged.bind(this)} updateState={this.updateState.bind(this)} />
                 { this.state.isInitialRender 
                     ? null 
-                    : <TodoItem params={this.props.match.params} initialRender= {this.state.isInitialRender}/>
+                    : <TodoItem params={this.props.match.params} />
                 }
              
                 </div>
@@ -64,5 +61,6 @@ class Dashboard extends Component {
 }
 export default Dashboard;
 
-// <Route path='/todoItem' render = {(props) => <TodoItem {...props} />} />
-//<TodoTitle/>
+
+//updateState={this.updateState.bind(this)}
+// initialRender= {this.initialRender.bind(this)}

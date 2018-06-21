@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
-import { ListGroup, ListGroupItem, Button, FormGroup, FormControl, ControlLabel, Checkbox } from "react-bootstrap";
-import { Link } from 'react-router-dom';
+import { Button} from "react-bootstrap";
 import './css/dashboard.css';
 import axios from 'axios';
-import { set } from 'mongoose';
 
 class DeleteContentComp extends Component {
     /*deleting content onclick content item deleted*/
@@ -31,7 +29,7 @@ class DeleteContentComp extends Component {
   }
     render() {
         return(
-            <Button style={{ marginTop: '3px' }} onClick={this.deletingcontent.bind(this)}>
+            <Button  bsStyle="danger" style={{ marginTop: '3px' }} onClick={this.deletingcontent.bind(this)}>
             <i className="glyphicon glyphicon-trash"></i>
           </Button> 
         )
