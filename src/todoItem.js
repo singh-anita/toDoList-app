@@ -31,12 +31,10 @@ class TodoItem extends Component {
           // this.props.x(response.data) 
           //Call the callback using this.props.[callback] in the child 
           if (response.status === 200) {
-         //   console.log("what obj",response.data)
             this.setState({ list: response.data.entries,titlename:response.data.note_title })
-          // if (this.state.list.length) {
-              //console.log( "check",this.props.initialRender(false))
+          /*if (this.state.list.length) {
               this.props.updateState(false);
-         // }
+         }*/
           }
         }).catch(function (error) {
           console.log("error", error.response);
@@ -66,10 +64,9 @@ class TodoItem extends Component {
           //Call the callback using this.props.[callback] in the child 
           console.log("for title check",response.data)
           if (response.status === 200) {
-            // this.setState({ list: response.data.entries ,titlename:response.data.note_title})
+            this.setState({ list: response.data.entries ,titlename:response.data.note_title})
             
-            this.props.updateState(false);
-            //this.props.updateState(false)
+         //   this.props.updateState(false);
            // this.props.initialRender(false);
           }
         }).catch(function (error) {
@@ -123,7 +120,7 @@ class TodoItem extends Component {
   }
 
   /*Define a callback in my parent which takes the data I need in as a parameter.*/
-  x(objFromupdatingcontent) {
+  updateContentCallback(objFromupdatingcontent) {
     console.log("list", this.state.list)
     var templist = this.state.list.slice()
     // console.log("chhhh",templist)
@@ -140,7 +137,7 @@ class TodoItem extends Component {
     this.setState({ list: templist })
     // this.setState({  list: objFromupdatingcontent})
   }
-  y(objFromcontent) {
+  todoContentcallBack(objFromcontent) {
     // console.log("list", this.state.list)
     var templist = this.state.list.slice()
     console.log("chhhh", objFromcontent)
@@ -203,7 +200,7 @@ class TodoItem extends Component {
                   this.state.list.map((noteEntry, index) => {
                     {console.log("noteentry:",noteEntry)}
                     return (
-                      <ListGroupComp key={index} noteEntry={noteEntry} index={index} x={this.x.bind(this)} y={this.y.bind(this)} checkboxChange={this.checkboxChange.bind(this)} />
+                      <ListGroupComp key={index} noteEntry={noteEntry} index={index} updateContentCallback={this.updateContentCallback.bind(this)}  callBackFromtodoItem={this.todoContentcallBack.bind(this)} checkboxChange={this.checkboxChange.bind(this)} />
                     )
                   })
                 )

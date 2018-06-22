@@ -21,7 +21,7 @@ class DeleteTitleComp extends Component {
                 console.log("daass",response.data)
                if (response.status === 200) {
                     console.log("axios delete title", response.data);
-                   this.props.u(response.data)
+                   this.props.callBackFromtodoTitle(response.data)
                    if(Object.keys(response.data).length ==0)
                    this.props.updateState(true);
                 //}*/

@@ -108,17 +108,17 @@ exports.contentChecked = function (req, res) {
 }
 /*---------------------------deleting the content---------------------------------------------------*/
 exports.deleteNoteContent = function (req, res) {
-    // console.log("reqofdeletecontent", req.params);
+     console.log("reqofdeletecontent", req.params.id);
     var user = res.locals.user;
     var contentToSend = []
     if (user) {
-        contentTable.findOneAndRemove({ _id: req.params.id })// removeNotesContent based on contentid
+        contentTable.findOneAndRemove({ _id: req.params.id })// removeNotesContent 
             .then((deletecontent) => {
-                console.log("doc", deletecontent)
+                console.log("doccontent", deletecontent)
 
                 contentTable.find({ notesID: deletecontent.notesID })// getAllContentofNote-->get all contents using titleid-
                     .then((NoteContents) => {
-                        // console.log("content", NoteContents)
+                         console.log("notecontents", NoteContents)
                         NoteContents.map((individualTitleentry, noteContentIdx) => {
                             contentToSend.push({ id: individualTitleentry._id, content: individualTitleentry.content, isChecked: individualTitleentry.isChecked }
                             )

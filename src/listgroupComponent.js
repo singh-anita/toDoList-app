@@ -9,18 +9,14 @@ import DeleteContentComp from './deleteContent';
 class ListGroupComp extends Component {
 
   componentDidMount() {
-    this.setState({ updatevalue: this.props.noteEntry.content },
-      () => {
-        this.baseState = this.state
-      })
+    this.setState({ updatevalue: this.props.noteEntry.content })
   }
-
   constructor(props) {
     super(props);
     this.state = {
       show: true,
-      updatevalue: '',
-      updatevalueLengthZero: false,
+      updatevalue: ''
+      // updatevalueLengthZero: false,
     }
     // preserve the initial state in a new object
 
@@ -33,7 +29,7 @@ class ListGroupComp extends Component {
   //  console.log("-------------THIS PROPS : ", this.props.noteEntry, this.props.index)
   // }
   resetForm() {
-    this.setState(this.baseState)
+    this.setState({show: !this.state.show ,updatevalue : this.props.noteEntry.content })
   }
   /*editing content onclick inputbox comes with button*/
   editingcontent() {
@@ -90,7 +86,7 @@ class ListGroupComp extends Component {
       .then((response) => {
         console.log("axios", response.data);
         if (response.status === 200) {
-          this.props.x(response.data)   //Call the callback using this.props.[callback] in the child 
+          this.props.updateContentCallback(response.data)   //Call the callback using this.props.[callback] in the child 
           this.setState({ show: true })
         }
       })
@@ -117,7 +113,7 @@ class ListGroupComp extends Component {
                 <Button  bsStyle="info" style={{ marginRight: '15px', marginTop: '3px' }} onClick={this.editingcontent.bind(this)}>
                   <i className="glyphicon glyphicon-pencil"></i>
                 </Button>
-                <DeleteContentComp item={this.props.noteEntry.id} y={this.props.y} /></span> :
+                <DeleteContentComp item={this.props.noteEntry.id} callBackFromtodoItem={this.props.callBackFromtodoItem} /></span> :
               <span> <Button bsStyle="success"  style={{ float: 'left' }} onClick={this.updateContent} disabled={!this.state.updatevalue}>Save</Button>
                 <Button  bsStyle="warning" style={{ marginBottom: '20px', marginLeft: '5px' }} onClick={this.resetForm}>Cancel</Button></span>
           }

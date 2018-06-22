@@ -20,7 +20,7 @@ class DeleteContentComp extends Component {
         .then((response) => {
           if (response.status === 200) {
                       // console.log("axios", response.data);
-             this.props.y(response.data)
+             this.props.callBackFromtodoItem(response.data)
           }
        })
        .catch(err => {

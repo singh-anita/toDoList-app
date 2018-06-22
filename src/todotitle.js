@@ -28,9 +28,9 @@ class TodoTitle extends Component {
 
                 this.setState({ list: response.data })
                 console.log(this.state.list);
-              /*  if (this.state.list.length) {
+                if (this.state.list.length) {
                     this.props.updateState(false);
-                }*/
+                }
             })
             .catch((err) => {
                 // if (err.response.status == 401) {
@@ -64,11 +64,13 @@ class TodoTitle extends Component {
                 console.log("axios", response.data);
                 if (response.status === 200) {
                     var titleObjArray = this.state.list.slice();
-                    console.log(titleObjArray)
+                   // console.log(titleObjArray)
                     titleObjArray.push({ _id: response.data._id, title: response.data.title })
+                    // console.log("note table title is adding?",titleObjArray)
                     if (this.state.value.length > 0) {
                         this.setState({ list: titleObjArray, value: '' })
                         console.log(this.state.list)
+                        this.props.updateState(false)
                     }
 
                 }
@@ -85,7 +87,7 @@ class TodoTitle extends Component {
         //  console.log("VALUE : ", this.state.value)
     }
     /*Define a callback in my parent which takes the data I need in as a parameter.*/
-    t(objFromupdatingTitle) {
+    updateTitleCallback(objFromupdatingTitle) {
         console.log("list", this.state.list)
         var templist = this.state.list.slice()
         // console.log("chhhh",templist)
@@ -99,7 +101,7 @@ class TodoTitle extends Component {
         this.setState({ list: templist })
         // this.setState({  list: objFromupdatingcontent})
     }
-    u(objofnotestitle) {
+    todoTitlecallBack(objofnotestitle) {
         var templist = this.state.list.slice()
         console.log("chhhh", objofnotestitle)
         this.setState({ list: objofnotestitle })
@@ -137,7 +139,7 @@ class TodoTitle extends Component {
                             {
                                 this.state.list.map((currentTitle, index) => {
                                     return (
-                                        <TitleListGroupComp key ={index}  updateState={this.props.updateState} titleEntry={currentTitle} index={index} t={this.t.bind(this)} u={this.u.bind(this)} chkboxupdate={this.chkboxupdate.bind(this)} />
+                                        <TitleListGroupComp key ={index}  updateState={this.props.updateState} titleEntry={currentTitle} index={index} updateTitleCallback={this.updateTitleCallback.bind(this)} callBackFromtodoTitle={this.todoTitlecallBack.bind(this)} chkboxupdate={this.chkboxupdate.bind(this)} />
                                     );
                                 })
                             }
