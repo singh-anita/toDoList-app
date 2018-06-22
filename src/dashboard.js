@@ -23,10 +23,7 @@ class Dashboard extends Component {
         console.log("calling update state")
         this.setState({isInitialRender: value})
     }
-    // initialRender(value){
-    //     console.log("calling update state")
-    //     this.setState({isInitialRender: value})
-    // }
+  
 
     render() {
         let {
@@ -50,5 +47,3 @@ class Dashboard extends Component {
 export default Dashboard;
 
 
-//updateState={this.updateState.bind(this)}
-// initialRender= {this.initialRender.bind(this)}

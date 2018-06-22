@@ -9,8 +9,6 @@ exports.addNewContent = function (req, res) {
         content: req.body.content,
         isChecked: req.body.isChecked
     };
-
-    //  if (user) {
     contentTable(content).save()
         .then((notecontent) => {
             console.log("note content : ", notecontent)
@@ -26,7 +24,6 @@ exports.getNoteAllContent = function (req, res) {
     console.log("reqnoteconetnt", req.params);
     console.log("Users coming", res.locals.user)
     var user = res.locals.user;
-    // if (user) {
     var objToSend = {
         note_title: '',
         entries: []
@@ -97,15 +94,7 @@ exports.contentChecked = function (req, res) {
                // res.status(200).send({ isChecked: ! contentObj.isChecked })
                 // res.status(200).send(updateCheck);
             })
-    // contentTable.findOneAndUpdate(
-    //     { _id: req.params.id },
-    //     { $set: { isChecked: !isChecked } },
-    //     { new: true }
-    // )  // update checkbox
-    //     .then((updateCheck) => {
-    //         console.log("doc", updateCheck);
-    //         res.status(200).send(updateCheck);
-    //     })
+  
 }
 /*---------------------------deleting the content---------------------------------------------------*/
 exports.deleteNoteContent = function (req, res) {
@@ -127,7 +116,6 @@ exports.deleteNoteContent = function (req, res) {
                         // console.log("sending", contentToSend)
                         res.status(200).send(contentToSend);
                     })
-                // res.status(200).send({message:"successfully deleted"});
             })
     }
     else {

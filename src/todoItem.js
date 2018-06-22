@@ -32,10 +32,6 @@ class TodoItem extends Component {
           //Call the callback using this.props.[callback] in the child 
           if (response.status === 200) {
             this.setState({ list: response.data.entries,titlename:response.data.note_title })
-           // this.props.history.push('/dashboard');
-          /*if (this.state.list.length) {
-              this.props.updateState(false);
-         }*/
           }
         }).catch(function (error) {
           console.log("error", error.response);
@@ -52,8 +48,7 @@ class TodoItem extends Component {
       id
     } = nextProps.params
      if (id && this.props.params.id !== id) {
-// if((Object.keys(nextProps).length)){
-      // call todoitems using id
+
       axios.get('http://localhost:3001/getnotecontent/' + id,
         {
           headers: {
@@ -61,14 +56,11 @@ class TodoItem extends Component {
           }
         })
         .then((response) => {
-          // this.props.x(response.data) 
           //Call the callback using this.props.[callback] in the child 
           console.log("for title check",response.data)
           if (response.status === 200) {
             this.setState({ list: response.data.entries ,titlename:response.data.note_title})
-            
-         //   this.props.updateState(false);
-           // this.props.initialRender(false);
+
           }
         }).catch(function (error) {
           console.log("error", error.response);
@@ -77,15 +69,7 @@ class TodoItem extends Component {
   }
   /*adding contentlist items on button click*/
   addContent() {
-    // var updatedContents;
-    console.log("props", this.props.params)
-    //  if (this.state.value.length > 0) {
-    /* updatedContents = [...this.state.list, { content: this.state.description, isChecked: false }];
-     this.setState({
-       list: updatedContents,
-       description: '',
-       // selectedTitleContents: ''
-     });*/
+
     var contentObj = {
       content: this.state.description, isChecked: false,
       titleid: this.props.params.id
@@ -104,14 +88,13 @@ class TodoItem extends Component {
           temp.push({ content: response.data.content, isChecked: response.data.isChecked, id: response.data._id });
           if (this.state.description.length > 0) {
           this.setState({ list: temp, description: '' })
-          // this.props.handleItems(this.props.noteObj.id,contentObj.content,contentObj.isChecked)
           }
         }
       })
       .catch(err => {
         console.error(err);
       });
-    // }
+
   }
   /*adding content inputbox value change*/
   handleChange(e) {
@@ -136,10 +119,9 @@ class TodoItem extends Component {
       }
     })
     this.setState({ list: templist })
-    // this.setState({  list: objFromupdatingcontent})
   }
   todoContentcallBack(objFromcontent) {
-    // console.log("list", this.state.list)
+
     var templist = this.state.list.slice()
     console.log("chhhh", objFromcontent)
 
@@ -191,8 +173,7 @@ class TodoItem extends Component {
       
         
         <div className="contentlist" style={{ marginTop: '105px' }}>
-          {/*this.selectedcontents()*/}
-          
+
           <ListGroup componentClass="ul">
             {
               (this.state.list.length !== 0)

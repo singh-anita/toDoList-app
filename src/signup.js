@@ -18,6 +18,7 @@ class Signup extends Component {
         }).then(
             (response) => {
                 if (response.status === 200) {
+                    console.log("signup response",response.data)
                     this.props.history.push('/dashboard');
                 }
             }
@@ -37,7 +38,7 @@ class Signup extends Component {
         passwordLengthZero: true,
         isPasswordMatching: false,
         disabled: true,
-        emailIdExist:false,
+        emailIdExist: false,
         loading: false
     };
 
@@ -120,7 +121,7 @@ class Signup extends Component {
                 })
         }
         else {
-            this.setState({ isInvalidEmail: true ,emailIdExist:false},
+            this.setState({ isInvalidEmail: true, emailIdExist: false },
                 () => {
                     this.allSet()
                 })
@@ -136,7 +137,7 @@ class Signup extends Component {
             "match? : ", this.state.isPasswordMatching);
 
         if (!this.state.isInvalidEmail && !this.state.passwordLengthZero && !this.state.usernameLengthZero &&
-            this.state.isPasswordMatching ) {
+            this.state.isPasswordMatching) {
             this.setState({ disabled: false }, function () {
                 console.log('callbacked ', this.state)
 
@@ -153,7 +154,7 @@ class Signup extends Component {
 
 
     handleSubmit(e) {
-         this.setState({loading: true})
+        this.setState({ loading: true })
         if (!this.allSet) {
             e.preventDefault();
             return;
@@ -166,8 +167,7 @@ class Signup extends Component {
             password: this.state.password
         };
         // console.log("TOKEN IN SIGNUP : ", localStorage.getItem("authtoken"))
-        /*Posting Data From React to the Node Service*/
-          // if(req.headers.authorization === 'null' && Object.keys(req.body) != 0){
+        // if(req.headers.authorization === 'null' && Object.keys(req.body) != 0){
         axios.post('http://localhost:3001/signup', obj, {
             headers: {
                 "Authorization": localStorage.getItem('authtoken')
@@ -176,37 +176,35 @@ class Signup extends Component {
             .then((response) => {
                 console.log(response.data.authtoken);
                 console.log(response.data.message)
-//                 if (response.status === 200)
-// {
-    if(response.data.message === 'already')
-    {
-      console.log(response.data.message);
-      console.log('ready');
-      this.setState({loading: false});
-      this.setState({ emailIdExist: true })
+                //                 if (response.status === 200)
+                // {
+                if (response.data.message === 'already') {
+                    console.log(response.data.message);
+                    console.log('ready');
+                    this.setState({ loading: false });
+                    this.setState({ emailIdExist: true })
 
-    }
-    else
-    {
-                if (!localStorage.getItem('authtoken')) {
-                    //save it in localStorage
-                    localStorage.setItem('authtoken', (response.data.authtoken));
-                    console.log("Saved in localStorage ");
-                    console.log("RESPONSE : ", response);
-                    // setTimeout(() => {
-                        this.props.history.push('/dashboard')
-                    // }, 1000)
-
-                    // this.setState({
-                    //     redirect: true,
-                    //     loading:true
-                    // })
                 }
-            }
-        // }
+                else {
+                    if (!localStorage.getItem('authtoken')) {
+                        this.setState({ loading: false });
+                        //save it in localStorage
+                        localStorage.setItem('authtoken', (response.data.authtoken));
+                        console.log("Saved in localStorage ");
+                        console.log("RESPONSE : ", response);
+                       
+                        // setTimeout(() => {
+                        this.props.history.push('/dashboard')
+                        // }, 1000)
+                        // this.setState({
+                        //     loading:true
+                        // })
+                    }
+                }
+                // }
             })
             .catch(function (error) {
-                console.log("ERROR : " ,error.response)
+                console.log("ERROR : ", error.response)
             });
     }
 
@@ -229,8 +227,8 @@ class Signup extends Component {
                                     </Col>
                                     <Col md={9}>
                                         <FormControl onChange={this.handleEmailChange.bind(this)} name="email" type="email" placeholder="Email" value={this.state.email} />
-                                        {(this.state.isInvalidEmail && this.state.touched ) ? <div>Invalid email format!</div> : null}
-                                        <span>{(this.state.emailIdExist && !this.state.isInvalidEmail)?<span>email Id already exist</span>:null}</span>
+                                        {(this.state.isInvalidEmail && this.state.touched) ? <div>Invalid email format!</div> : null}
+                                        <span>{(this.state.emailIdExist && !this.state.isInvalidEmail) ? <span>email Id already exist</span> : null}</span>
                                     </Col>
 
                                 </FormGroup>
@@ -263,18 +261,18 @@ class Signup extends Component {
                                 </FormGroup>
                                 <FormGroup>
                                     <Col smOffset={3} mdOffset={3} sm={9} md={9}>
-                
+
                                         <Button type="button" bsStyle="success" disabled={this.state.disabled} onClick={(e) => this.handleSubmit(e)}>
-                                        {/* <ClipLoader size={17} color={'#123abc'} /><span style={{marginLeft:'8px'}}>Loading</span> */}
-                                             {(this.state.loading) ? <span><ClipLoader size={17} color={'#123abc'}/><span style={{marginLeft:'8px'}}>Loading</span></span>:<span>SignUp</span>} 
-                                            </Button>
+                                            {/* <ClipLoader size={17} color={'#123abc'} /><span style={{marginLeft:'8px'}}>Loading</span> */}
+                                            {(this.state.loading) ? <span><ClipLoader size={17} color={'#123abc'} /><span style={{ marginLeft: '8px' }}>Loading</span></span> : <span>SignUp</span>}
+                                        </Button>
                                         <span style={{ marginLeft: '8px' }}>OR</span>
                                     </Col>
                                 </FormGroup>
                                 <FormGroup>
                                     <Col smOffset={3} mdOffset={3} sm={9} md={9} >
                                         <Button type="submit" bsStyle="primary">
-                                        {/* <ClipLoader size={17} color={'#123abc'} />  */}
+                                            {/* <ClipLoader size={17} color={'#123abc'} />  */}
                                             Sign Up with Stackoverflow</Button>
 
 

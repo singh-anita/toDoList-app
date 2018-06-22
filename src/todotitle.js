@@ -33,22 +33,14 @@ class TodoTitle extends Component {
                 }*/
             })
             .catch((err) => {
-                // if (err.response.status == 401) {
                 console.log("error : ", err)
-                // }
+      
             })
     }
 
     /*on add click will add the title*/
     addTitle(e) {
-        /*  var updatedList;
-           if (this.state.value.length > 0) {
-           updatedList = [...this.state.list, { title: this.state.value, list: [] }]
-               this.setState({
-                  list: updatedList,
-                   value: ''
-               });
-           }*/
+  
         var obj = {
             title: this.state.value,
             list: []
@@ -60,13 +52,12 @@ class TodoTitle extends Component {
             }
         })
             .then((response) => {
-                // this.props.checkStateChanged("checkStateChanged",response.data.title)
                 console.log("axios", response.data);
                 if (response.status === 200) {
                     var titleObjArray = this.state.list.slice();
-                   // console.log(titleObjArray)
+
                     titleObjArray.push({ _id: response.data._id, title: response.data.title })
-                    // console.log("note table title is adding?",titleObjArray)
+            
                     if (this.state.value.length > 0) {
                         this.setState({ list: titleObjArray, value: '' })
                         console.log(this.state.list)
@@ -84,7 +75,6 @@ class TodoTitle extends Component {
         this.setState({
             value: e.target.value
         })
-        //  console.log("VALUE : ", this.state.value)
     }
     /*Define a callback in my parent which takes the data I need in as a parameter.*/
     updateTitleCallback(objFromupdatingTitle) {
@@ -109,15 +99,7 @@ class TodoTitle extends Component {
             this.setState({ list:  objofnotestitle })
             })
     }
-    /*for checkbox*/
-    chkboxupdate(index) {
-        console.log("checkbox", index)
-        // console.log("CHECKBOX CHANGED : ", this.props.list[index].isChecked);
-        // var objToChange = this.props.list.slice();
-        // console.log( "changevar",objToChange)
-        // objToChange[index].isChecked = !this.props.list[index].isChecked;
-        //this.setState({ list: objToChange })
-    }
+   
 
     render() {
         return (
@@ -142,7 +124,7 @@ class TodoTitle extends Component {
                             {
                                 this.state.list.map((currentTitle, index) => {
                                     return (
-                                        <TitleListGroupComp history={this.props.history} key ={index} titleEntry={currentTitle} index={index} updateTitleCallback={this.updateTitleCallback.bind(this)} callBackFromtodoTitle={this.todoTitlecallBack.bind(this)} chkboxupdate={this.chkboxupdate.bind(this)} />
+                                        <TitleListGroupComp history={this.props.history} key ={index} titleEntry={currentTitle} index={index} updateTitleCallback={this.updateTitleCallback.bind(this)} callBackFromtodoTitle={this.todoTitlecallBack.bind(this)} />
                                     );
                                 })
                             }

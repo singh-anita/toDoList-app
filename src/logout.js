@@ -1,42 +1,30 @@
 import React, { Component } from "react";
-import { Navbar, Nav} from "react-bootstrap";
-import { Link} from 'react-router-dom';
+import { Navbar, Nav } from "react-bootstrap";
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 class HeaderLogout extends Component {
     constructor(props) {
         super(props);
     }
     loggingOutFunction() {
-       // console.log("Logging out function");
-        // localStorage.removeItem('authtoken');
-       axios.post('http://localhost:3001/logout', {},
-        {
-           headers: {
-             "Authorization": localStorage.getItem('authtoken')
-           }
-         })
-           .then( (response) => {
-                    console.log("loginresponse",response.data);
-                            // if (!localStorage.authtoken) {
-                    if(response.status === 200){
-                        console.log("Logging out function");
-                          // console.log(response.data.authtoken);
-                          localStorage.removeItem('authtoken');
-                          this.props.history.push("/login")
-               }
-           })
-           .catch(function (error) {
-               console.log(error.response);
-           });
-   }
-       // localStorage.removeItem('authtoken');
-        //   this.setState({ redirect: true }) 
-   /* renderRedirect(){
-            if (this.state.redirect) {
-                this.props.history.push("/login")
-                //return <Redirect to='/dashboard'/>
-            } style={{flaot:'right',marginRight:'45px!important'}}
-        }*/
+
+        axios.post('http://localhost:3001/logout', {},
+            {
+                headers: {
+                    "Authorization": localStorage.getItem('authtoken')
+                }
+            })
+            .then((response) => {
+                if (response.status === 200) {
+                    localStorage.removeItem('authtoken');
+                    console.log("Logging out function");
+                }
+            })
+            .catch(function (error) {
+                console.log(error.response);
+            });
+    }
+
     render() {
         return (
             <Navbar>
@@ -46,9 +34,9 @@ class HeaderLogout extends Component {
                     </Navbar.Brand>
                 </Navbar.Header>
                 <Nav>
-                   
+
                     <Link onClick={this.loggingOutFunction}
-                        className="btn btn-info btn-lg" to="/">
+                        className="btn btn-info btn-lg" to="/login">
                         <span className="glyphicon glyphicon-log-out"></span>Logout
                     </Link>
                 </Nav>

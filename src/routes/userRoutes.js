@@ -8,9 +8,5 @@ module.exports = (app) => {
     //  app.post('',user.findAllUsers);
     // app.get("/signup", user.siguprelated);
     app.post('/login', user.userLogin);
-
-    app.get("/dashboard", user.dashboard);
     app.post('/logout', user.logout);
-    //  app.get("/logout", user.logout);
-
 }

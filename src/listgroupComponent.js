@@ -4,7 +4,7 @@ import './css/dashboard.css';
 import axios from 'axios';
 import './css/todoItem.css';
 import DeleteContentComp from './deleteContent';
-// import TodoItem from './todoItem';
+
 
 class ListGroupComp extends Component {
 
@@ -18,19 +18,17 @@ class ListGroupComp extends Component {
       updatevalue: ''
       // updatevalueLengthZero: false,
     }
-    // preserve the initial state in a new object
 
     this.resetForm = this.resetForm.bind(this)
     this.updateChange = this.updateChange.bind(this);
     this.updateContent = this.updateContent.bind(this);
   }
 
-  //componentWillMount() {
-  //  console.log("-------------THIS PROPS : ", this.props.noteEntry, this.props.index)
-  // }
+
   resetForm() {
     this.setState({show: !this.state.show ,updatevalue : this.props.noteEntry.content })
   }
+
   /*editing content onclick inputbox comes with button*/
   editingcontent() {
     this.setState({ show: !this.state.show })
@@ -45,9 +43,6 @@ class ListGroupComp extends Component {
 
   }
   checkStateChanged(index, e) {
-    console.log("CHECKBOX CHANGED :", this.props.noteEntry)
-    // this.props.checkboxChange(this.props.noteEntry[index].isChecked)
-    console.log(localStorage.getItem('authtoken'))
     axios.put('http://localhost:3001/checkStateChange/'+this.props.noteEntry.id,{},
     {
       headers: {
@@ -57,16 +52,12 @@ class ListGroupComp extends Component {
      .then((response) => {
        if (response.status === 200) {
                  console.log("chkaa", response.data);
-                 this.props.checkboxChange(index)
-        //  this.props.y(response.data)
+                 this.props.checkboxChange(index);
        }
     })
     .catch(err => {
       console.error(err);
     }); 
-    // var objToChange = this.props.noteEntry.slice();
-    // objToChange[index].isChecked = !this.props.list[index].isChecked;
-    // this.props.checkboxChange(objToChange)
 
   }
   /*updating contentlist items on button click */

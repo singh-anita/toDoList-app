@@ -1,5 +1,6 @@
 const User = require('../models/userModel');
-var bcrypt = require('bcrypt');
+//var bcrypt = require('bcrypt');
+const crypto = require('crypto')
 const saltRounds = 10;
 var r = require('../tokenGenerate');
 var Token = require('../models/tokenModel');
@@ -8,17 +9,17 @@ var tokenChecking = require('../functionality/tokenCheckingmw')
 /*----- FOR SIGN UP - create user accounts-------*/
 exports.addNewUser = (req, res) => {
 
-    console.log("from clientside data coming: ", req.body)
-    console.log(Object.keys(req.body))
+    console.log("from clientside data coming: ", req.body);
+    console.log("headers", req.headers.authorization);
+    // console.log(Object.keys(req.body))
     var emailId = req.body.email;
     var username = req.body.username;
     var password = req.body.password;
 
-    console.log("headers", req.headers.authorization);
     if (req.headers.authorization === 'null' && Object.keys(req.body) != 0) {
         User.findOne({ emailId: emailId })
             .then(users => {
-                console.log("ss", users)
+                console.log("users object", users);
                 //     if (users == null)
                 //     res.status(200).json({ message: 'not there' });
                 // else{
@@ -27,8 +28,9 @@ exports.addNewUser = (req, res) => {
                 // emailId:users.emailId})
                 if (!users) {
                     // res.status(200).json({ message: 'not there' });
-                    var hash = bcrypt.hashSync(password, saltRounds);
-
+                   var hash = crypto.createHash('sha256').update(password).digest('hex');
+                   // var hash = bcrypt.hashSync(password, saltRounds);
+                 ///  userCredObject.password = crypto.createHash('sha256').update(req.body.passwordSignUp).digest('hex');
                     const userdata = {
                         emailId: emailId,
                         username: username,
@@ -76,6 +78,7 @@ exports.addNewUser = (req, res) => {
             })
     }
     else {
+        console.log("is coming,",req.headers.authorization)
         Token.findOne({ token: req.headers.authorization })
             .then((doc, err) => {
                 if (doc) {
@@ -113,8 +116,9 @@ exports.userLogin = (req, res) => {
             console.log("userobj find", userObj);
 
             var tokenobj = {};
-
-            if (bcrypt.compareSync(password, userObj.password)) {
+//console.log("hashing----",bcrypt.compareSync(password, userObj.password))
+var hashedPassword = crypto.createHash('sha256').update(password).digest('hex');
+            if (hashedPassword===userObj.password) {
                 tokenobj.uId = userObj._id;
                 tokenobj.token = r.randomToken();
                 tokenobj.timestamp = new Date().getTime();
@@ -152,19 +156,18 @@ exports.logout = (req, res) => {
         })
 }
 
-exports.dashboard = (req, res) => {
-}
+
 
 // Retrieve and return all users from the database.
-exports.findAllUsers = (req, res) => {
+/*exports.findAllUsers = (req, res) => {
     User.find()
         .then(users => {
             res.status(200).send({ users });
         }).catch(err => {
-            console.log(err)
-            /* res.status(500).send({
+
+            res.status(500).send({
                  message: "Some error occurred while retrieving users."
-             });*/
+             });
         });
-};
+};*/
 

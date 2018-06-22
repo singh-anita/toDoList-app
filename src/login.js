@@ -130,8 +130,10 @@ class Login extends Component {
                              // if (!localStorage.authtoken) {
                      if(response.status === 200){
                            // console.log(response.data.authtoken);
+                         
                         localStorage.setItem('authtoken', (response.data.authtoken));
-                        this.props.history.push('/dashboard')
+                        //this.setState({loading: true})
+                        this.props.history.push('/dashboard');
                 }
             })
             .catch(function (error) {
