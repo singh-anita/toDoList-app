@@ -5,10 +5,6 @@ import axios from 'axios';
 class HeaderLogout extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-
-        redirect: false  
-        }
     }
     loggingOutFunction() {
        // console.log("Logging out function");
@@ -26,9 +22,7 @@ class HeaderLogout extends Component {
                         console.log("Logging out function");
                           // console.log(response.data.authtoken);
                           localStorage.removeItem('authtoken');
-              this.setState({
-                   redirect: true
-                 })
+                          this.props.history.push("/login")
                }
            })
            .catch(function (error) {
@@ -41,7 +35,7 @@ class HeaderLogout extends Component {
             if (this.state.redirect) {
                 this.props.history.push("/login")
                 //return <Redirect to='/dashboard'/>
-            }
+            } style={{flaot:'right',marginRight:'45px!important'}}
         }*/
     render() {
         return (
@@ -52,6 +46,7 @@ class HeaderLogout extends Component {
                     </Navbar.Brand>
                 </Navbar.Header>
                 <Nav>
+                   
                     <Link onClick={this.loggingOutFunction}
                         className="btn btn-info btn-lg" to="/">
                         <span className="glyphicon glyphicon-log-out"></span>Logout

@@ -32,6 +32,7 @@ class TodoItem extends Component {
           //Call the callback using this.props.[callback] in the child 
           if (response.status === 200) {
             this.setState({ list: response.data.entries,titlename:response.data.note_title })
+           // this.props.history.push('/dashboard');
           /*if (this.state.list.length) {
               this.props.updateState(false);
          }*/
@@ -50,8 +51,8 @@ class TodoItem extends Component {
     let {
       id
     } = nextProps.params
-    if (id && this.props.params.id !== id) {
-
+     if (id && this.props.params.id !== id) {
+// if((Object.keys(nextProps).length)){
       // call todoitems using id
       axios.get('http://localhost:3001/getnotecontent/' + id,
         {

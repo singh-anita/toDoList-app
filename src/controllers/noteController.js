@@ -82,7 +82,6 @@ exports.deleteTitle= function (req, res) {
              .then((NoteTitles) => {
                  titlesToSend = NoteTitles.map((note) => {
                    return { _id: note._id, title: note.title ,deletedAt:note.deletedAt}
-                  //return note
                 })
                  res.status(200).send(titlesToSend);
              })

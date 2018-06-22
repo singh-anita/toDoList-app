@@ -98,7 +98,7 @@ return (
                <Button bsStyle="info" style={{ marginRight: '6px', marginTop: '0px'}} onClick={this.editTitleClick.bind(this)}>
                 <i className="glyphicon glyphicon-pencil"></i>
             </Button>
-            <DeleteTitleComp titleId={this.props.titleEntry._id} callBackFromtodoTitle={this.props.callBackFromtodoTitle} updateState={this.props.updateState}/>
+            <DeleteTitleComp history={this.props.history} titleId={this.props.titleEntry._id} callBackFromtodoTitle={this.props.callBackFromtodoTitle} />
             </span>:
             <span>
               <Button  bsStyle="success" style={{ marginRight: '6px' }} onClick={this.updateSubmitTitle} disabled={!this.state.updatevalue}>

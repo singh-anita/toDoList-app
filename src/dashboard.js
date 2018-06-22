@@ -7,7 +7,6 @@ class Dashboard extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            redirect: false,
             isInitialRender: true,
             currentlySelected: null,
             noteTitleId: null
@@ -16,22 +15,9 @@ class Dashboard extends Component {
     }
 
     checkStateChanged(obj) {
-        // alert('SHOWING HERE')
         this.setState({ noteTitle: obj })
     }
 
-    renderRedirect() {
-        if (this.state.redirect) {
-            this.props.history.push("/login")
-            //return <Redirect to='/dashboard'/>
-        }
-    }
-    /*Define a callback in my parent which takes the data I need in as a parameter.*/
-    // x() {
-    //  //   console.log(noteTitleId)
-    //  console.log(this.props.match.params)
-    //     this.setState({ currentlySelected: this.props.match.params, isInitialRender: false})
-    // }
 
     updateState(value){
         console.log("calling update state")
@@ -43,16 +29,18 @@ class Dashboard extends Component {
     // }
 
     render() {
+        let {
+            id
+        } = this.props.match.params
         return (
             <div className="container">
                 <header className="page-title">
                     <HeaderLogout />
-                    {this.renderRedirect()}
                 </header>
-                <TodoTitle checkStateChanged={this.checkStateChanged.bind(this)} updateState={this.updateState.bind(this)} />
-                { this.state.isInitialRender 
-                    ? null 
-                    : <TodoItem params={this.props.match.params} />
+                <TodoTitle history={this.props.history} checkStateChanged={this.checkStateChanged.bind(this)}  />
+                { id 
+                    ? <TodoItem params={this.props.match.params} /> 
+                    : null
                 }
              
                 </div>

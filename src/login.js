@@ -27,7 +27,6 @@ class Login extends Component {
             touched: false,
             isInvalidEmail: true,
             passwordLengthZero: true,
-            redirect: false,
             disabled: true,
             loading: false
         };
@@ -82,12 +81,12 @@ class Login extends Component {
                 })
         }
     }
-    renderRedirect(){
-        if(this.state.redirect){
-            //return <Redirect to='/dashboard'/>
-            this.props.history.push('/dashboard')
-        }
-    }
+    // renderRedirect(){
+    //     if(this.state.redirect){
+    //         //return <Redirect to='/dashboard'/>
+            
+    //     }
+    // }
     /* WHEN EVERYTHING IS RIGHT, EXECUTE THIS.... */
     allSet() {
         console.log("invalidEmail : ", this.state.isInvalidEmail,
@@ -132,9 +131,7 @@ class Login extends Component {
                      if(response.status === 200){
                            // console.log(response.data.authtoken);
                         localStorage.setItem('authtoken', (response.data.authtoken));
-                this.setState({
-                    redirect: true
-                  })
+                        this.props.history.push('/dashboard')
                 }
             })
             .catch(function (error) {
@@ -173,7 +170,7 @@ class Login extends Component {
                                 </FormGroup>
                                 <FormGroup style={{ marginTop: 10 }}>
                                     <Col sm={12} md={12}>
-                                   {this.renderRedirect()}
+                                  
                                         <Button id="btn-login" bsStyle="success" onClick={(e) => this.login(e)} disabled={this.state.disabled}>
                                         {(this.state.loading) ? <span><ClipLoader size={17} color={'#123abc'}/><span style={{marginLeft:'8px'}}>Loading</span></span>:<span>Login</span>} 
                                         </Button>

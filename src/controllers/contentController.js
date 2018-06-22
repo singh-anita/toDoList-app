@@ -31,6 +31,7 @@ exports.getNoteAllContent = function (req, res) {
         note_title: '',
         entries: []
     }
+    
     notesTable.findById({ _id: req.params.id })//getSingleNote with noteId
         .then((notesobj, err) => {
 

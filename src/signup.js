@@ -18,7 +18,7 @@ class Signup extends Component {
         }).then(
             (response) => {
                 if (response.status === 200) {
-                    this.setState({ redirect: true })
+                    this.props.history.push('/dashboard');
                 }
             }
         )
@@ -151,11 +151,6 @@ class Signup extends Component {
         }
     }
 
-    renderRedirect() {
-        if (this.state.redirect) {
-            this.props.history.push('/dashboard')
-        }
-    }
 
     handleSubmit(e) {
          this.setState({loading: true})
@@ -199,7 +194,7 @@ class Signup extends Component {
                     console.log("Saved in localStorage ");
                     console.log("RESPONSE : ", response);
                     // setTimeout(() => {
-                        this.setState({redirect: true})
+                        this.props.history.push('/dashboard')
                     // }, 1000)
 
                     // this.setState({
@@ -268,7 +263,6 @@ class Signup extends Component {
                                 </FormGroup>
                                 <FormGroup>
                                     <Col smOffset={3} mdOffset={3} sm={9} md={9}>
-                                        {this.renderRedirect()}
                 
                                         <Button type="button" bsStyle="success" disabled={this.state.disabled} onClick={(e) => this.handleSubmit(e)}>
                                         {/* <ClipLoader size={17} color={'#123abc'} /><span style={{marginLeft:'8px'}}>Loading</span> */}

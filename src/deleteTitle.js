@@ -9,7 +9,9 @@ class DeleteTitleComp extends Component {
         super(props);
        // console.log('deleted title --------------------', this.props);
     }
-
+    // componentDidMount(){
+    //     this.setState({ updatevalue : this.props.titleEntry.title })
+    //   }
     deletetitle() {
         console.log("OBJECT check: ", this.props.titleId)
        axios.delete('http://localhost:3001/deletenotetitle/' + this.props.titleId, {
@@ -22,8 +24,17 @@ class DeleteTitleComp extends Component {
                if (response.status === 200) {
                     console.log("axios delete title", response.data);
                    this.props.callBackFromtodoTitle(response.data)
-                   if(Object.keys(response.data).length ==0)
+                   this.props.history.push('/dashboard');
+                  // this.props.updateState(false);
+                 /* if(Object.keys(response.data).length ==0)
+                  this.props.updateState(true);*/
+                /*{
                    this.props.updateState(true);
+                }
+                else{
+                    this.props.updateState(false); 
+                }*/
+                //    this.props.history.push('/dashboard');
                 //}*/
                }
             })

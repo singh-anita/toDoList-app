@@ -28,9 +28,9 @@ class TodoTitle extends Component {
 
                 this.setState({ list: response.data })
                 console.log(this.state.list);
-                if (this.state.list.length) {
+             /*   if (this.state.list.length) {
                     this.props.updateState(false);
-                }
+                }*/
             })
             .catch((err) => {
                 // if (err.response.status == 401) {
@@ -70,7 +70,7 @@ class TodoTitle extends Component {
                     if (this.state.value.length > 0) {
                         this.setState({ list: titleObjArray, value: '' })
                         console.log(this.state.list)
-                        this.props.updateState(false)
+                     //   this.props.updateState(false)
                     }
 
                 }
@@ -104,7 +104,10 @@ class TodoTitle extends Component {
     todoTitlecallBack(objofnotestitle) {
         var templist = this.state.list.slice()
         console.log("chhhh", objofnotestitle)
-        this.setState({ list: objofnotestitle })
+       // this.setState({ list: objofnotestitle })
+        templist.map((c, idx) => {
+            this.setState({ list:  objofnotestitle })
+            })
     }
     /*for checkbox*/
     chkboxupdate(index) {
@@ -139,7 +142,7 @@ class TodoTitle extends Component {
                             {
                                 this.state.list.map((currentTitle, index) => {
                                     return (
-                                        <TitleListGroupComp key ={index}  updateState={this.props.updateState} titleEntry={currentTitle} index={index} updateTitleCallback={this.updateTitleCallback.bind(this)} callBackFromtodoTitle={this.todoTitlecallBack.bind(this)} chkboxupdate={this.chkboxupdate.bind(this)} />
+                                        <TitleListGroupComp history={this.props.history} key ={index} titleEntry={currentTitle} index={index} updateTitleCallback={this.updateTitleCallback.bind(this)} callBackFromtodoTitle={this.todoTitlecallBack.bind(this)} chkboxupdate={this.chkboxupdate.bind(this)} />
                                     );
                                 })
                             }
