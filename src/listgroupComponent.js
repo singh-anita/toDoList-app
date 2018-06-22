@@ -100,7 +100,8 @@ class ListGroupComp extends Component {
         <div className="description">
           {
             (this.state.show) ?
-              <Checkbox onChange={this.checkStateChanged.bind(this, this.props.index)} checked={this.props.noteEntry.isChecked} value={this.props.noteEntry.content}>{this.props.noteEntry.content}</Checkbox>
+              <Checkbox onChange={this.checkStateChanged.bind(this, this.props.index)} checked={this.props.noteEntry.isChecked} value={this.props.noteEntry.content}>
+              <span style={{ textDecorationLine: this.props.noteEntry.isChecked ? 'line-through' : 'none' }} >{this.props.noteEntry.content}</span></Checkbox>
               : <div className="editcontent col-md-12 col-lg-12" >
                 <input type="text" onChange={this.updateChange} value={this.state.updatevalue} className="form-control edit" placeholder="Edit Content" />
               </div>
