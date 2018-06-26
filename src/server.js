@@ -1,8 +1,10 @@
 var express = require('express'); // call express
 var app = express();  /* define our app using express*/
 var bodyParser = require("body-parser");
-//var { checkUserEmail, addnewUser, validPassword, newToken, getUId, getUserData, checkuId, deleteUserToken, insertTitle, getAllContentofNote, getNotesTitle, hashpass, insertNoteContent ,updateItems,removeNotesContent,updateTitles,deleteNotesTitle,getSingleTitle} = require('./models/userSchema');
-// const Users = require('../controllers/userController.js');
+const path = require('path');
+const multer = require('multer');
+const uuidv4 = require('uuid/v4');
+
 //global.salt = "$2b$20$qnRfTkFUVT1CEjzZkjMmGu";
 app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");

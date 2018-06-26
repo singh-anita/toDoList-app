@@ -3,6 +3,8 @@ import { ListGroup, Button } from "react-bootstrap";
 import './css/dashboard.css';
 import axios from 'axios';
 import ListGroupComp from './listgroupComponent';
+import AddNoteAttachmentsComponent from './addNoteAttachment';
+
 class TodoItem extends Component {
 
   constructor(props) {
@@ -180,7 +182,9 @@ class TodoItem extends Component {
                 : null
             }
           </ListGroup>
+        
         </div>
+        <AddNoteAttachmentsComponent/>
       </div>
 
     );
