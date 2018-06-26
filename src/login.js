@@ -6,18 +6,19 @@ import { ClipLoader } from 'react-spinners';
 
 class Login extends Component {
 
-    // componentWillMount(){
-    //     axios.post('http://localhost:3001/login',{}, {
-    //         headers: {
-    //             "Authorization": localStorage.getItem('authtoken')
-    //         }
-    //   }
-    // ).then((response) =>{
-    //   if(response.status == 200 ){
-    //   this.setState({  redirect : true })
-    //   }
-    // })
-    // }
+    componentWillMount(){
+        axios.post('http://localhost:3001/login',{}, {
+            headers: {
+                "Authorization": localStorage.getItem('authtoken')
+            }
+      }
+    ).then((response) =>{
+      if(response.status === 200 ){
+        //  console.log("hello",response.data)
+        this.props.history.push('/dashboard');
+      }
+    })
+    }
     constructor(props) {
         super(props);
 
@@ -34,15 +35,10 @@ class Login extends Component {
         this.handlePassword = this.handlePassword.bind(this);
         this.login = this.login.bind(this);
     }
-    // handleChange(e) {
-    //     this.setState({
-    //         [e.target.id]: e.target.value
-    //     });
-    // }
+
     handleEmailChange(event) {
         this.setState({ loginEmail: event.target.value, touched: true },
             () => {
-                console.log("IN HERE")
                 this.validateEmail();
             })
     }
@@ -81,29 +77,17 @@ class Login extends Component {
                 })
         }
     }
-    // renderRedirect(){
-    //     if(this.state.redirect){
-    //         //return <Redirect to='/dashboard'/>
-            
-    //     }
-    // }
+
     /* WHEN EVERYTHING IS RIGHT, EXECUTE THIS.... */
     allSet() {
-        console.log("invalidEmail : ", this.state.isInvalidEmail,
-            "passwordLengthZero : ", this.state.passwordLengthZero);
+     //   console.log("invalidEmail : ", this.state.isInvalidEmail, "passwordLengthZero : ", this.state.passwordLengthZero);
 
         if (!this.state.isInvalidEmail && !this.state.passwordLengthZero) {
-            this.setState({ disabled: false }, function () {
-                console.log('callbacked ', this.state)
-
-            })
+            this.setState({ disabled: false })
         }
         else {
-            console.log("all matched else ", this.state);
-            this.setState({ disabled: true }, function () {
-                console.log('callbacked ', this.state)
-
-            })
+           // console.log("all matched else ", this.state);
+            this.setState({ disabled: true })
         }
     }
 
@@ -117,7 +101,7 @@ class Login extends Component {
             loginEmail: this.state.loginEmail,
             loginPassword: this.state.loginPassword
         };
-         console.log(userobj)
+
         /*Posting Data From React to the Node Service*/
         axios.post('http://localhost:3001/login', userobj,
          {
@@ -125,18 +109,15 @@ class Login extends Component {
               "Authorization": localStorage.getItem('authtoken')
             }
           })
-            .then( (response) => {
-                     console.log("loginresponse",response);
+            .then((response) => {
                              // if (!localStorage.authtoken) {
                      if(response.status === 200){
-                           // console.log(response.data.authtoken);
-                         
+                           // console.log(response.data.authtoken); 
                         localStorage.setItem('authtoken', (response.data.authtoken));
-                        //this.setState({loading: true})
                         this.props.history.push('/dashboard');
                 }
             })
-            .catch(function (error) {
+            .catch((error)=> {
                 console.log(error.response);
             });
     }

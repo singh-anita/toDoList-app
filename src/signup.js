@@ -131,24 +131,18 @@ class Signup extends Component {
 
     /* WHEN EVERYTHING IS RIGHT, EXECUTE THIS.... */
     allSet() {
-        console.log("invalidEmail : ", this.state.isInvalidEmail,
+       /* console.log("invalidEmail : ", this.state.isInvalidEmail,
             "passwordLengthZero : ", this.state.passwordLengthZero,
             "username:", this.state.usernameLengthZero,
-            "match? : ", this.state.isPasswordMatching);
+            "match? : ", this.state.isPasswordMatching);*/
 
         if (!this.state.isInvalidEmail && !this.state.passwordLengthZero && !this.state.usernameLengthZero &&
             this.state.isPasswordMatching) {
-            this.setState({ disabled: false }, function () {
-                console.log('callbacked ', this.state)
-
-            })
+            this.setState({ disabled: false })
         }
         else {
             console.log("all matched else ", this.state);
-            this.setState({ disabled: true }, function () {
-                console.log('callbacked ', this.state)
-
-            })
+            this.setState({ disabled: true })
         }
     }
 
@@ -166,7 +160,7 @@ class Signup extends Component {
             username: this.state.username,
             password: this.state.password
         };
-        // console.log("TOKEN IN SIGNUP : ", localStorage.getItem("authtoken"))
+
         // if(req.headers.authorization === 'null' && Object.keys(req.body) != 0){
         axios.post('http://localhost:3001/signup', obj, {
             headers: {
@@ -176,8 +170,7 @@ class Signup extends Component {
             .then((response) => {
                 console.log(response.data.authtoken);
                 console.log(response.data.message)
-                //                 if (response.status === 200)
-                // {
+
                 if (response.data.message === 'already') {
                     console.log(response.data.message);
                     console.log('ready');
@@ -203,7 +196,7 @@ class Signup extends Component {
                 }
                 // }
             })
-            .catch(function (error) {
+            .catch((error) =>{
                 console.log("ERROR : ", error.response)
             });
     }
@@ -212,7 +205,6 @@ class Signup extends Component {
         return (
             <div className="container">
                 <Header />
-                {/* { this.allSet() } */}
                 <div id="signupbox" style={{ marginTop: 50 }} className="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
                     <div className="panel panel-info">
                         <div className="panel-heading">
@@ -272,7 +264,6 @@ class Signup extends Component {
                                 <FormGroup>
                                     <Col smOffset={3} mdOffset={3} sm={9} md={9} >
                                         <Button type="submit" bsStyle="primary">
-                                            {/* <ClipLoader size={17} color={'#123abc'} />  */}
                                             Sign Up with Stackoverflow</Button>
 
 

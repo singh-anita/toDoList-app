@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Navbar, Nav } from "react-bootstrap";
+import { Navbar, Nav,NavItem } from "react-bootstrap";
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 class HeaderLogout extends Component {
@@ -33,12 +33,13 @@ class HeaderLogout extends Component {
                         Todo
                     </Navbar.Brand>
                 </Navbar.Header>
-                <Nav>
-
+                <Nav pullRight>
+                <NavItem componentClass="span">
                     <Link onClick={this.loggingOutFunction}
                         className="btn btn-info btn-lg" to="/login">
                         <span className="glyphicon glyphicon-log-out"></span>Logout
                     </Link>
+                    </NavItem>
                 </Nav>
             </Navbar>
         )

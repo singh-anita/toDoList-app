@@ -20,12 +20,9 @@ class TitleListGroupComp extends Component {
         }
         this.resetForm =this.resetForm.bind(this)
         this.updateSubmitTitle = this.updateSubmitTitle.bind(this);
-//        this.linkOnClick = this.linkOnClick.bind(this);
         this.updateHandleChange= this.updateHandleChange.bind(this);
       }
-      // resetForm(){
-      //   this.setState(this.baseState)
-      // }
+
          /*editing note onclick inputbox comes with button*/
          editTitleClick() {
          // this.props.updateTitleCallback(response.data)
@@ -38,7 +35,6 @@ class TitleListGroupComp extends Component {
            }
             /*update list inputbox value change*/
   updateHandleChange(e) {
-    //this.props.updateTitleCallback(this.state.updatevalue) 
     this.setState({
       updatevalue: e.target.value
     })

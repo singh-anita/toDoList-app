@@ -68,7 +68,7 @@ exports.updateTitle= function (req, res) {
 }
 
 
-/*---------------------------deleting the title---------------------------------------------------*/
+/*---------------------------deleting  note title---------------------------------------------------*/
 exports.deleteTitle= function (req, res) {
      console.log("reqofdeleteetitle", req.params);
     console.log("Users coming", res.locals.user)
@@ -83,6 +83,7 @@ exports.deleteTitle= function (req, res) {
                  titlesToSend = NoteTitles.map((note) => {
                    return { _id: note._id, title: note.title ,deletedAt:note.deletedAt}
                 })
+                console.log("sending titles",titlesToSend)
                  res.status(200).send(titlesToSend);
              })
              .catch(()=>{

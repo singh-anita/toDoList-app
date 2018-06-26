@@ -19,10 +19,10 @@ class Dashboard extends Component {
     }
 
 
-    updateState(value){
+  /*  updateState(value){
         console.log("calling update state")
         this.setState({isInitialRender: value})
-    }
+    }*/
   
 
     render() {
@@ -32,6 +32,7 @@ class Dashboard extends Component {
         return (
             <div className="container">
                 <header className="page-title">
+                
                     <HeaderLogout />
                 </header>
                 <TodoTitle history={this.props.history} checkStateChanged={this.checkStateChanged.bind(this)}  />

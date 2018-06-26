@@ -76,7 +76,3 @@ UserSchema.methods.comparePassword = function(candidatePassword, cb) {
 /* the schema is useless so far we need to create a model using it*/
 module.exports = mongoose.model('User', UserSchema);
 
-
-
-//exporting database
-// module.exports = { User }

@@ -25,16 +25,12 @@ class TodoTitle extends Component {
             })
             .then(response => {
                 console.log("CONSOLE DATA : ", response.data)
-
                 this.setState({ list: response.data })
                 console.log(this.state.list);
-             /*   if (this.state.list.length) {
-                    this.props.updateState(false);
-                }*/
             })
             .catch((err) => {
-                console.log("error : ", err)
-      
+                // console.log("error : ", err)
+            this.props.history.push('/login')
             })
     }
 

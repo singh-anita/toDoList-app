@@ -1,11 +1,10 @@
 var Token = require('../models/tokenModel');
 const User = require('../models/userModel');
 exports.tokenCheckingMiddleware = function (req, res,next) {
-    console.log("authorization of token", req.headers.authorization)
-    //console.log(req.headers.authorization)
+    console.log("mw authorization of token", req.headers.authorization)
     //  if (req.headers.authorization) {
     Token.findOne({ token: req.headers.authorization })
-        .then((doc, err) => {
+        .then((doc) => {
             if (doc) {
                 console.log("Got token")
                 User.findOne({ _id: doc.uId })
@@ -17,13 +16,16 @@ exports.tokenCheckingMiddleware = function (req, res,next) {
                             next();
              
                         }
-
+                       
                     })
-                    .catch(() => {
-                        res.status(409).send({ error: "didnt get user", message: "" });
+                    .catch((err) => {
+                        res.status(409).send({ error: err, message: "didnt get user" });
                         console.log("didnt get user")
 
                     })
+            }
+            else{
+                res.status(401).send()
             }
         })
     //  }
