@@ -1,5 +1,6 @@
 const contentTable = require('../models/contentModel');
 const notesTable = require('../models/noteModel');
+const AttachmentCollection = require('../models/noteAttachmentModel');
 /*Create and Save a new Content----->------adding new Content------------------*/
 exports.addNewContent = function (req, res) {
     console.log("req", req.body);
@@ -41,10 +42,18 @@ exports.getNoteAllContent = function (req, res) {
                         )
                         console.log("sending : ", individualTitleentry)
                     })
-                    console.log("drftre", objToSend)
+                    console.log("getNoteAllContent", objToSend)
                     res.status(200).send(objToSend);
 
                 })
+                                  /*  AttachmentCollection.find({ notesID:  req.params.notesId })
+                    .then(
+                        imageDoc => {
+                            console.log('image doc coming', imageDoc)
+
+                            return res.status(200).json({ message: doc, message1: notesTitle, message2: imageDoc })
+                        }
+                    )*/
                 .catch(() => {
                     res.status(400).send({ error: err, message: "Note not found " });
                 })

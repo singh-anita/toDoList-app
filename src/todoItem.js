@@ -56,7 +56,7 @@ class TodoItem extends Component {
         })
         .then((response) => {
           if (response.status === 200) {
-            this.setState({ list: response.data.entries, titlename: response.data.note_title })
+            this.setState({ list: response.data.entries, titlename: response.data.note_title ,description: '' })
 
           }
         }).catch(function (error) {
@@ -142,6 +142,10 @@ class TodoItem extends Component {
 
     this.setState({ list: temp })
   }
+
+  // myCallback = (dataFromChild) => {
+  //   this.setState({ listDataFromChild: dataFromChild });
+  // }
   render() {
 
 
@@ -173,7 +177,6 @@ class TodoItem extends Component {
                 ? (
 
                   this.state.list.map((noteEntry, index) => {
-                    { console.log("noteentry:", noteEntry) }
                     return (
                       <ListGroupComp key={index} noteEntry={noteEntry} index={index} updateContentCallback={this.updateContentCallback.bind(this)} callBackFromtodoItem={this.todoContentcallBack.bind(this)} checkboxChange={this.checkboxChange.bind(this)} />
                     )
@@ -184,7 +187,7 @@ class TodoItem extends Component {
           </ListGroup>
         
         </div>
-        <AddNoteAttachmentsComponent/>
+        <AddNoteAttachmentsComponent notesId={this.props.params.id} />
       </div>
 
     );

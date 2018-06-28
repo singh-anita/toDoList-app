@@ -13,6 +13,7 @@ exports.tokenCheckingMiddleware = function (req, res,next) {
                             console.log("Got user", user)
                            // res.status(200).send({ message: 'Got user' });
                             res.locals.user = user;
+                            req.user=user;
                             next();
              
                         }
