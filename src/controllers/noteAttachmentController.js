@@ -37,55 +37,60 @@ const storage = multer.diskStorage({
     }
 });
 
-// create the multer instance that will be used to upload/save the file
-const upload = multer({ storage: storage }).array('selectedFile');//Field name
+// create the multer instance that will be used to upload/save the file--->
+// Function to upload project images
+exports.upload = multer({ storage: storage }).array('imgUploader');//Field name
 
 //exports.
 exports.uploadImageFile = (req, res) => {
 
     console.log('req param notesid here-', req.params.notesId)
 
- 
-    upload(req, res, function (err) {
-        console.log('user id comin from tokenchecking middleware', req.files[0].filename);
-        if (err) throw err
-        let fileObj =  {};
-        fileObj.uId= req.user.id,
-        fileObj.notesID= req.params.notesId,
+
+    // upload(req, res, function (err) {
+    // console.log('user id comin from tokenchecking middleware', req.files[0].filename);
+    //   if (err) throw err
+    let fileObj = {};
+    fileObj.uId = req.user.id,
+        fileObj.notesID = req.params.notesId,
         req.files.map((oneFile, idx) => {
-            fileObj.imageId= oneFile.filename.slice(0, oneFile.filename.length - oneFile.originalname.length),
-      
-            fileObj.originalName= oneFile.originalname,
-            fileObj.savedName= oneFile.filename,
-            fileObj.mimeType= oneFile.mimetype
-      
-    // Save Note in the database
-    AttachmentCollection(fileObj).save()
-        .then((doc) => {   //returns the inserted document
-            console.log("fileObj doc", doc);
-            res.status(200).send(doc);
+            fileObj.imageId = oneFile.filename.slice(0, oneFile.filename.length - oneFile.originalname.length),
+
+                fileObj.originalName = oneFile.originalname,
+                fileObj.savedName = oneFile.filename,
+                fileObj.mimeType = oneFile.mimetype
+
+            // Save Note in the database
+            AttachmentCollection(fileObj).save()
+                .then((doc) => {   //returns the inserted document
+                    console.log("fileObj doc", doc);
+                })
+                .catch((err) => {
+                    res.status(400).send({ error: err, message: "Some Error occured " });
+                })
         })
-        .catch((err) => {
-            res.status(400).send({ error: err, message: "Some Error occured " });
-        })
-    })
-})
+    res.status(200).send({message:"success"});
+    // })
 
 }
 
-/*exports.getImageFile= (req,res) => {
-    console.log('req param notesid here-', req.params.notesId)
+exports.getImageFile= (req,res) => {
+    console.log('get req param notesid here-', req.params.notesId)
 
-    console.log('user id comin from tokenchecking middleware', res.locals.user.id)
-      /* AttachmentCollection.find({ notesID:  req.params.notesId })
+    console.log('user id comin from tokenchecking middleware', req.user.id)
+    var imageToSend = [];
+       AttachmentCollection.find({ notesID:  req.params.notesId })
                     .then(
-                        imageDoc => {
+                        (imageDoc) => {
                             console.log('image doc coming', imageDoc)
+                            imageDoc.map((image) => {
+                                imageToSend.push({id:image.id, imageId: image.imageId, savedName: image.savedName });
+                            })
 
-                            return res.status(200).json({ message: imageDoc })
+                            return res.status(200).json({ message: imageToSend })
                         }
                     )
-}*/
+}
 
 /*db.findImageContent(req.params.notesId)
 .then(

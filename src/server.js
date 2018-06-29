@@ -17,6 +17,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 // parse requests of content-type - application/json
 app.use(bodyParser.json());
 
+app.use('/images',express.static('/home/anita/Documents/reactmvcapp/todolist-app/images'));
 
 // define a simple route
 app.get('/', (req, res) => {
@@ -24,6 +25,8 @@ app.get('/', (req, res) => {
 });
 
 // Require Users routes
+
+
 require('./routes/userRoutes.js')(app);
 // Require Notes routes
 require('./routes/noteRoutes')(app);
