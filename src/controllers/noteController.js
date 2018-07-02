@@ -5,18 +5,20 @@ const notesTable = require('../models/noteModel');
 exports.addNewTitle= (req, res) => {
    // console.log("req of title", req.body);
     console.log("Users coming", res.locals.user._id)
-    var user = res.locals.user;
+ //   var user = res.locals.user;
     // Create a Note
     const note = {
         title: req.body.title, 
-        uId: user._id,
+        uId: req.user._id,
         date: new Date() 
     };
+    
     // Save Note in the database
         notesTable(note).save()
         .then((doc) => {   //returns the inserted document
             
             console.log("doc", doc);
+
             res.status(200).send(doc);
         })
         .catch((err)=>{
@@ -29,11 +31,11 @@ exports.addNewTitle= (req, res) => {
 exports.getAllTitle= function (req, res) {
     // console.log("req", req.headers);
     console.log("Users coming",res.locals.user._id)
-    var user = res.locals.user;
+  //  var user = res.locals.user;
   
         var titleToSend = [];
 
-        notesTable.find({ uId: user._id , deletedAt: { $eq: null} })
+        notesTable.find({ uId: req.user._id , deletedAt: { $eq: null} })
             .then((noteTitles) => {
                 // if (err) throw err
                 //  console.log("notestitleobj",noteTitles)
@@ -53,8 +55,8 @@ exports.getAllTitle= function (req, res) {
 
 /*--------------------------- Update a note title--------------------------*/
 exports.updateTitle= function (req, res) {
-    console.log("reqofupdatetitle", req.body);
-    console.log("Users coming", res.locals.user)
+    //console.log("reqofupdatetitle", req.body);
+   // console.log("Users coming", res.locals.user)
     var user = res.locals.user;
         // Find note and update it with the request body
     notesTable.findOneAndUpdate({ _id : req.body.titleId } , { $set : { title: req.body.title } }, { new: true })
@@ -70,8 +72,8 @@ exports.updateTitle= function (req, res) {
 
 /*---------------------------deleting  note title---------------------------------------------------*/
 exports.deleteTitle= function (req, res) {
-     console.log("reqofdeleteetitle", req.params);
-    console.log("Users coming", res.locals.user)
+  //   console.log("reqofdeleteetitle", req.params);
+  //  console.log("Users coming", res.locals.user)
      var user = res.locals.user;
      var titlesToSend = []
         

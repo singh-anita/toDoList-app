@@ -21,7 +21,7 @@ exports.addNewContent = function (req, res) {
 }
 /*----------------get contents based on titleid of particular note-------------------*/
 exports.getNoteAllContent = function (req, res) {
-    console.log("req", req.headers);
+   // console.log("req", req.headers);
     console.log("reqnoteconetnt", req.params);
     console.log("Users coming", res.locals.user)
     var user = res.locals.user;

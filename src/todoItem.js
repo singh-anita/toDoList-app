@@ -12,7 +12,8 @@ class TodoItem extends Component {
     this.state = {
       list: [],
       description: '',
-      titlename: ''
+      titlename: '',
+      viewImageList:[]
     };
     this.addContent = this.addContent.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -56,7 +57,7 @@ class TodoItem extends Component {
         })
         .then((response) => {
           if (response.status === 200) {
-            this.setState({ list: response.data.entries, titlename: response.data.note_title ,description: '' })
+            this.setState({ list: response.data.entries, titlename: response.data.note_title, description: '' })
 
           }
         }).catch(function (error) {
@@ -79,8 +80,9 @@ class TodoItem extends Component {
     })
       .then((response) => {
         if (response.status === 200) {
+          console.log("itemslist",this.state.list)
           const temp = this.state.list.slice();
-          // console.log(temp);
+          console.log("tempobharray",temp);
           temp.push({ content: response.data.content, isChecked: response.data.isChecked, id: response.data._id });
           if (this.state.description.length > 0) {
             this.setState({ list: temp, description: '' })
@@ -142,6 +144,9 @@ class TodoItem extends Component {
 
     this.setState({ list: temp })
   }
+  /*sendImagetoparentItem = (getImageFromNoteAttachemnt) => {
+    console.log("see", getImageFromNoteAttachemnt);
+  }*/
 
   // myCallback = (dataFromChild) => {
   //   this.setState({ listDataFromChild: dataFromChild });
@@ -185,15 +190,15 @@ class TodoItem extends Component {
                 : null
             }
           </ListGroup>
-        
+
         </div>
-        <AddNoteAttachmentsComponent notesId={this.props.params.id} />
+        <AddNoteAttachmentsComponent notesId={this.props.params.id}  />
       </div>
 
     );
   }
 }
 export default TodoItem;
-
+// sendImage={this.sendImagetoparentItem.bind(this)}
 
 

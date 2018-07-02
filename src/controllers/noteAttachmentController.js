@@ -50,6 +50,7 @@ exports.uploadImageFile = (req, res) => {
     // upload(req, res, function (err) {
     // console.log('user id comin from tokenchecking middleware', req.files[0].filename);
     //   if (err) throw err
+    var imgSend = [];
     let fileObj = {};
     fileObj.uId = req.user.id,
         fileObj.notesID = req.params.notesId,
@@ -59,17 +60,21 @@ exports.uploadImageFile = (req, res) => {
                 fileObj.originalName = oneFile.originalname,
                 fileObj.savedName = oneFile.filename,
                 fileObj.mimeType = oneFile.mimetype
-
+             
             // Save Note in the database
             AttachmentCollection(fileObj).save()
                 .then((doc) => {   //returns the inserted document
                     console.log("fileObj doc", doc);
+                    doc.map((img)=>{
+                    imgSend.push({id:img.id, imageId: img.imageId, savedName: img.savedName})
+                    })
+                    // res.status(200).send({message:doc});
                 })
                 .catch((err) => {
                     res.status(400).send({ error: err, message: "Some Error occured " });
                 })
         })
-    res.status(200).send({message:"success"});
+    res.status(200).send({message: imgSend});
     // })
 
 }
@@ -77,7 +82,7 @@ exports.uploadImageFile = (req, res) => {
 exports.getImageFile= (req,res) => {
     console.log('get req param notesid here-', req.params.notesId)
 
-    console.log('user id comin from tokenchecking middleware', req.user.id)
+   // console.log('user id comin from tokenchecking middleware', req.user.id)
     var imageToSend = [];
        AttachmentCollection.find({ notesID:  req.params.notesId })
                     .then(
