@@ -70,22 +70,8 @@ class AddNoteAttachmentsComponent extends Component {
 					console.log("tempobharray", temp);
 				  temp.push({id: response.data.message.id,imageId:response.data.message.imageId,savedName: response.data.message.savedName });
 				  console.log("tempy", temp);
-				  // if (this.state.description.length > 0) {
 					this.setState({ imageSavedName: temp ,selectedFile:''})
-					// }
 				}
-				//	if (response.status === 200) {
-				// var fileUploadObjArray = this.state.fileUploadList.slice();
-				//  console.log(fileUploadObjArray)
-				/*	fileUploadObjArray.push({ _id: response.data._id, title: response.data.title })
-            
-                    if (this.state.value.length > 0) {
-                        this.setState({ list: titleObjArray, value: '' })
-                        console.log(this.state.list)
-                     //   this.props.updateState(false)
-                    }*/
-
-				//}
 			});
 
 	}
@@ -115,7 +101,7 @@ class AddNoteAttachmentsComponent extends Component {
 						<Col md={4} sm={4} md={4} lg={5}>
 							<FormControl type="file" accept='image/*' name="imgUploader" onChange={this.handleGetFiles.bind(this)} multiple='multiple' />
 						</Col>
-						<Col md={6} sm={4} md={6} lg={4}>
+						<Col md={6} sm={4} md={6} lg={4} style={{marginTop:'-7px'}}>
 							<Button bsStyle="success" onClick={this.uploadFile.bind(this)}><Glyphicon glyph="upload" />Upload</Button>
 						</Col>
 					</FormGroup>

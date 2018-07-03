@@ -2,7 +2,7 @@ const AttachmentCollection = require('../models/noteAttachmentModel');
 const path = require('path');
 const multer = require('multer');
 const uuidv4 = require('uuid/v4');
-
+const fs = require('fs');
 // configure storage
 //create a storage which says where and how the files/images should be saved.
 const storage = multer.diskStorage({
@@ -67,6 +67,7 @@ exports.uploadImageFile = (req, res) => {
                     console.log("fileObj doc", doc);
                     doc.map((img)=>{
                     imgSend.push({id:img.id, imageId: img.imageId, savedName: img.savedName})
+                    console.log("imgsend",imgSend)
                     })
                     // res.status(200).send({message:doc});
                 })
@@ -74,7 +75,9 @@ exports.uploadImageFile = (req, res) => {
                     res.status(400).send({ error: err, message: "Some Error occured " });
                 })
         })
-    res.status(200).send({message: imgSend});
+     
+            res.status(200).send({message: imgSend});
+
     // })
 
 }
@@ -119,3 +122,57 @@ exports.getImageFile= (req,res) => {
                 return res.status(400).json({ message: err })
             }
         )*/
+        /*---------------------------deleting  note title---------------------------------------------------*/
+exports.deleteImageAttachemnt= function (req, res) {
+    //   console.log("reqofdeleteetitle", req.params);
+    //  console.log("Users coming", res.locals.user)
+       var imagesToSend = []
+          
+       AttachmentCollection.findOneAndUpdate({ _id : req.params.id},{ $set : {deletedAt : Date.now()} }, {new : true} )
+          .then((deleteImg, err) => {
+               console.log("doc",deleteImg);
+               notesTable.find({ uId:deleteTitle.uId , deletedAt: { $eq: null} })
+               .then((NoteTitles) => {
+                   titlesToSend = NoteTitles.map((note) => {
+                     return { _id: note._id, title: note.title ,deletedAt:note.deletedAt}
+                  })
+                  console.log("sending titles",titlesToSend)
+                   res.status(200).send(titlesToSend);
+               })
+               .catch(()=>{
+                  res.status(400).send({error: err, message:"Note not found for user" });
+                 })
+              // res.status(200).send({message:"successfully deleted"});*/
+        })
+        .catch(()=>{
+          res.status(400).send({error: err, message:"Error deleting note" });
+         })
+     
+   
+   }
+
+  /* app.delete('/deleteimage/:imageId', requiresLogin, function (req, res) {
+
+    db.deleteImage(req.params.imageId)
+        .then(
+            doc => {
+
+                fs.unlink(__dirname + "/assets/" + req.params.imageId, function (error) {
+                    if (error) {
+                        throw error;
+                    }
+                    console.log('Deleted image!!');
+                });
+
+                return res.status(200).json({ message: doc })
+            }
+
+        )
+        .catch(
+            err => {
+                return res.status(400).json({message: err})
+            }
+        )
+
+
+})*/

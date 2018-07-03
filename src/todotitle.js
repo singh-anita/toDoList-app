@@ -111,7 +111,7 @@ class TodoTitle extends Component {
                         <div className="addlist">
                             <input type="text" onChange={(e) => { this.update(e) }} className="form-control add-todo" placeholder="Add todo" value={this.state.value} />
                         </div>
-                        <Button bsStyle="success" onClick={this.addTitle} disabled={!this.state.value}>
+                        <Button bsStyle="success" onClick={this.addTitle} disabled={!this.state.value} style={{marginTop:'20px'}}>
                             <span>Add Title</span>
                         </Button>
                     </div>
