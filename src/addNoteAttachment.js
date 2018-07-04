@@ -3,35 +3,35 @@ import { Button, Form, Col, FormGroup, FormControl, ListGroup, Glyphicon } from 
 import axios from 'axios';
 import ImageListGroupItemComponent from './ImageListGroupComponent';
 class AddNoteAttachmentsComponent extends Component {
-	/*componentDidMount() {
-		console.log("hello")
-		axios.get('http://localhost:3001/getFilesImg/' + this.props.notesId)
-			.then((response) => {
-				console.log('imageid response', response.data.message.length);
-				this.setState({ imageSavedName: response.data.message ,selectedFile:''}, () => {
-					console.log('name check', this.state.imageSavedName)
+	/*	componentDidMount() {
+			("hello")
+			axios.get('http://localhost:3001/getFilesImg/' + this.props.notesId)
+				.then((response) => {
+					('imageid response', response.data.message.length);
+					this.setState({ imageSavedName: response.data.message ,selectedFile:''}, () => {
+						('name check', this.state.imageSavedName)
+					});
+					//this.props.sendImage(this.state.imageSavedName)
 				});
-				//this.props.sendImage(this.state.imageSavedName)
-			});
-
-	}*/
+	
+		}*/
 	componentWillReceiveProps(nextProps) {
 		console.log("imagerecieveprops", nextProps.notesId)
 		console.log("currenyt props", this.props.notesId)
 		let {
 			notesId
-		  } = nextProps.notesId
-		  if (this.props.notesId !== notesId) {
-		axios.get('http://localhost:3001/getFilesImg/' + this.props.notesId)
-		.then((response) => {
-			console.log('imageid response', response.data.message.length);
-			this.setState({ imageSavedName: response.data.message ,selectedFile:''}, () => {
-				console.log('name check', this.state.imageSavedName)
-			});
-			//this.props.sendImage(this.state.imageSavedName)
-		});
+		} = nextProps.notesId
+		if (this.props.notesId !== notesId) {
+			axios.get('http://localhost:3001/getFilesImg/' + this.props.notesId)
+				.then((response) => {
+					('imageid response', response.data.message.length);
+					this.setState({ imageSavedName: response.data.message, selectedFile: '' }, () => {
+						('name check', this.state.imageSavedName)
+					});
+					//this.props.sendImage(this.state.imageSavedName)
+				});
+		}
 	}
-}
 	state = {
 		selectedFile: [],
 		imageSavedName: []
@@ -41,9 +41,11 @@ class AddNoteAttachmentsComponent extends Component {
 	uploadFile(e) {
 		console.log("selectedFile", this.state.selectedFile)
 		let formData = new FormData();//create a new FormData() object 
-		for (var i in this.state.selectedFile) {
-			if (!isNaN(i)) {//to exclude length field which is a number so used NaN
-				formData.append('imgUploader', this.state.selectedFile[i])	//append our field values.
+		if (this.state.selectedFile.length > 0) {
+			for (var i in this.state.selectedFile) {
+				if (!isNaN(i)) {//to exclude length field which is a number so used NaN
+					formData.append('imgUploader', this.state.selectedFile[i])	//append our field values.
+				}
 			}
 		}
 		/*
@@ -63,21 +65,31 @@ class AddNoteAttachmentsComponent extends Component {
 				}
 			})
 			.then((response) => {
-				console.log('image result', response.data)
-			if (response.status === 200) {
-					console.log("imageslist", this.state.imageSavedName)
+				console.log('image result', response.data.message)
+				if (response.status === 200) {
+					("imageslist", this.state.imageSavedName)
 					const temp = this.state.imageSavedName.slice();
+					response.data.message.map((singleImg) => {
+						temp.push({ id: singleImg.id, imageId: singleImg.imageId, savedName: singleImg.savedName })
+						//  ("imgsend",imgSend)
+					})
 					console.log("tempobharray", temp);
-				  temp.push({id: response.data.message.id,imageId:response.data.message.imageId,savedName: response.data.message.savedName });
-				  console.log("tempy", temp);
-					this.setState({ imageSavedName: temp ,selectedFile:''})
+					//   temp.push({id: response.data.message.id,imageId:response.data.message.imageId,savedName: response.data.message.savedName });
+					//   ("tempy", temp);
+					if (this.state.selectedFile.length > 0) {
+						this.setState({ imageSavedName: temp, selectedFile: '' })
+					}
 				}
 			});
 
 	}
 
 	handleGetFiles(e) {
-
+	/*	if(target.value.length > 0){
+			callback(target.files)
+		} else {
+			target.reset();
+		}*/
 		let fileUploadList = [];
 		for (var i in e.target.files) {
 			if (!isNaN(i)) {
@@ -89,8 +101,17 @@ class AddNoteAttachmentsComponent extends Component {
 		})
 
 	}
+	callBackaddNoteAttachment(objofImages) {
+		var templist = this.state.imageSavedName.slice();
+		console.log("objofImages for delete", objofImages);
+		// this.setState({ list: objofnotestitle })
+		templist.map((singleImg, idx) => {
+			if (singleImg.imageId !== objofImages.imageId) {
 
-
+				this.setState({ imageSavedName: objofImages })
+			}
+		})
+	}
 	render() {
 		return (
 			<div className="img" style={{ marginTop: '50px' }}>
@@ -101,8 +122,10 @@ class AddNoteAttachmentsComponent extends Component {
 						<Col md={4} sm={4} md={4} lg={5}>
 							<FormControl type="file" accept='image/*' name="imgUploader" onChange={this.handleGetFiles.bind(this)} multiple='multiple' />
 						</Col>
-						<Col md={6} sm={4} md={6} lg={4} style={{marginTop:'-7px'}}>
-							<Button bsStyle="success" onClick={this.uploadFile.bind(this)}><Glyphicon glyph="upload" />Upload</Button>
+						<Col md={6} sm={4} md={6} lg={4} style={{ marginTop: '-7px' }}>
+							<Button bsStyle="success" onClick={this.uploadFile.bind(this)} disabled={!this.state.selectedFile}>
+								<Glyphicon glyph="upload" />Upload
+							</Button>
 						</Col>
 					</FormGroup>
 				</Form>
@@ -113,7 +136,7 @@ class AddNoteAttachmentsComponent extends Component {
 								? (
 									this.state.imageSavedName.map((singleImageContent, index) => {
 										return (
-											<ImageListGroupItemComponent key={index} singleImageEntry={singleImageContent} />
+											<ImageListGroupItemComponent key={index} singleImageEntry={singleImageContent} callBackaddNoteAttachment={this.callBackaddNoteAttachment.bind(this)} />
 										);
 									})
 								) : null

@@ -16,23 +16,8 @@ const storage = multer.diskStorage({
         let imageId = uuidv4();
 
         const newFilename = `${imageId}${file.originalname}`;
-        console.log('old file name', file)
-        console.log('new file name', newFilename)
-        console.log('imageid', imageId)
-        console.log('mimetype', file.mimetype)
-        //console.log("userid",res.locals.user)
 
-        // console.log("user",res.locals.user.id)
-        /*  let fileObj = {
-              imageId: imageId,
-              uId: req.user.id,
-              notesID: req.params.notesId,
-              originalName: file.originalname,
-              savedName: newFilename,
-              mimeType: file.mimetype
-          }
-          // let fileObj = new noteAttachmentModel(fileObjDatabase);
-          AttachmentCollection.create(fileObj);//createFiles*/
+        //     AttachmentCollection.create(fileObj);//createFiles*/
         cb(null, newFilename);//error and givenewfilename parameters for callback
     }
 });
@@ -41,63 +26,54 @@ const storage = multer.diskStorage({
 // Function to upload project images
 exports.upload = multer({ storage: storage }).array('imgUploader');//Field name
 
-//exports.
 exports.uploadImageFile = (req, res) => {
-
     console.log('req param notesid here-', req.params.notesId)
-
-
-    // upload(req, res, function (err) {
-    // console.log('user id comin from tokenchecking middleware', req.files[0].filename);
-    //   if (err) throw err
     var imgSend = [];
-    let fileObj = {};
-    fileObj.uId = req.user.id,
-        fileObj.notesID = req.params.notesId,
+    var allImgSend = [];
+    console.log("files", req.files)
+    if (req.files.length > 0) {
         req.files.map((oneFile, idx) => {
-            fileObj.imageId = oneFile.filename.slice(0, oneFile.filename.length - oneFile.originalname.length),
-
+            let fileObj = {};
+            fileObj.uId = req.user.id,
+                fileObj.notesID = req.params.notesId,
+                fileObj.imageId = oneFile.filename.slice(0, oneFile.filename.length - oneFile.originalname.length),
                 fileObj.originalName = oneFile.originalname,
                 fileObj.savedName = oneFile.filename,
                 fileObj.mimeType = oneFile.mimetype
-             
-            // Save Note in the database
-            AttachmentCollection(fileObj).save()
-                .then((doc) => {   //returns the inserted document
-                    console.log("fileObj doc", doc);
-                    doc.map((img)=>{
-                    imgSend.push({id:img.id, imageId: img.imageId, savedName: img.savedName})
-                    console.log("imgsend",imgSend)
-                    })
-                    // res.status(200).send({message:doc});
-                })
-                .catch((err) => {
-                    res.status(400).send({ error: err, message: "Some Error occured " });
-                })
+            imgSend.push(fileObj)
         })
-     
-            res.status(200).send({message: imgSend});
-
-    // })
-
+        console.log("imgsend  array", imgSend)
+        AttachmentCollection.insertMany(imgSend)
+            .then((doc) => {   //returns the inserted document
+                console.log("img doc", doc);
+                doc.map((img) => {
+                    allImgSend.push({ id: img.id, imageId: img.imageId, savedName: img.savedName })
+                    //  console.log("imgsend",imgSend)
+                })
+                res.status(200).send({ message: allImgSend });
+            })
+            .catch((err) => {
+                res.status(400).send({ error: err, message: "Some Error occured " });
+            })
+    }
 }
 
-exports.getImageFile= (req,res) => {
+exports.getImageFile = (req, res) => {
     console.log('get req param notesid here-', req.params.notesId)
 
-   // console.log('user id comin from tokenchecking middleware', req.user.id)
+    // console.log('user id comin from tokenchecking middleware', req.user.id)
     var imageToSend = [];
-       AttachmentCollection.find({ notesID:  req.params.notesId })
-                    .then(
-                        (imageDoc) => {
-                            console.log('image doc coming', imageDoc)
-                            imageDoc.map((image) => {
-                                imageToSend.push({id:image.id, imageId: image.imageId, savedName: image.savedName });
-                            })
+    AttachmentCollection.find({ notesID: req.params.notesId })
+        .then(
+            (imageDoc) => {
+                console.log('image doc coming', imageDoc)
+                imageDoc.map((image) => {
+                    imageToSend.push({ id: image.id, imageId: image.imageId, savedName: image.savedName });
+                })
 
-                            return res.status(200).json({ message: imageToSend })
-                        }
-                    )
+                return res.status(200).json({ message: imageToSend })
+            }
+        )
 }
 
 /*db.findImageContent(req.params.notesId)
@@ -122,8 +98,8 @@ exports.getImageFile= (req,res) => {
                 return res.status(400).json({ message: err })
             }
         )*/
-        /*---------------------------deleting  note title---------------------------------------------------*/
-exports.deleteImageAttachemnt= function (req, res) {
+/*---------------------------deleting  note title---------------------------------------------------*/
+/*exports.deleteImageAttachemnt= function (req, res) {
     //   console.log("reqofdeleteetitle", req.params);
     //  console.log("Users coming", res.locals.user)
        var imagesToSend = []
@@ -142,37 +118,53 @@ exports.deleteImageAttachemnt= function (req, res) {
                .catch(()=>{
                   res.status(400).send({error: err, message:"Note not found for user" });
                  })
-              // res.status(200).send({message:"successfully deleted"});*/
+             
         })
         .catch(()=>{
           res.status(400).send({error: err, message:"Error deleting note" });
          })
      
    
-   }
+}*/
 
-  /* app.delete('/deleteimage/:imageId', requiresLogin, function (req, res) {
+exports.deleteImageAttachemnt = (req, res) => {
+    console.log("reqofdelete Image", req.params);
+    var imagesToSend = [];
 
-    db.deleteImage(req.params.imageId)
+    AttachmentCollection.findOneAndRemove({ imageId: req.params.imageId })
         .then(
-            doc => {
-
-                fs.unlink(__dirname + "/assets/" + req.params.imageId, function (error) {
+            (doc) => {
+                console.log("image contents", doc)
+                //fs.readFile(path.join(__dirname, '../..', 'foo.bar'));
+                console.log("DFG", path.join(__dirname, '../..', 'images/') + doc.savedName);
+                // console.log("DFG",__dirname +'/../images')
+                fs.unlink(path.join(__dirname, '../..', 'images/') + doc.savedName, function (error) {
                     if (error) {
                         throw error;
                     }
                     console.log('Deleted image!!');
-                });
+                })
+                AttachmentCollection.find({ notesID: doc.notesID })// getAllContentofNote-->get all contents using titleid-
+                    .then((images) => {
+                        console.log("imgContents", images)
+                        images.map((individualImageEntry, imageIndex) => {
+                            imagesToSend.push({ id: individualImageEntry.id, imageId: individualImageEntry.imageId, savedName: individualImageEntry.savedName })
+                        })
+                        // console.log("sending", contentToSend)
+                        res.status(200).send(imagesToSend);
+                    })
+                // return res.status(200).json({ message: doc })
+            })
 
-                return res.status(200).json({ message: doc })
-            }
-
-        )
         .catch(
-            err => {
-                return res.status(400).json({message: err})
+            (err) => {
+                return res.status(400).json({ message: err })
             }
         )
 
 
-})*/
+}
+exports.downloadImage = (req, res) => {
+    console.log("reqof  download Image", req.params);
+    res.download(path.join(__dirname, '../..', 'images/') + req.params.savedName)
+}
