@@ -70,7 +70,7 @@ class AddNoteAttachmentsComponent extends Component {
 					("imageslist", this.state.imageSavedName)
 					const temp = this.state.imageSavedName.slice();
 					response.data.message.map((singleImg) => {
-						temp.push({ id: singleImg.id, imageId: singleImg.imageId, savedName: singleImg.savedName })
+						temp.push({ id: singleImg.id, imageId: singleImg.imageId, savedName: singleImg.savedName,originalName:singleImg.originalName })
 						//  ("imgsend",imgSend)
 					})
 					console.log("tempobharray", temp);
@@ -135,6 +135,7 @@ class AddNoteAttachmentsComponent extends Component {
 							(this.state.imageSavedName.length > 0)
 								? (
 									this.state.imageSavedName.map((singleImageContent, index) => {
+										{console.log("sigleimg",singleImageContent)}
 										return (
 											<ImageListGroupItemComponent key={index} singleImageEntry={singleImageContent} callBackaddNoteAttachment={this.callBackaddNoteAttachment.bind(this)} />
 										);

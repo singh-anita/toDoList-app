@@ -3,7 +3,8 @@ const path = require('path');
 const multer = require('multer');
 const uuidv4 = require('uuid/v4');
 const fs = require('fs');
-// configure storage
+
+// ####configure storage#####
 //create a storage which says where and how the files/images should be saved.
 const storage = multer.diskStorage({
     //destination	: The folder to which the file has been saved.
@@ -12,11 +13,8 @@ const storage = multer.diskStorage({
     },
     // filename	: The name of the file within the destination.
     filename: (req, file, cb) => {
-
         let imageId = uuidv4();
-
         const newFilename = `${imageId}${file.originalname}`;
-
         //     AttachmentCollection.create(fileObj);//createFiles*/
         cb(null, newFilename);//error and givenewfilename parameters for callback
     }
@@ -47,7 +45,7 @@ exports.uploadImageFile = (req, res) => {
             .then((doc) => {   //returns the inserted document
                 console.log("img doc", doc);
                 doc.map((img) => {
-                    allImgSend.push({ id: img.id, imageId: img.imageId, savedName: img.savedName })
+                    allImgSend.push({ id: img.id, imageId: img.imageId, savedName: img.savedName,originalName :img.originalName})
                     //  console.log("imgsend",imgSend)
                 })
                 res.status(200).send({ message: allImgSend });
@@ -68,7 +66,7 @@ exports.getImageFile = (req, res) => {
             (imageDoc) => {
                 console.log('image doc coming', imageDoc)
                 imageDoc.map((image) => {
-                    imageToSend.push({ id: image.id, imageId: image.imageId, savedName: image.savedName });
+                    imageToSend.push({ id: image.id, imageId: image.imageId, savedName: image.savedName ,originalName:image.originalName });
                 })
 
                 return res.status(200).json({ message: imageToSend })
@@ -76,66 +74,13 @@ exports.getImageFile = (req, res) => {
         )
 }
 
-/*db.findImageContent(req.params.notesId)
-.then(
-    imageDoc => {
-        console.log('imge doc here => #########################3333333333', imageDoc)
-
-        return res.status(200).json({ message: doc, message1: notesTitle, message2: imageDoc })
-    }
-)*/
-/*  AttachmentCollection.find({ notesID:  req.params.notesId })
-        .then(
-           (imageDoc) => {
-
-                console.log('imagedoc here -', imageDoc)
-                return res.status(200).json({ message: imageDoc })
-            }
-
-        )
-        .catch(
-            (err) => {
-                return res.status(400).json({ message: err })
-            }
-        )*/
-/*---------------------------deleting  note title---------------------------------------------------*/
-/*exports.deleteImageAttachemnt= function (req, res) {
-    //   console.log("reqofdeleteetitle", req.params);
-    //  console.log("Users coming", res.locals.user)
-       var imagesToSend = []
-          
-       AttachmentCollection.findOneAndUpdate({ _id : req.params.id},{ $set : {deletedAt : Date.now()} }, {new : true} )
-          .then((deleteImg, err) => {
-               console.log("doc",deleteImg);
-               notesTable.find({ uId:deleteTitle.uId , deletedAt: { $eq: null} })
-               .then((NoteTitles) => {
-                   titlesToSend = NoteTitles.map((note) => {
-                     return { _id: note._id, title: note.title ,deletedAt:note.deletedAt}
-                  })
-                  console.log("sending titles",titlesToSend)
-                   res.status(200).send(titlesToSend);
-               })
-               .catch(()=>{
-                  res.status(400).send({error: err, message:"Note not found for user" });
-                 })
-             
-        })
-        .catch(()=>{
-          res.status(400).send({error: err, message:"Error deleting note" });
-         })
-     
-   
-}*/
-
 exports.deleteImageAttachemnt = (req, res) => {
     console.log("reqofdelete Image", req.params);
     var imagesToSend = [];
-
     AttachmentCollection.findOneAndRemove({ imageId: req.params.imageId })
         .then(
             (doc) => {
-                console.log("image contents", doc)
-                //fs.readFile(path.join(__dirname, '../..', 'foo.bar'));
+                console.log("image contents", doc);
                 console.log("DFG", path.join(__dirname, '../..', 'images/') + doc.savedName);
                 // console.log("DFG",__dirname +'/../images')
                 fs.unlink(path.join(__dirname, '../..', 'images/') + doc.savedName, function (error) {
@@ -155,16 +100,16 @@ exports.deleteImageAttachemnt = (req, res) => {
                     })
                 // return res.status(200).json({ message: doc })
             })
-
         .catch(
             (err) => {
                 return res.status(400).json({ message: err })
             }
         )
-
-
 }
 exports.downloadImage = (req, res) => {
-    console.log("reqof  download Image", req.params);
-    res.download(path.join(__dirname, '../..', 'images/') + req.params.savedName)
+    // console.log("reqof body", req.body);
+     console.log("reqof  download Image", req.params.savedName);
+    var file = path.join(__dirname, '../..', 'images/') + req.params.savedName;
+    res.download(file); // Set disposition and send it.
+   // res.download(path.join(__dirname, '../..', 'images/') + req.params.savedName)
 }

@@ -5,7 +5,10 @@ module.exports = (app) => {
     app.get('/getFilesImg/:notesId', attatchment.getImageFile);
     // delete a image with noteId
     app.delete('/deleteImage/:imageId', tokenChecking.tokenCheckingMiddleware, attatchment.deleteImageAttachemnt);
-    app.get('/images/:imageSavedName', function(req,res,next){
-        console.log("IMAGES....")
-    })
+    app.get('/downloadImg/:savedName',attatchment.downloadImage);
+  /*  app.get('/download', function(req, res){
+        var file = __dirname + '/upload-folder/dramaticpenguin.MOV';
+        res.download(file); // Set disposition and send it.
+      });*/
 }
+// attatchment.downloadImage

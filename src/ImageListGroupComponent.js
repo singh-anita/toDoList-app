@@ -4,8 +4,6 @@ import axios from 'axios';
 
 class ImageListGroupItemComponent extends Component {
     deleteClicked() {
-        //  console.log("id",id)
-        alert("cccc")
         console.log("OBJECT check: ", this.props.singleImageEntry.imageId)
         axios.delete('http://localhost:3001/deleteImage/' + this.props.singleImageEntry.imageId, {
             headers: {
@@ -27,9 +25,9 @@ class ImageListGroupItemComponent extends Component {
         return (
             <ListGroupItem key={this.props.singleImageEntry.notesID}>
                 <div className="description">
-                    <a href={'http://localhost:3001/images/' + this.props.singleImageEntry.savedName} download>
+                    <a href={'http://localhost:3001/downloadImg/' + this.props.singleImageEntry.savedName}>
                         <img src={'http://localhost:3001/images/' + this.props.singleImageEntry.savedName} height={75} width={75} />
-                        <span style={{ marginLeft: '15px' }}> {this.props.singleImageEntry.savedName}</span>
+                        <span style={{ marginLeft: '15px' }}> {this.props.singleImageEntry.originalName}</span>
                     </a>
                 </div>
                 <div className="deleteaction" style={{ float: 'right' }}>

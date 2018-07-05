@@ -5,7 +5,6 @@ import axios from 'axios';
 import './css/todoItem.css';
 import DeleteContentComp from './deleteContent';
 
-
 class ListGroupComp extends Component {
 
   componentDidMount() {
@@ -18,12 +17,10 @@ class ListGroupComp extends Component {
       updatevalue: ''
       // updatevalueLengthZero: false,
     }
-
     this.resetForm = this.resetForm.bind(this)
     this.updateChange = this.updateChange.bind(this);
     this.updateContent = this.updateContent.bind(this);
   }
-
 
   resetForm() {
     this.setState({show: !this.state.show ,updatevalue : this.props.noteEntry.content })
