@@ -85,6 +85,9 @@ class TodoTitle extends Component {
             }
         })
         this.setState({ list: templist })
+        console.log(this.state.list)
+       // this.props.getInput(newInput)
+       // this.props.updateTtile(this.state.list)
         // this.setState({  list: objFromupdatingcontent})
     }
     todoTitlecallBack(objofnotestitle) {

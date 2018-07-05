@@ -10,5 +10,4 @@ module.exports = (app) => {
     app.put('/updatenotetitle', tokenChecking.tokenCheckingMiddleware,note.updateTitle);
      // Update a Note with noteId
      app.delete('/deletenotetitle/:id',tokenChecking.tokenCheckingMiddleware,note.deleteTitle);
-   
 }

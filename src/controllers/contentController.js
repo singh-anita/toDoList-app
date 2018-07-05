@@ -32,7 +32,7 @@ exports.getNoteAllContent = function (req, res) {
     
     notesTable.findById({ _id: req.params.id })//getSingleNote with noteId
         .then((notesobj, err) => {
-
+       console.log("notesobjcheck",notesobj)
             objToSend.note_title = notesobj.title;
             contentTable.find({ notesID: req.params.id }) //getAllContentofNote using noteTitleId
                 .then((NoteContents) => {

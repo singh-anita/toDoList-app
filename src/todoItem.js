@@ -19,7 +19,7 @@ class TodoItem extends Component {
     this.handleChange = this.handleChange.bind(this);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     console.log("currprops", this.props.params.id);
     if (this.props.params.id) {
       // call todoitems using id
@@ -40,6 +40,8 @@ class TodoItem extends Component {
 
   }
 
+
+
   /*contents display*/
   componentWillReceiveProps(nextProps) {
     console.log("nextprops", nextProps.params)
@@ -47,7 +49,9 @@ class TodoItem extends Component {
     let {
       id
     } = nextProps.params
-    if (id && this.props.params.id !== id) {
+    // if(id||id===undefined!==this.props.params.id )
+    //  {   
+      if (id && this.props.params.id !== id ) {
 
       axios.get('http://localhost:3001/getnotecontent/' + id,
         {
@@ -56,6 +60,7 @@ class TodoItem extends Component {
           }
         })
         .then((response) => {
+          console.log("hello")
           if (response.status === 200) {
             this.setState({ list: response.data.entries, titlename: response.data.note_title, description: '' })
 

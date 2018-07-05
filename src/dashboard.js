@@ -9,17 +9,19 @@ class Dashboard extends Component {
         this.state = {
             isInitialRender: true,
             currentlySelected: null,
-            noteTitleId: null
+            noteTitle: null
         };
 
     }
-
-    checkStateChanged(obj) {
+  /*  updateTtile(value){
+        this.setState({noteTitle: value})
+    }*/
+    /*checkStateChanged(obj) {
         this.setState({ noteTitle: obj })
-    }
+    }*/
 
 
-  /*  updateState(value){
+  /*  updatetitle(value){
         console.log("calling update state")
         this.setState({isInitialRender: value})
     }*/
@@ -31,16 +33,14 @@ class Dashboard extends Component {
         } = this.props.match.params
         return (
             <div className="container">
-                <header className="page-title">
-                
+                <header className="page-title"> 
                     <HeaderLogout />
                 </header>
-                <TodoTitle history={this.props.history} checkStateChanged={this.checkStateChanged.bind(this)}  />
+                <TodoTitle history={this.props.history} />
                 { id 
                     ? <TodoItem params={this.props.match.params} /> 
                     : null
-                }
-             
+                }    
                 </div>
         )
     }
