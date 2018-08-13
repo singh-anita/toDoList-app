@@ -31,8 +31,6 @@ button.addEventListener('click', function (e) {
 data.forEach(item => {
     liMaker(item.text);
 });
-
-
 // function store() {
 //     localStorage.setItem('items', JSON.stringify(itemsArray));
 //     // window.localStorage.myitems = list.innerHTML;
